@@ -8,25 +8,26 @@ import { Chibi } from "@/components/Chibi";
 import { PlanView } from "@/components/PlanView";
 import { PROFILE, randomNickname } from "@/lib/profile";
 
-const MOODS = ["Birthday", "Anniversary", "Romantic", "Chill", "Celebrate", "Adventure", "Group Outing"];
-const PERSONALITY = ["Queen", "Adventure", "Peaceful", "Foodie", "Shopper", "Spiritual", "Playful", "Culture"];
-const FOODS = ["Lebanese", "Arabic", "Chinese", "Italian", "Sizzler", "Dessert", "Ice cream", "Brunch", "Indian", "Mediterranean"];
+const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Celebrate", "Adventure", "Group outing", "Proposal", "Reunion", "Just because"];
+const PERSONALITY = ["Queen", "Adventure", "Peaceful", "Foodie", "Shopper", "Spiritual", "Playful", "Culture", "Nature", "Artsy", "Nightlife", "Cozy", "Luxe", "Romantic"];
+const FOODS = ["Lebanese", "Arabic", "Chinese", "Italian", "Sizzler", "Dessert", "Ice cream", "Brunch", "Indian", "Mediterranean", "Continental", "Asian", "Thai", "Japanese", "Seafood", "Street food", "Healthy", "Cafe", "Pizza", "Coffee"];
+const ACTIVITIES = ["Watch a movie", "Spa or massage", "Long drive", "Beach time", "Live music", "Art gallery", "Boat ride", "Arcade or gaming", "Workshop", "Sunset point", "Bookstore café", "Picnic"];
 const BUDGETS = [2000, 5000, 10000, 20000];
-const STARTS = [["7 AM", 420], ["8 AM", 480], ["9 AM", 540], ["10 AM", 600]] as const;
-const ENDS = [["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
+const STARTS = [["6 AM", 360], ["8 AM", 480], ["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200]] as const;
+const ENDS = [["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
 
-type Step = "intro" | "mood" | "personality" | "foods" | "budget" | "time" | "plan";
-const ORDER: Step[] = ["intro", "mood", "personality", "foods", "budget", "time", "plan"];
+type Step = "intro" | "mood" | "personality" | "foods" | "activities" | "budget" | "time" | "plan";
+const ORDER: Step[] = ["intro", "mood", "personality", "foods", "activities", "budget", "time", "plan"];
 
 const HER_NAME = PROFILE.name;
 const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
 
 export default function Page() {
   const [step, setStep] = useState<Step>("intro");
-  const [name, setName] = useState("");
   const [mood, setMood] = useState<string[]>([]);
   const [personality, setPersonality] = useState<string[]>([]);
   const [foods, setFoods] = useState<string[]>([]);
+  const [activities, setActivities] = useState<string[]>([]);
   const [budget, setBudget] = useState(0);
   const [startMin, setStartMin] = useState(0);
   const [endMin, setEndMin] = useState(0);
@@ -41,14 +42,20 @@ export default function Page() {
     set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
   }
 
+  function setStart(v: number) {
+    setStartMin(v);
+    if (endMin && endMin <= v) setEndMin(0);
+  }
+
   function generate() {
     const ans: Answers = {
-      who: name || HER_NAME,
+      who: HER_NAME,
       mood: (mood.length ? mood[0] : "Birthday").toLowerCase(),
       personality: personality.map((p) => p.toLowerCase()),
       foods: foods.map((f) => (f === "Ice cream" ? "icecream" : f.toLowerCase())),
+      mustInclude: activities,
       budget: budget || 5000,
-      startMin: startMin || 480,
+      startMin: startMin || 600,
       endMin: endMin || 1320,
       dayOfWeek: OUTING_DOW,
       dislikes: PROFILE.dislikes,
@@ -117,8 +124,9 @@ export default function Page() {
           {step === "mood" && (
             <Screen>
               <Chibi mood={chibiMood} />
-              <Q>What is the mood today?</Q>
-              <Chips options={[...MOODS]} selected={mood} onTap={(v) => toggle(mood, v, setMood)} multi />
+              <Q>What is the occasion or mood?</Q>
+              <Hint>Pick as many as fit, or add your own.</Hint>
+              <ChipsInput options={MOODS} selected={mood} onToggle={(v) => toggle(mood, v, setMood)} placeholder="Add another mood…" />
               <Nav onBack={() => setStep("intro")} onNext={() => setStep("personality")} canNext={mood.length > 0} />
             </Screen>
           )}
@@ -127,7 +135,8 @@ export default function Page() {
             <Screen>
               <Chibi mood={chibiMood} />
               <Q>Pick the energy. Choose as many as fit.</Q>
-              <Chips options={[...PERSONALITY]} selected={personality} onTap={(v) => toggle(personality, v, setPersonality)} multi />
+              <Hint>Or type a vibe that is not here.</Hint>
+              <ChipsInput options={PERSONALITY} selected={personality} onToggle={(v) => toggle(personality, v, setPersonality)} placeholder="Add a vibe…" />
               <Nav onBack={() => setStep("mood")} onNext={() => setStep("foods")} canNext={personality.length > 0} />
             </Screen>
           )}
@@ -136,8 +145,19 @@ export default function Page() {
             <Screen>
               <Chibi mood="excited" />
               <Q>What are we eating?</Q>
-              <Chips options={[...FOODS]} selected={foods} onTap={(v) => toggle(foods, v, setFoods)} multi />
-              <Nav onBack={() => setStep("personality")} onNext={() => setStep("budget")} canNext={foods.length > 0} />
+              <Hint>Pick favourites or type a cuisine.</Hint>
+              <ChipsInput options={FOODS} selected={foods} onToggle={(v) => toggle(foods, v, setFoods)} placeholder="Add a cuisine…" />
+              <Nav onBack={() => setStep("personality")} onNext={() => setStep("activities")} canNext={foods.length > 0} />
+            </Screen>
+          )}
+
+          {step === "activities" && (
+            <Screen>
+              <Chibi mood={chibiMood} />
+              <Q>Anything you already want to do?</Q>
+              <Hint>Optional. Pick or type specific things and I will build the day around them.</Hint>
+              <ChipsInput options={ACTIVITIES} selected={activities} onToggle={(v) => toggle(activities, v, setActivities)} placeholder="e.g. Ferris wheel, pottery class…" />
+              <Nav onBack={() => setStep("foods")} onNext={() => setStep("budget")} canNext nextLabel={activities.length ? "Next" : "Skip"} />
             </Screen>
           )}
 
@@ -145,12 +165,24 @@ export default function Page() {
             <Screen>
               <Chibi mood="neutral" />
               <Q>What is the budget for the day?</Q>
+              <Hint>For two people. Pick one or enter your own.</Hint>
               <Chips
                 options={BUDGETS.map((b) => `₹${b.toLocaleString("en-IN")}`)}
-                selected={budget ? [`₹${budget.toLocaleString("en-IN")}`] : []}
+                selected={budget && BUDGETS.includes(budget) ? [`₹${budget.toLocaleString("en-IN")}`] : []}
                 onTap={(v) => setBudget(Number(v.replace(/[₹,]/g, "")))}
               />
-              <Nav onBack={() => setStep("foods")} onNext={() => setStep("time")} canNext={!!budget} />
+              <div className="mt-3 flex items-center gap-2">
+                <span className="text-white/50">₹</span>
+                <input
+                  type="number"
+                  min={0}
+                  value={budget || ""}
+                  onChange={(e) => setBudget(Number(e.target.value) || 0)}
+                  placeholder="Enter a custom amount"
+                  className="flex-1 rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm outline-none focus:border-glow"
+                />
+              </div>
+              <Nav onBack={() => setStep("activities")} onNext={() => setStep("time")} canNext={!!budget} />
             </Screen>
           )}
 
@@ -158,16 +190,25 @@ export default function Page() {
             <Screen>
               <Chibi mood={chibiMood} />
               <Q>How long is the day?</Q>
-              <p className="mt-2 text-sm text-white/50">Start</p>
-              <Chips options={STARTS.map((s) => s[0])} selected={STARTS.filter((s) => s[1] === startMin).map((s) => s[0])} onTap={(v) => setStartMin(STARTS.find((s) => s[0] === v)![1])} />
+              <Hint>Start and end any time. The plan fills whatever window you pick.</Hint>
+              <p className="mt-3 text-sm text-white/50">Start</p>
+              <Chips
+                options={STARTS.map((s) => s[0])}
+                selected={STARTS.filter((s) => s[1] === startMin).map((s) => s[0])}
+                onTap={(v) => setStart(STARTS.find((s) => s[0] === v)![1])}
+              />
               <p className="mt-4 text-sm text-white/50">End</p>
-              <Chips options={ENDS.map((s) => s[0])} selected={ENDS.filter((s) => s[1] === endMin).map((s) => s[0])} onTap={(v) => setEndMin(ENDS.find((s) => s[0] === v)![1])} />
+              <Chips
+                options={ENDS.filter((e) => !startMin || e[1] > startMin).map((e) => e[0])}
+                selected={ENDS.filter((e) => e[1] === endMin).map((e) => e[0])}
+                onTap={(v) => setEndMin(ENDS.find((e) => e[0] === v)![1])}
+              />
               <Nav onBack={() => setStep("budget")} onNext={generate} canNext={!!startMin && !!endMin} nextLabel="Plan my day" />
             </Screen>
           )}
 
           {step === "plan" && plan && (
-            <PlanView plan={plan} name={name || HER_NAME} onRestart={() => setStep("intro")} />
+            <PlanView plan={plan} name={HER_NAME} onRestart={() => setStep("intro")} />
           )}
         </motion.div>
       </AnimatePresence>
@@ -181,6 +222,9 @@ function Screen({ children }: { children: React.ReactNode }) {
 function Q({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-6 text-2xl font-semibold leading-snug">{children}</h2>;
 }
+function Hint({ children }: { children: React.ReactNode }) {
+  return <p className="mt-2 text-sm text-white/50">{children}</p>;
+}
 function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
   return (
     <button onClick={onClick} className="btn-primary mt-7 w-full rounded-xl py-3.5 font-semibold text-white">
@@ -188,7 +232,8 @@ function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick:
     </button>
   );
 }
-function Chips({ options, selected, onTap }: { options: string[]; selected: string[]; onTap: (v: string) => void; multi?: boolean }) {
+function Chips({ options, selected, onTap }: { options: string[]; selected: string[]; onTap: (v: string) => void }) {
+  const customs = selected.filter((s) => !options.includes(s));
   return (
     <div className="mt-5 flex flex-wrap gap-2.5">
       {options.map((o) => (
@@ -196,6 +241,35 @@ function Chips({ options, selected, onTap }: { options: string[]; selected: stri
           {o}
         </button>
       ))}
+      {customs.map((c) => (
+        <button key={c} onClick={() => onTap(c)} className="chip chip-on rounded-full px-4 py-2 text-sm">
+          {c} <span className="opacity-60">✕</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+function ChipsInput({ options, selected, onToggle, placeholder }: { options: string[]; selected: string[]; onToggle: (v: string) => void; placeholder: string }) {
+  const [val, setVal] = useState("");
+  const add = () => {
+    const v = val.trim();
+    if (!v) return;
+    if (!selected.some((s) => s.toLowerCase() === v.toLowerCase())) onToggle(v);
+    setVal("");
+  };
+  return (
+    <div>
+      <Chips options={options} selected={selected} onTap={onToggle} />
+      <div className="mt-3 flex gap-2">
+        <input
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
+          placeholder={placeholder}
+          className="flex-1 rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm outline-none focus:border-glow"
+        />
+        <button onClick={add} className="rounded-xl bg-white/10 px-5 text-sm font-medium hover:bg-white/20">Add</button>
+      </div>
     </div>
   );
 }

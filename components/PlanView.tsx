@@ -35,6 +35,16 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
             🗺️ View full day route on Maps
           </a>
         )}
+
+        {plan.requests && plan.requests.length > 0 && (
+          <div className="mt-4 rounded-xl border border-glow/30 bg-glow/5 px-4 py-3 text-left">
+            <p className="text-xs font-medium text-glow">You wanted to include</p>
+            <p className="mt-1 text-sm text-white/75">
+              {plan.requests.join(" · ")}
+            </p>
+            <p className="mt-1 text-xs text-white/40">Worked into the day where it fits. Anything not matched to a spot, slot it in yourself.</p>
+          </div>
+        )}
       </div>
 
       <div className="relative mt-8 pl-6">

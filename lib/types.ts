@@ -35,6 +35,7 @@ export interface Answers {
   endMin: number;
   dayOfWeek?: number;     // 0=Sun..6=Sat, controls veg-day rule
   dislikes?: string[];    // ingredients to avoid
+  mustInclude?: string[]; // specific activities the user already wants in the day
 }
 
 export interface TravelFromPrev {
@@ -63,4 +64,5 @@ export interface Plan {
   greeting?: string;
   signoff?: string;
   fullDayMapUrl?: string; // Google Maps route with all waypoints
+  requests?: string[];    // specific activities the user asked to include
 }

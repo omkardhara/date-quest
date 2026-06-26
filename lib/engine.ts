@@ -24,18 +24,33 @@ const TRAVEL_BASE: Record<string, number> = {
   "central-home":       40,
   "central-south":      20,
   "central-thane":      50,
-  "gorai-home":         90,
+  "gorai-home":         75,
   "home-south":         60,
   "home-thane":         45,
-  "karjat-home":       150,
-  "kolad-home":        150,
+  "home-vasai":         90,
+  "home-karjat":       150,
+  "home-kolad":        150,
+  "home-gorai":         75,
+  "home-borivali":      60,
   "thane-vasai":       140,
 };
 
+// Approx minutes to get back to the city from a far-out destination. Used when
+// the next stop is a flexible ("multiple") place — you can't teleport from Vasai.
+const FAR_RETURN: Partial<Record<Zone, number>> = {
+  vasai: 90, karjat: 130, kolad: 150, gorai: 70, borivali: 50, thane: 45,
+};
+
 function travelMins(from: Zone, to: Zone, atMin: number): number {
-  if (from === to || from === "multiple" || to === "multiple") return 10;
-  const key = [from, to].sort().join("-");
-  const base = TRAVEL_BASE[key] ?? 60;
+  if (from === to) return 10;
+  let base: number;
+  if (from === "multiple" || to === "multiple") {
+    // A flexible-location place. If we're leaving a far zone, charge the real return drive.
+    const far = from === "multiple" ? FAR_RETURN[to] : FAR_RETURN[from];
+    base = far ?? 15;
+  } else {
+    base = TRAVEL_BASE[[from, to].sort().join("-")] ?? 60;
+  }
   if (atMin >= 1020 && atMin < 1200) return Math.round(base * 1.4); // 5–8 pm rush
   if (atMin >= 720  && atMin < 900)  return Math.round(base * 1.2); // noon rush
   return base;
@@ -69,8 +84,8 @@ function detectCorridor(ans: Answers): Corridor {
 }
 
 // ─── Scoring & filtering ──────────────────────────────────────────────────────
-const MEAL_CATS: Category[] = ["food", "cafe", "dessert"];
-const FOODY:     Category[] = ["food", "dessert"];
+const FULL_MEALS: Category[] = ["food", "cafe"]; // these need spacing; dessert does not
+const FOODY:      Category[] = ["food", "dessert"];
 
 function bandFor(min: number): string {
   if (min < 720)  return "morning";
@@ -86,12 +101,32 @@ function overlap(a: string[] = [], b: string[] = []): number {
 // Hard time-of-day gate so morning cafes never appear at dinner etc.
 function timeAllowed(p: Place, atMin: number): boolean {
   switch (p.bestTime) {
-    case "morning":   return atMin < 780;   // before 1 pm
+    case "morning":   return atMin < 780;                  // before 1 pm
     case "afternoon": return atMin >= 660 && atMin < 1140; // 11 am – 7 pm
-    case "evening":   return atMin >= 900;  // after 3 pm
-    case "night":     return atMin >= 1080; // after 6 pm
+    case "evening":   return atMin >= 900;                 // after 3 pm
+    case "night":     return atMin >= 1080;                // after 6 pm
     default:          return true;
   }
+}
+
+// Reduce a word to a rough stem so plurals match: galleries→gallery, movies→movie.
+function stem(w: string): string {
+  if (w.endsWith("ies") && w.length > 4) return w.slice(0, -3) + "y";
+  if (w.endsWith("es")  && w.length > 4) return w.slice(0, -2);
+  if (w.endsWith("s")   && w.length > 3) return w.slice(0, -1);
+  return w;
+}
+
+// Best-effort match of a place against the user's typed "must include" requests.
+function matchesRequest(p: Place, requests: string[]): boolean {
+  if (!requests.length) return false;
+  const tokens = `${p.name} ${p.area} ${(p.tags ?? []).join(" ")} ${(p.cuisines ?? []).join(" ")} ${(p.vibes ?? []).join(" ")}`
+    .toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).map(stem);
+  return requests.some(term =>
+    term.toLowerCase().split(/\s+/).map(stem).filter(w => w.length >= 4).some(w =>
+      tokens.some(t => t.length >= 4 && (t.startsWith(w) || w.startsWith(t))),
+    ),
+  );
 }
 
 function score(p: Place, ans: Answers, band: string, remainingBudget: number): number {
@@ -102,10 +137,11 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   if (FOODY.includes(p.category)) s += overlap(p.cuisines, ans.foods) * 4;
   s += overlap(p.tags ?? [], PROFILE.loves) * 2;
   const cost = p.costPerPerson * 2;
-  if (cost <= remainingBudget)        s += 2;
-  else if (cost > remainingBudget * 1.3) s -= 5; // strong penalty for busting budget
+  if (cost <= remainingBudget)            s += 2;
+  else if (cost > remainingBudget * 1.3)  s -= 5;
   if (ans.personality.includes("adventure")) s += p.adventureLevel;
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
+  if (matchesRequest(p, ans.mustInclude ?? [])) s += 25; // strongly prefer requested things
   return s;
 }
 
@@ -121,15 +157,21 @@ function pick(
   atMin: number, remainingBudget: number,
   cuisineFilter?: string[],
 ): { place: Place; zone: Zone } | undefined {
-  const pool = PLACES.filter(p =>
+  const base = PLACES.filter(p =>
     cats.includes(p.category) &&
     !used.has(p.id) &&
     !blocked(p, ans) &&
     timeAllowed(p, atMin) &&
-    (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple") &&
-    (!cuisineFilter?.length || overlap(p.cuisines ?? [], cuisineFilter) > 0),
+    (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple"),
   );
-  if (!pool.length) return undefined;
+  if (!base.length) return undefined;
+
+  // Cuisine is a soft preference: only narrow if it leaves something.
+  let pool = base;
+  if (cuisineFilter?.length) {
+    const filtered = base.filter(p => overlap(p.cuisines ?? [], cuisineFilter) > 0);
+    if (filtered.length) pool = filtered;
+  }
 
   const best = pool.sort((a, b) => {
     const az = (a.zone ?? "multiple") as Zone;
@@ -157,10 +199,10 @@ export function buildPlan(ans: Answers): Plan {
   const blocks:      PlanBlock[] = [];
   let cursor         = ans.startMin;
   let currentZone:   Zone = "home";
-  let prevName       = "Home (Marol)";
-  let prevArea       = "Marol, Andheri East";
+  let prevName       = `Home (${PROFILE.homeArea})`;
+  let prevArea       = PROFILE.homeArea;
   let runningCost    = 0;
-  let lastMealEnd    = 0; // track when last food/cafe ended for spacing
+  let lastMealEnd    = 0; // end time of the last full meal (food/cafe), for spacing
   const end          = ans.endMin;
   const dayMins      = end - ans.startMin;
   const vegDay       = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
@@ -172,20 +214,17 @@ export function buildPlan(ans: Answers): Plan {
     if (!result || cursor >= end) return;
     const { place: p, zone } = result;
 
-    // Meal spacing: need at least 150 min gap between food/cafe stops
-    const isMeal = MEAL_CATS.includes(p.category);
-    if (isMeal && lastMealEnd > 0) {
-      const gap = cursor - lastMealEnd;
-      if (gap < 150) return;
-    }
-
     const tripMins   = travelMins(currentZone, zone, cursor);
     const arrivalMin = cursor + tripMins;
-    if (arrivalMin + 20 > end) return;
+    if (arrivalMin + 20 > end) return; // no time left after travel
 
-    // Hard budget cap: skip if this stop would push 20 % over budget
+    // Meal spacing: two full meals need a 150-min gap. Dessert is exempt.
+    const isFullMeal = FULL_MEALS.includes(p.category);
+    if (isFullMeal && lastMealEnd > 0 && arrivalMin - lastMealEnd < 150) return;
+
+    // Budget: never exceed it (except the very first stop, so the plan is never empty).
     const blockCost = p.costPerPerson * 2;
-    if (runningCost + blockCost > ans.budget * 1.2) return;
+    if (blocks.length > 0 && runningCost + blockCost > ans.budget) return;
 
     const dur = Math.min(p.durationMins, end - arrivalMin);
 
@@ -210,59 +249,63 @@ export function buildPlan(ans: Answers): Plan {
 
     runningCost += blockCost;
     cursor       = arrivalMin + dur;
-    if (isMeal) lastMealEnd = cursor;
+    if (isFullMeal) lastMealEnd = cursor;
     if (zone !== "multiple") currentZone = zone;
+    else if (FAR_RETURN[currentZone]) currentZone = "home"; // we've driven back to the city
     prevName = p.name;
     prevArea = p.area;
   };
 
-  const longDay = dayMins > 480;
+  const longDay   = dayMins > 480;
   const remaining = () => ans.budget - runningCost;
+  const b = () => bandFor(cursor); // band follows the real clock, so any start time works
 
   // Morning activity + café (early starts only)
   if (ans.startMin < 660) {
-    add(pick(ans, "morning", ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining()), "activity");
-    add(pick(ans, "morning", ["cafe"], used, currentZone, corridorZones, cursor, remaining()), "cafe");
+    add(pick(ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining()), "activity");
+    add(pick(ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, remaining()), "cafe");
   }
 
-  // Lunch — only if it's been 150+ min since breakfast (handled inside add)
-  if (cursor < 900 && end > 780) {
-    add(pick(ans, "afternoon", ["food"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "food");
+  // Lunch (skipped automatically by meal-spacing if breakfast was recent)
+  if (cursor < 960 && end > 780) {
+    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "food");
   }
 
-  // Afternoon experience / shopping
-  if (end > 900) {
-    add(pick(ans, "afternoon", ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining()), "experience");
+  // Afternoon / first-half experience or shopping
+  if (end > 840) {
+    add(pick(ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining()), "experience");
   }
 
-  // Mid-day rest — only if we're near home and it's a long day
+  // Mid-day rest — only if near home and it's a long day
   if (longDay && cursor < 1140 && (currentZone === "home" || currentZone === "andheri_w" || currentZone === "bandra")) {
     const restPlace = PLACES.find(p => p.category === "rest");
     if (restPlace) add({ place: restPlace, zone: "home" }, "rest");
   }
 
-  // Evening activity
+  // Evening activity / shopping / café
   if (end > 1080) {
-    add(pick(ans, "evening", ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining()), "activity");
+    add(pick(ans, b(), ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining()), "activity");
   }
 
   // Dinner
   if (end > 1140) {
-    add(pick(ans, "night", ["food"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "food");
+    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "food");
   }
 
   // Dessert
   if (end - cursor > 15) {
-    add(pick(ans, "night", ["dessert"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "dessert");
+    add(pick(ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "dessert");
   }
 
   // Full-day map URL with all waypoints
-  const waypoints = blocks.filter(b => b.place).map(b => `${b.place!.name}, ${b.place!.area}, Mumbai`);
+  const waypoints = blocks.filter(x => x.place).map(x => `${x.place!.name}, ${x.place!.area}, Mumbai`);
   const fullDayMapUrl = waypoints.length >= 2
     ? `https://www.google.com/maps/dir/${waypoints.map(w => encodeURIComponent(w)).join("/")}`
     : undefined;
 
-  const totalCost = blocks.reduce((s, b) => s + b.cost, 0);
+  const requests = (ans.mustInclude ?? []).map(s => s.trim()).filter(Boolean);
+
+  const totalCost = blocks.reduce((s, x) => s + x.cost, 0);
   const plan: Plan = {
     blocks,
     totalCost,
@@ -271,6 +314,7 @@ export function buildPlan(ans: Answers): Plan {
     greeting:   greeting(ans),
     signoff:    signoff(),
     fullDayMapUrl,
+    requests:   requests.length ? requests : undefined,
   };
 
   if (vegDay && blocks.length) {
