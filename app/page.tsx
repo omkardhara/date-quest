@@ -8,7 +8,7 @@ import { Chibi } from "@/components/Chibi";
 import { PlanView } from "@/components/PlanView";
 import { PROFILE, randomNickname } from "@/lib/profile";
 
-const MOODS = ["Birthday", "Romantic", "Chill", "Celebrate", "Adventure"];
+const MOODS = ["Birthday", "Anniversary", "Romantic", "Chill", "Celebrate", "Adventure", "Group Outing"];
 const PERSONALITY = ["Queen", "Adventure", "Peaceful", "Foodie", "Shopper", "Spiritual", "Playful", "Culture"];
 const FOODS = ["Lebanese", "Arabic", "Chinese", "Italian", "Sizzler", "Dessert", "Ice cream", "Brunch", "Indian", "Mediterranean"];
 const BUDGETS = [2000, 5000, 10000, 20000];
@@ -24,7 +24,7 @@ const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
 export default function Page() {
   const [step, setStep] = useState<Step>("intro");
   const [name, setName] = useState("");
-  const [mood, setMood] = useState("");
+  const [mood, setMood] = useState<string[]>([]);
   const [personality, setPersonality] = useState<string[]>([]);
   const [foods, setFoods] = useState<string[]>([]);
   const [budget, setBudget] = useState(0);
@@ -44,7 +44,7 @@ export default function Page() {
   function generate() {
     const ans: Answers = {
       who: name || HER_NAME,
-      mood: (mood || "Birthday").toLowerCase(),
+      mood: (mood.length ? mood[0] : "Birthday").toLowerCase(),
       personality: personality.map((p) => p.toLowerCase()),
       foods: foods.map((f) => (f === "Ice cream" ? "icecream" : f.toLowerCase())),
       budget: budget || 5000,
@@ -83,7 +83,7 @@ export default function Page() {
   const chibiMood =
     step === "intro" ? "wave" :
     step === "plan" ? "happy" :
-    personality.includes("Adventure") ? "excited" : "neutral";
+    personality.includes("Adventure") || mood.includes("Adventure") ? "excited" : "neutral";
 
   return (
     <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex flex-col">
@@ -118,8 +118,8 @@ export default function Page() {
             <Screen>
               <Chibi mood={chibiMood} />
               <Q>What is the mood today?</Q>
-              <Chips options={[...MOODS]} selected={mood ? [mood] : []} onTap={(v) => setMood(v)} />
-              <Nav onBack={() => setStep("intro")} onNext={() => setStep("personality")} canNext={!!mood} />
+              <Chips options={[...MOODS]} selected={mood} onTap={(v) => toggle(mood, v, setMood)} multi />
+              <Nav onBack={() => setStep("intro")} onNext={() => setStep("personality")} canNext={mood.length > 0} />
             </Screen>
           )}
 
