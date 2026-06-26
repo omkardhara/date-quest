@@ -6,6 +6,7 @@ export interface Place {
   name: string;
   category: Category;
   area: string;
+  zone?: string;            // geographic zone for routing: south, bandra, central, andheri_w, borivali, thane, vasai, karjat, kolad, gorai, multiple
   moods: string[];        // birthday, romantic, chill, adventure, celebrate
   vibes: string[];        // queen, adventure, peaceful, foodie, culture, playful
   cuisines: string[];     // for food/dessert: lebanese, chinese, dessert, icecream, indian...
