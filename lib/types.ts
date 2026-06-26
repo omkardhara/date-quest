@@ -37,9 +37,10 @@ export interface Answers {
   dislikes?: string[];    // ingredients to avoid
 }
 
-export interface Leg {
-  publicOption: string;
-  privateOption: string;
+export interface TravelFromPrev {
+  mins: number;
+  fromLabel: string;      // "Home (Marol)" or previous place name
+  directionsUrl: string;  // Google Maps directions link
 }
 
 export interface PlanBlock {
@@ -49,7 +50,7 @@ export interface PlanBlock {
   place?: Place;
   why: string;            // narration (templated now, AI later)
   cost: number;
-  transport?: Leg;
+  travelFromPrev?: TravelFromPrev;
   backup?: string;        // rain / energy backup
   kind: Category | "buffer";
 }
@@ -61,4 +62,5 @@ export interface Plan {
   overBudget: boolean;
   greeting?: string;
   signoff?: string;
+  fullDayMapUrl?: string; // Google Maps route with all waypoints
 }
