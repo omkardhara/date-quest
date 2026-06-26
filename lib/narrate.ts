@@ -42,7 +42,10 @@ export function narrate(p: Place, ans: Answers): string {
 
 export function greeting(ans: Answers): string {
   const who = ans.who || PROFILE.name;
-  return `Happy birthday, ${who}. Here is your whole day, start to finish.`;
+  const today = new Date();
+  const isBirthday = today.getMonth() === 6 && today.getDate() === 8; // July 8
+  if (isBirthday) return `Happy birthday, ${who}. Here is your whole day, start to finish.`;
+  return `Here is the day, ${who}. Start to finish.`;
 }
 
 export function signoff(): string {
