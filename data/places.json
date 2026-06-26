@@ -1,0 +1,912 @@
+[
+  {
+    "id": "sgnp-kanheri",
+    "name": "SGNP forest trail to Kanheri Caves",
+    "category": "activity",
+    "area": "Borivali",
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful",
+      "queen"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 200,
+    "durationMins": 150,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kanheri+Caves+SGNP+Borivali",
+    "summary": "Real forest air 30 minutes from home. Green and misty in July, quiet if you go early.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "forest",
+      "lowcrowd",
+      "monsoon"
+    ],
+    "safety": "Go early to beat both crowds and rain. Carry a poncho; trails get slippery."
+  },
+  {
+    "id": "yeoor-hills",
+    "name": "Yeoor Hills forest trail",
+    "category": "activity",
+    "area": "Thane",
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 150,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Yeoor+Hills+Thane",
+    "summary": "Part of SGNP on the Thane side. Streams and dense green in monsoon, far fewer people than Borivali gate.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "forest",
+      "lowcrowd",
+      "monsoon",
+      "instagrammable"
+    ],
+    "safety": "Forest checkpost has timings and entry rules. Go early, avoid after heavy rain."
+  },
+  {
+    "id": "tungareshwar-falls",
+    "name": "Tungareshwar waterfall and forest",
+    "category": "activity",
+    "area": "Vasai",
+    "moods": [
+      "birthday",
+      "adventure"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 150,
+    "durationMins": 180,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 3,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tungareshwar+Waterfall+Vasai",
+    "summary": "Waterfall inside a wildlife sanctuary near Vasai. Lush in July, lighter crowds on a weekday.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "waterfall",
+      "forest",
+      "monsoon",
+      "lowcrowd"
+    ],
+    "safety": "Monsoon water can rise fast. Stay off slippery rocks and check local conditions before going."
+  },
+  {
+    "id": "bhivpuri-falls",
+    "name": "Bhivpuri waterfall walk",
+    "category": "activity",
+    "area": "Karjat",
+    "moods": [
+      "birthday",
+      "adventure"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 240,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 3,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bhivpuri+Waterfall+Karjat",
+    "summary": "Offbeat falls near Karjat, train-accessible, no stalls or tour groups. Just green and water.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "waterfall",
+      "lowcrowd",
+      "monsoon"
+    ],
+    "safety": "Best as a full half-day. Slippery in heavy rain; wear grippy shoes and do not wade into strong flow."
+  },
+  {
+    "id": "kolad-lake",
+    "name": "Kolad lakeside and river valley",
+    "category": "activity",
+    "area": "Kolad",
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "adventure"
+    ],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 600,
+    "durationMins": 240,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kolad+Maharashtra",
+    "summary": "Quiet lake ringed by green hills, about 2.5 hours out. Serene and uncrowded on weekdays.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "lakeside",
+      "lowcrowd",
+      "monsoon"
+    ],
+    "safety": "Long drive; better suited to a full day or an overnight than a tight schedule."
+  },
+  {
+    "id": "marine-drive-walk",
+    "name": "Marine Drive sea walk",
+    "category": "activity",
+    "area": "South Mumbai",
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 60,
+    "bestTime": "evening",
+    "indoor": false,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Marine+Drive+Mumbai",
+    "summary": "The bay, the breeze, the lights coming on. Calm and open if the rain holds off.",
+    "veg": true,
+    "tags": [
+      "lowcrowd",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "sequel-brunch",
+    "name": "Sequel Bistro brunch (avocado, exotic fruit)",
+    "category": "cafe",
+    "area": "Bandra / Kemps Corner",
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "peaceful"
+    ],
+    "cuisines": [
+      "cafe",
+      "continental",
+      "brunch"
+    ],
+    "budgetLevel": 3,
+    "costPerPerson": 700,
+    "durationMins": 75,
+    "bestTime": "morning",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Sequel+Bistro+Mumbai",
+    "summary": "Clean, pretty, plant-forward. Avocado everything, dragon fruit bowls, the brunch plate she photographs.",
+    "veg": true,
+    "tags": [
+      "brunch",
+      "instagrammable",
+      "exoticfruit"
+    ]
+  },
+  {
+    "id": "kitchen-garden-brunch",
+    "name": "Kitchen Garden by Suzette brunch",
+    "category": "cafe",
+    "area": "Multiple",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "peaceful"
+    ],
+    "cuisines": [
+      "cafe",
+      "continental",
+      "brunch"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 550,
+    "durationMins": 60,
+    "bestTime": "morning",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kitchen+Garden+by+Suzette+Mumbai",
+    "summary": "Big salads, chicken sausage breakfast plates, fresh juices. Bright and easy in the morning.",
+    "veg": true,
+    "tags": [
+      "brunch",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "ramashray-dosa",
+    "name": "Rava dosa breakfast (classic Udipi)",
+    "category": "cafe",
+    "area": "Matunga",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "culture"
+    ],
+    "cuisines": [
+      "indian",
+      "brunch"
+    ],
+    "budgetLevel": 1,
+    "costPerPerson": 250,
+    "durationMins": 45,
+    "bestTime": "morning",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Matunga+South+Indian+breakfast+Mumbai",
+    "summary": "Crisp rava dosa and filter coffee done the old way. Cheap, fast, exactly right some mornings.",
+    "veg": true,
+    "tags": [
+      "brunch"
+    ]
+  },
+  {
+    "id": "bayroute-lebanese",
+    "name": "Bayroute (Lebanese / Mediterranean)",
+    "category": "food",
+    "area": "Multiple",
+    "moods": [
+      "birthday",
+      "romantic",
+      "celebrate"
+    ],
+    "vibes": [
+      "foodie",
+      "queen"
+    ],
+    "cuisines": [
+      "lebanese",
+      "mediterranean"
+    ],
+    "budgetLevel": 3,
+    "costPerPerson": 1200,
+    "durationMins": 80,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bayroute+Mumbai",
+    "summary": "Mezze, hummus, grilled chicken and fish. Pretty plating, strong veg spread too. Skip the capsicum-heavy dishes.",
+    "veg": true,
+    "tags": [
+      "instagrammable"
+    ],
+    "contains": []
+  },
+  {
+    "id": "royal-china",
+    "name": "Royal China (Chinese / dim sum)",
+    "category": "food",
+    "area": "Fort / Bandra",
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen"
+    ],
+    "cuisines": [
+      "chinese",
+      "asian"
+    ],
+    "budgetLevel": 3,
+    "costPerPerson": 1300,
+    "durationMins": 90,
+    "bestTime": "night",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Royal+China+Mumbai",
+    "summary": "Dim sum, steamed fish, chicken dishes that earned the name. Plenty of veg dim sum for veg days.",
+    "veg": true,
+    "tags": []
+  },
+  {
+    "id": "olive-italian",
+    "name": "Olive Bar & Kitchen (Italian / Mediterranean)",
+    "category": "food",
+    "area": "Bandra",
+    "moods": [
+      "birthday",
+      "romantic",
+      "celebrate"
+    ],
+    "vibes": [
+      "foodie",
+      "queen"
+    ],
+    "cuisines": [
+      "italian",
+      "mediterranean"
+    ],
+    "budgetLevel": 4,
+    "costPerPerson": 2000,
+    "durationMins": 100,
+    "bestTime": "night",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Olive+Bar+and+Kitchen+Bandra",
+    "summary": "White-washed, fairy-lit, very instagrammable. Handmade pasta, wood-fired mains, a real occasion dinner.",
+    "veg": true,
+    "tags": [
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "jamjar-pasta",
+    "name": "Jamjar Diner (pasta, lasagna)",
+    "category": "food",
+    "area": "Versova / Bandra",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "playful"
+    ],
+    "cuisines": [
+      "italian",
+      "continental"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 800,
+    "durationMins": 75,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Jamjar+Diner+Mumbai",
+    "summary": "Fun, colourful diner close to home. Baked lasagna and pastas, easy on the wallet.",
+    "veg": true,
+    "tags": [
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "yoko-sizzlers",
+    "name": "Yoko Sizzlers (chicken / fish sizzlers)",
+    "category": "food",
+    "area": "Multiple",
+    "moods": [
+      "birthday",
+      "celebrate",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "playful"
+    ],
+    "cuisines": [
+      "continental",
+      "sizzler"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 900,
+    "durationMins": 80,
+    "bestTime": "night",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Yoko+Sizzlers+Mumbai",
+    "summary": "Sizzling chicken and fish steaks the way she likes them. Veg sizzlers on veg days.",
+    "veg": true,
+    "tags": [
+      "sizzler"
+    ]
+  },
+  {
+    "id": "bombay-sweet-shop",
+    "name": "Bombay Sweet Shop (modern mithai)",
+    "category": "dessert",
+    "area": "Byculla",
+    "moods": [
+      "birthday",
+      "celebrate",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "queen"
+    ],
+    "cuisines": [
+      "dessert"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 400,
+    "durationMins": 40,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bombay+Sweet+Shop+Byculla",
+    "summary": "Indian sweets reimagined and beautifully boxed. The most photogenic dessert stop in the city.",
+    "veg": true,
+    "tags": [
+      "dessert",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "le15-patisserie",
+    "name": "Le15 Patisserie (pastries, cakes)",
+    "category": "dessert",
+    "area": "Multiple",
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen"
+    ],
+    "cuisines": [
+      "dessert"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 350,
+    "durationMins": 30,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Le15+Patisserie+Mumbai",
+    "summary": "Pastel French pastries and a birthday-worthy cake. Pretty enough to photograph before the first bite.",
+    "veg": true,
+    "tags": [
+      "dessert",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "naturals-icecream",
+    "name": "Naturals Ice Cream",
+    "category": "dessert",
+    "area": "Multiple",
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "playful",
+      "foodie"
+    ],
+    "cuisines": [
+      "icecream",
+      "dessert"
+    ],
+    "budgetLevel": 1,
+    "costPerPerson": 150,
+    "durationMins": 25,
+    "bestTime": "night",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Naturals+Ice+Cream+Mumbai",
+    "summary": "Real-fruit ice cream, a Mumbai institution. Tender coconut, alphonso, custard apple in season.",
+    "veg": true,
+    "tags": [
+      "dessert",
+      "exoticfruit"
+    ]
+  },
+  {
+    "id": "k-rustom",
+    "name": "K. Rustom ice cream sandwich",
+    "category": "dessert",
+    "area": "Churchgate",
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "playful",
+      "culture"
+    ],
+    "cuisines": [
+      "icecream",
+      "dessert"
+    ],
+    "budgetLevel": 1,
+    "costPerPerson": 120,
+    "durationMins": 20,
+    "bestTime": "evening",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=K+Rustom+Churchgate",
+    "summary": "A wafer-pressed ice cream slab from 1953. Tiny shop, big memory.",
+    "veg": true,
+    "tags": [
+      "dessert"
+    ]
+  },
+  {
+    "id": "rest-home",
+    "name": "Head home to rest and freshen up",
+    "category": "rest",
+    "area": "Marol",
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic",
+      "adventure",
+      "celebrate"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "adventure",
+      "foodie",
+      "playful",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 60,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Marol+Andheri+East",
+    "summary": "A real break in the middle so the evening still feels good. Change, nap, reset.",
+    "veg": true,
+    "tags": []
+  },
+  {
+    "id": "kala-ghoda-art",
+    "name": "Kala Ghoda art and galleries",
+    "category": "experience",
+    "area": "Fort",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "culture",
+      "queen",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 90,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kala+Ghoda+Mumbai",
+    "summary": "Street art, the Jehangir gallery, the Sassoon library lawns. Walkable and unhurried, indoors when it rains.",
+    "veg": true,
+    "tags": [
+      "instagrammable",
+      "lowcrowd"
+    ]
+  },
+  {
+    "id": "movie-premium",
+    "name": "Movie at a recliner screen",
+    "category": "experience",
+    "area": "Multiple malls",
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "queen",
+      "playful",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 500,
+    "durationMins": 150,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "bookingUrl": "https://district.in/movies",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=PVR+Inox+Mumbai",
+    "summary": "A recliner screen and a film she actually wants. Cool, dark, a good rainy-day reset.",
+    "veg": true,
+    "tags": []
+  },
+  {
+    "id": "colaba-causeway",
+    "name": "Colaba Causeway street shopping",
+    "category": "shopping",
+    "area": "Colaba",
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "shopper",
+      "playful",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 600,
+    "durationMins": 90,
+    "bestTime": "evening",
+    "indoor": false,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Colaba+Causeway+Mumbai",
+    "summary": "The classic street haul: silver, bags, kurtas, knick-knacks. Bargain and you will win.",
+    "veg": true,
+    "tags": [
+      "shopping",
+      "street",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "hill-road-bandra",
+    "name": "Hill Road and Linking Road street shopping",
+    "category": "shopping",
+    "area": "Bandra",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "shopper",
+      "playful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 600,
+    "durationMins": 90,
+    "bestTime": "evening",
+    "indoor": false,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Hill+Road+Bandra+Mumbai",
+    "summary": "Bandra's street racks for shoes, accessories and trendy finds. Close to home, easy evening.",
+    "veg": true,
+    "tags": [
+      "shopping",
+      "street",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "chor-bazaar-thrift",
+    "name": "Chor Bazaar vintage and thrift",
+    "category": "shopping",
+    "area": "Mutton Street",
+    "moods": [
+      "birthday",
+      "adventure"
+    ],
+    "vibes": [
+      "shopper",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 500,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Chor+Bazaar+Mumbai",
+    "summary": "Old-world flea for vintage, brass, records and odd treasures. The thrift hunter's paradise.",
+    "veg": true,
+    "tags": [
+      "shopping",
+      "thrift",
+      "vintage"
+    ],
+    "safety": "Liveliest on Friday. Bargain hard and keep an eye on bags in the crowd."
+  },
+  {
+    "id": "bombay-closet-cleanse",
+    "name": "Bombay Closet Cleanse (curated thrift)",
+    "category": "shopping",
+    "area": "Bandra",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "shopper",
+      "queen"
+    ],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 700,
+    "durationMins": 60,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bombay+Closet+Cleanse+Bandra",
+    "summary": "Curated secondhand and vintage in a cool little store. Thrift without the dust, very photogenic.",
+    "veg": true,
+    "tags": [
+      "shopping",
+      "thrift",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "banganga-tank",
+    "name": "Banganga Tank and temples (Walkeshwar)",
+    "category": "experience",
+    "area": "Walkeshwar",
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "spiritual",
+      "peaceful",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 60,
+    "bestTime": "morning",
+    "indoor": false,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Banganga+Tank+Walkeshwar+Mumbai",
+    "summary": "An ancient stone tank ringed by tiny temples and steps. Hushed, old, almost no crowd.",
+    "veg": true,
+    "tags": [
+      "temple",
+      "serene",
+      "lowcrowd",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "vipassana-pagoda",
+    "name": "Global Vipassana Pagoda (Gorai)",
+    "category": "experience",
+    "area": "Gorai",
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "spiritual",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 120,
+    "bestTime": "morning",
+    "indoor": true,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Global+Vipassana+Pagoda+Gorai",
+    "summary": "A vast golden meditation dome by the sea, reached by a short ferry. Deeply calm and quiet inside.",
+    "veg": true,
+    "tags": [
+      "temple",
+      "serene",
+      "lowcrowd",
+      "instagrammable"
+    ],
+    "safety": "Plan around the Gorai ferry timings. Add travel time from Marol."
+  },
+  {
+    "id": "cafe-arabia",
+    "name": "Cafe Arabia (Arabic / Middle Eastern)",
+    "category": "food",
+    "area": "Bandra",
+    "moods": [
+      "birthday",
+      "romantic",
+      "celebrate"
+    ],
+    "vibes": [
+      "foodie",
+      "queen"
+    ],
+    "cuisines": [
+      "arabic",
+      "lebanese",
+      "mediterranean",
+      "middleeastern"
+    ],
+    "budgetLevel": 3,
+    "costPerPerson": 1100,
+    "durationMins": 90,
+    "bestTime": "night",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Cafe+Arabia+Bandra",
+    "summary": "Mandi, hummus, grills and proper Arabic coffee. The closest thing to a Muscat evening in Bombay.",
+    "veg": true,
+    "tags": [
+      "muscat",
+      "arabic",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "kunafa-arabic-sweets",
+    "name": "Kunafa and Arabic sweets",
+    "category": "dessert",
+    "area": "Multiple",
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen"
+    ],
+    "cuisines": [
+      "dessert",
+      "arabic",
+      "middleeastern"
+    ],
+    "budgetLevel": 1,
+    "costPerPerson": 250,
+    "durationMins": 30,
+    "bestTime": "night",
+    "indoor": true,
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=kunafa+Mumbai",
+    "summary": "Warm cheese kunafa and dates, the dessert of home for her. A sweet, nostalgic finish.",
+    "veg": true,
+    "tags": [
+      "dessert",
+      "muscat",
+      "arabic"
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --font-sans: "Inter", system-ui, sans-serif; }
+
+html, body { height: 100%; }
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #1b1530 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, #15203a 0%, transparent 55%),
+    #0b0b14;
+  color: #ECECF2;
+  -webkit-font-smoothing: antialiased;
+}
+
+.glass {
+  background: rgba(21, 21, 31, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.chip {
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: all .15s ease;
+}
+.chip:hover { border-color: rgba(167,139,250,0.6); transform: translateY(-1px); }
+.chip-on {
+  background: linear-gradient(135deg, #a78bfa, #6366f1);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 8px 24px rgba(99,102,241,.35);
+}
+.btn-primary {
+  background: linear-gradient(135deg, #a78bfa, #6366f1);
+  box-shadow: 0 10px 30px rgba(99,102,241,.35);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 36px rgba(99,102,241,.45); }
+.btn-primary:active { transform: translateY(0); }
+
+.timeline-line { background: linear-gradient(180deg, #a78bfa, #6366f1 60%, transparent); }
