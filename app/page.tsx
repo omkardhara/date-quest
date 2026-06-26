@@ -15,8 +15,8 @@ const BUDGETS = [2000, 5000, 10000, 20000];
 const STARTS = [["7 AM", 420], ["8 AM", 480], ["9 AM", 540], ["10 AM", 600]] as const;
 const ENDS = [["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
 
-type Step = "intro" | "name" | "mood" | "personality" | "foods" | "budget" | "time" | "plan";
-const ORDER: Step[] = ["intro", "name", "mood", "personality", "foods", "budget", "time", "plan"];
+type Step = "intro" | "mood" | "personality" | "foods" | "budget" | "time" | "plan";
+const ORDER: Step[] = ["intro", "mood", "personality", "foods", "budget", "time", "plan"];
 
 const HER_NAME = PROFILE.name;
 const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
@@ -110,22 +110,7 @@ export default function Page() {
               <p className="mt-3 text-white/70">
                 Answer a few quick things and I will plan the whole day for you. Real places, real plan, made for your mood.
               </p>
-              <PrimaryBtn onClick={() => setStep("name")}>Press start</PrimaryBtn>
-            </Screen>
-          )}
-
-          {step === "name" && (
-            <Screen>
-              <Chibi mood="neutral" />
-              <Q>First, who is this day for?</Q>
-              <input
-                autoFocus
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={HER_NAME}
-                className="mt-5 w-full rounded-xl bg-white/5 border border-white/15 px-4 py-3 outline-none focus:border-glow"
-              />
-              <Nav onBack={() => setStep("intro")} onNext={() => setStep("mood")} canNext />
+              <PrimaryBtn onClick={() => setStep("mood")}>Press start</PrimaryBtn>
             </Screen>
           )}
 
@@ -134,7 +119,7 @@ export default function Page() {
               <Chibi mood={chibiMood} />
               <Q>What is the mood today?</Q>
               <Chips options={[...MOODS]} selected={mood ? [mood] : []} onTap={(v) => setMood(v)} />
-              <Nav onBack={() => setStep("name")} onNext={() => setStep("personality")} canNext={!!mood} />
+              <Nav onBack={() => setStep("intro")} onNext={() => setStep("personality")} canNext={!!mood} />
             </Screen>
           )}
 
