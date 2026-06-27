@@ -1,8 +1,25 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plan, PlanBlock, AltPlace } from "@/lib/types";
 import { Chibi } from "./Chibi";
+
+interface Media { photo?: string | null; map?: string | null; rating?: number; userRatings?: number; address?: string; }
+
+// Fetches a real venue photo + mini-map, via our key-safe API proxy.
+function useMedia(name: string | null, area: string | null): Media | null {
+  const [media, setMedia] = useState<Media | null>(null);
+  useEffect(() => {
+    if (!name) { setMedia(null); return; }
+    let active = true;
+    fetch(`/api/place-media?name=${encodeURIComponent(name)}&area=${encodeURIComponent(area ?? "")}`)
+      .then((r) => r.json())
+      .then((d) => { if (active) setMedia(d?.found ? d : null); })
+      .catch(() => { if (active) setMedia(null); });
+    return () => { active = false; };
+  }, [name, area]);
+  return media;
+}
 
 function fmt(min: number) {
   const h  = Math.floor(min / 60) % 24;
@@ -130,10 +147,20 @@ function TravelSegment({ mins, fromLabel, directionsUrl }: { mins: number; fromL
 function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; shown: Shown; swapped: boolean; onSwap: () => void }) {
   const cat = CAT[b.kind] ?? CAT.activity;
   const hasAlts = (b.alternatives?.length ?? 0) > 0;
+  const noVenue = b.kind === "rest" || b.place?.id === "movie-premium" || !shown.area;
+  const mediaName = noVenue ? null : shown.title.replace(/\(.*?\)/g, "").trim();
+  const mediaArea = shown.area && !/multiple|pick a/i.test(shown.area) ? shown.area : "";
+  const media = useMedia(mediaName, mediaArea);
+
   return (
     <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className="relative mb-2">
       <div className="absolute -left-[18px] top-1.5 h-3 w-3 rounded-full bg-glow shadow-[0_0_12px_rgba(167,139,250,.8)]" />
-      <div className="glass rounded-2xl p-5">
+      <div className="glass rounded-2xl overflow-hidden">
+        {media?.photo && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={media.photo} alt={shown.title} className="h-40 w-full object-cover" loading="lazy" />
+        )}
+        <div className="p-5">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-glow">{fmt(b.startMin)} – {fmt(b.endMin)}</span>
@@ -148,7 +175,10 @@ function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; show
             <span className="shrink-0 rounded-md bg-amber-400/15 px-2 py-1 text-[10px] font-semibold text-amber-200">📅 Book ahead</span>
           )}
         </div>
-        {shown.area && <p className="text-xs text-white/40 mt-0.5">📍 {shown.area}</p>}
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-white/40">
+          {shown.area && <span>📍 {shown.area}</span>}
+          {media?.rating && <span className="text-amber-200/80">⭐ {media.rating}{media.userRatings ? ` (${media.userRatings.toLocaleString("en-IN")})` : ""}</span>}
+        </div>
         <p className="mt-2 text-sm text-white/70">{shown.blurb}</p>
 
         {shown.topDishes && shown.topDishes.length > 0 && (
@@ -157,6 +187,13 @@ function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; show
 
         {b.restroom && <p className="mt-2 text-xs text-white/45">🚻 {b.restroom}</p>}
         {b.backup && <p className="mt-2 text-xs text-amber-300/80">☔ {b.backup}</p>}
+
+        {media?.map && (
+          <a href={shown.mapsUrl} target="_blank" rel="noreferrer" className="mt-3 block overflow-hidden rounded-xl border border-white/10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={media.map} alt="map" className="h-28 w-full object-cover" loading="lazy" />
+          </a>
+        )}
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {shown.mapsUrl && (
@@ -170,6 +207,7 @@ function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; show
               ↻ {swapped ? "Try another" : "Swap"}
             </button>
           )}
+        </div>
         </div>
       </div>
     </motion.div>
