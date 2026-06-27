@@ -23,6 +23,11 @@ export interface Place {
   tags?: string[];        // instagrammable, lowcrowd, nature, waterfall, lakeside, brunch, exoticfruit, monsoon, sizzler
   contains?: string[];    // ingredients to match against dislikes (mushroom, capsicum, oily)
   safety?: string;        // optional seasonal/safety note
+  topDishes?: string[];   // food/cafe/dessert: what to actually order
+  mustBook?: boolean;     // reservation/booking strongly recommended
+  outdoor?: boolean;      // exposed to rain (matters in monsoon)
+  monsoonRisk?: "ok" | "caution" | "avoid"; // how it holds up in heavy monsoon
+  closedDays?: number[];  // 0=Sun..6=Sat the venue is closed
 }
 
 export interface Answers {
@@ -34,6 +39,7 @@ export interface Answers {
   startMin: number;       // minutes from midnight
   endMin: number;
   dayOfWeek?: number;     // 0=Sun..6=Sat, controls veg-day rule
+  month?: number;         // 0=Jan..11=Dec, for monsoon-aware planning
   dislikes?: string[];    // ingredients to avoid
   mustInclude?: string[]; // specific activities the user already wants in the day
 }
@@ -53,7 +59,25 @@ export interface PlanBlock {
   cost: number;
   travelFromPrev?: TravelFromPrev;
   backup?: string;        // rain / energy backup
+  restroom?: string;      // nearest women-friendly restroom near this stop
+  alternatives?: AltPlace[]; // swap options for this slot
   kind: Category | "buffer";
+}
+
+export interface AltPlace {
+  id: string;
+  name: string;
+  area: string;
+  summary: string;
+  cost: number;
+  mapsUrl: string;
+  topDishes?: string[];
+  mustBook?: boolean;
+}
+
+export interface Flag {
+  icon: string;
+  text: string;
 }
 
 export interface Plan {
@@ -65,4 +89,7 @@ export interface Plan {
   signoff?: string;
   fullDayMapUrl?: string; // Google Maps route with all waypoints
   requests?: string[];    // specific activities the user asked to include
+  flags?: Flag[];         // early heads-up: monsoon, bookings, veg day
+  outfit?: string;        // what to wear given the day's venues + weather
+  weatherNote?: string;   // season/weather framing
 }

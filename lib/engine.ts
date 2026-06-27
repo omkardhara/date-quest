@@ -1,7 +1,10 @@
 import placesData from "@/data/places.json";
-import { Answers, Place, Plan, PlanBlock, Category, TravelFromPrev } from "./types";
+import { Answers, Place, Plan, PlanBlock, Category, TravelFromPrev, AltPlace } from "./types";
 import { PROFILE } from "./profile";
 import { narrate, greeting, signoff } from "./narrate";
+import { restroomFor, outfitFor, buildFlags } from "./concierge";
+
+const MONSOON_MONTHS = [5, 6, 7, 8]; // Jun–Sep
 
 const PLACES = placesData as Place[];
 
@@ -76,7 +79,9 @@ const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
 function detectCorridor(ans: Answers): Corridor {
   const p = ans.personality;
   const dayMins = ans.endMin - ans.startMin;
-  if (p.includes("adventure") && ans.startMin <= 480 && dayMins >= 660) return "full_day_out";
+  const monsoon = isMonsoon(ans);
+  // In peak monsoon the far waterfalls are unsafe, so never route a full day out to them.
+  if (!monsoon && p.includes("adventure") && ans.startMin <= 480 && dayMins >= 660) return "full_day_out";
   if (p.includes("adventure") && ans.startMin <= 600 && dayMins >= 480) return "north_adventure";
   if (p.includes("adventure")) return "thane_east";
   if (p.includes("culture") || p.includes("spiritual") || ans.mood === "romantic") return "south_loop";
@@ -129,6 +134,10 @@ function matchesRequest(p: Place, requests: string[]): boolean {
   );
 }
 
+function isMonsoon(ans: Answers): boolean {
+  return ans.month !== undefined && MONSOON_MONTHS.includes(ans.month);
+}
+
 function score(p: Place, ans: Answers, band: string, remainingBudget: number): number {
   let s = 0;
   s += overlap(p.vibes, ans.personality) * 3;
@@ -141,6 +150,8 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   else if (cost > remainingBudget * 1.3)  s -= 5;
   if (ans.personality.includes("adventure")) s += p.adventureLevel;
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
+  // Monsoon: demote exposed outdoor stops that only get a "caution" in heavy rain.
+  if (isMonsoon(ans) && p.outdoor && p.monsoonRisk === "caution") s -= 8;
   if (matchesRequest(p, ans.mustInclude ?? [])) s += 25; // strongly prefer requested things
   return s;
 }
@@ -148,15 +159,19 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
 function blocked(p: Place, ans: Answers): boolean {
   if (FOODY.includes(p.category) && ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek) && p.veg === false) return true;
   if (ans.dislikes && overlap(p.contains ?? [], ans.dislikes) > 0) return true;
+  // Closed that day of the week.
+  if (ans.dayOfWeek !== undefined && (p.closedDays ?? []).includes(ans.dayOfWeek)) return true;
+  // Genuinely unsafe outdoors in peak monsoon (e.g. waterfalls in flood).
+  if (isMonsoon(ans) && p.outdoor && p.monsoonRisk === "avoid") return true;
   return false;
 }
 
 function pick(
   ans: Answers, band: string, cats: Category[],
   used: Set<string>, currentZone: Zone, corridorZones: Zone[],
-  atMin: number, remainingBudget: number,
+  atMin: number, remainingBudget: number, usedCuisines: Set<string>,
   cuisineFilter?: string[],
-): { place: Place; zone: Zone } | undefined {
+): { place: Place; zone: Zone; alts: Place[] } | undefined {
   const base = PLACES.filter(p =>
     cats.includes(p.category) &&
     !used.has(p.id) &&
@@ -173,15 +188,16 @@ function pick(
     if (filtered.length) pool = filtered;
   }
 
-  const best = pool.sort((a, b) => {
-    const az = (a.zone ?? "multiple") as Zone;
-    const bz = (b.zone ?? "multiple") as Zone;
-    const as = score(a, ans, band, remainingBudget) - travelMins(currentZone, az, atMin) / 15;
-    const bs = score(b, ans, band, remainingBudget) - travelMins(currentZone, bz, atMin) / 15;
-    return bs - as;
-  })[0];
+  const rank = (p: Place) => {
+    const z = (p.zone ?? "multiple") as Zone;
+    let v = score(p, ans, band, remainingBudget) - travelMins(currentZone, z, atMin) / 15;
+    if (overlap(p.cuisines ?? [], Array.from(usedCuisines)) > 0) v -= 6; // don't repeat a cuisine
+    return v;
+  };
 
-  return { place: best, zone: (best.zone ?? "multiple") as Zone };
+  const sorted = [...pool].sort((a, b) => rank(b) - rank(a));
+  const best = sorted[0];
+  return { place: best, zone: (best.zone ?? "multiple") as Zone, alts: sorted.slice(1, 4) };
 }
 
 function backupFor(p: Place): string | undefined {
@@ -203,6 +219,8 @@ export function buildPlan(ans: Answers): Plan {
   let prevArea       = PROFILE.homeArea;
   let runningCost    = 0;
   let lastMealEnd    = 0; // end time of the last full meal (food/cafe), for spacing
+  const usedCuisines = new Set<string>(); // avoid repeating a cuisine across the day
+  const monsoon      = isMonsoon(ans);
   const end          = ans.endMin;
   const dayMins      = end - ans.startMin;
   const vegDay       = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
@@ -210,7 +228,12 @@ export function buildPlan(ans: Answers): Plan {
   const corridor      = detectCorridor(ans);
   const corridorZones = CORRIDOR_ZONES[corridor];
 
-  const add = (result: { place: Place; zone: Zone } | undefined, kind: Category) => {
+  const toAlt = (p: Place): AltPlace => ({
+    id: p.id, name: p.name, area: p.area, summary: p.summary,
+    cost: p.costPerPerson * 2, mapsUrl: p.mapsUrl, topDishes: p.topDishes, mustBook: p.mustBook,
+  });
+
+  const add = (result: { place: Place; zone: Zone; alts?: Place[] } | undefined, kind: Category) => {
     if (!result || cursor >= end) return;
     const { place: p, zone } = result;
 
@@ -244,12 +267,15 @@ export function buildPlan(ans: Answers): Plan {
       cost:           blockCost,
       travelFromPrev: blocks.length === 0 && tripMins <= 10 ? undefined : travel,
       backup:         backupFor(p),
+      restroom:       restroomFor(zone),
+      alternatives:   (result.alts ?? []).map(toAlt),
       kind,
     });
 
     runningCost += blockCost;
     cursor       = arrivalMin + dur;
     if (isFullMeal) lastMealEnd = cursor;
+    (p.cuisines ?? []).forEach(c => usedCuisines.add(c));
     if (zone !== "multiple") currentZone = zone;
     else if (FAR_RETURN[currentZone]) currentZone = "home"; // we've driven back to the city
     prevName = p.name;
@@ -262,18 +288,18 @@ export function buildPlan(ans: Answers): Plan {
 
   // Morning activity + café (early starts only)
   if (ans.startMin < 660) {
-    add(pick(ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining()), "activity");
-    add(pick(ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, remaining()), "cafe");
+    add(pick(ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
+    add(pick(ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "cafe");
   }
 
   // Lunch (skipped automatically by meal-spacing if breakfast was recent)
   if (cursor < 960 && end > 780) {
-    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "food");
+    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
   }
 
   // Afternoon / first-half experience or shopping
   if (end > 840) {
-    add(pick(ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining()), "experience");
+    add(pick(ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "experience");
   }
 
   // Mid-day rest — only if near home and it's a long day
@@ -284,17 +310,17 @@ export function buildPlan(ans: Answers): Plan {
 
   // Evening activity / shopping / café
   if (end > 1080) {
-    add(pick(ans, b(), ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining()), "activity");
+    add(pick(ans, b(), ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
   }
 
   // Dinner
   if (end > 1140) {
-    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "food");
+    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
   }
 
   // Dessert
   if (end - cursor > 15) {
-    add(pick(ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), ans.foods), "dessert");
+    add(pick(ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "dessert");
   }
 
   // Full-day map URL with all waypoints
@@ -305,21 +331,21 @@ export function buildPlan(ans: Answers): Plan {
 
   const requests = (ans.mustInclude ?? []).map(s => s.trim()).filter(Boolean);
 
+  const placesInPlan = blocks.filter(x => x.place).map(x => x.place!);
   const totalCost = blocks.reduce((s, x) => s + x.cost, 0);
   const plan: Plan = {
     blocks,
     totalCost,
-    budget:     ans.budget,
-    overBudget: totalCost > ans.budget,
-    greeting:   greeting(ans),
-    signoff:    signoff(),
+    budget:      ans.budget,
+    overBudget:  totalCost > ans.budget,
+    greeting:    greeting(ans),
+    signoff:     signoff(),
     fullDayMapUrl,
-    requests:   requests.length ? requests : undefined,
+    requests:    requests.length ? requests : undefined,
+    flags:       buildFlags(blocks, ans, monsoon, vegDay),
+    outfit:      placesInPlan.length ? outfitFor(placesInPlan, monsoon) : undefined,
+    weatherNote: monsoon ? "Planned for monsoon: indoor-leaning, with rain backups." : undefined,
   };
-
-  if (vegDay && blocks.length) {
-    blocks[0].backup = `Heads up: it's a veg day (Mon, Thu, Sat), so every food stop is vegetarian. ${blocks[0].backup ?? ""}`.trim();
-  }
 
   return plan;
 }

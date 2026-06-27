@@ -1,6 +1,7 @@
 "use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plan, PlanBlock } from "@/lib/types";
+import { Plan, PlanBlock, AltPlace } from "@/lib/types";
 import { Chibi } from "./Chibi";
 
 function fmt(min: number) {
@@ -11,7 +12,40 @@ function fmt(min: number) {
   return `${hh}:${m.toString().padStart(2, "0")} ${ap}`;
 }
 
+const CAT: Record<string, { label: string; cls: string }> = {
+  food:       { label: "Dining",     cls: "bg-rose-400/15 text-rose-200" },
+  cafe:       { label: "Café",       cls: "bg-amber-400/15 text-amber-200" },
+  dessert:    { label: "Dessert",    cls: "bg-pink-400/15 text-pink-200" },
+  activity:   { label: "Activity",   cls: "bg-emerald-400/15 text-emerald-200" },
+  experience: { label: "Experience", cls: "bg-violet-400/15 text-violet-200" },
+  shopping:   { label: "Shopping",   cls: "bg-sky-400/15 text-sky-200" },
+  rest:       { label: "Break",      cls: "bg-slate-400/15 text-slate-200" },
+};
+
+// What a card actually shows, after any swap is applied.
+interface Shown { title: string; area?: string; blurb: string; cost: number; mapsUrl?: string; topDishes?: string[]; mustBook?: boolean; }
+
 export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; onRestart: () => void }) {
+  // swaps[i] = 0 → original place; 1..n → that alternative
+  const [swaps, setSwaps] = useState<Record<number, number>>({});
+
+  const shownFor = (b: PlanBlock, i: number): Shown => {
+    const idx = swaps[i] ?? 0;
+    if (idx > 0 && b.alternatives?.[idx - 1]) {
+      const a = b.alternatives[idx - 1];
+      return { title: a.name, area: a.area, blurb: a.summary, cost: a.cost, mapsUrl: a.mapsUrl, topDishes: a.topDishes, mustBook: a.mustBook };
+    }
+    return { title: b.title, area: b.place?.area, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
+  };
+
+  const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
+  const over = liveTotal > plan.budget;
+
+  const cycle = (i: number, alts?: AltPlace[]) => {
+    if (!alts?.length) return;
+    setSwaps((s) => ({ ...s, [i]: ((s[i] ?? 0) + 1) % (alts.length + 1) }));
+  };
+
   return (
     <div>
       <div className="text-center">
@@ -19,57 +53,61 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
         <h1 className="mt-4 text-3xl font-bold">{plan.greeting ?? `Here is the day, ${name}`} ✨</h1>
         <p className="mt-2 text-white/60">
           {plan.blocks.length} stops ·{" "}
-          <span className={plan.overBudget ? "text-rose-400" : "text-emerald-400"}>
-            ₹{plan.totalCost.toLocaleString("en-IN")}
-          </span>{" "}
+          <span className={over ? "text-rose-400" : "text-emerald-400"}>₹{liveTotal.toLocaleString("en-IN")}</span>{" "}
           of ₹{plan.budget.toLocaleString("en-IN")}
         </p>
 
         {plan.fullDayMapUrl && (
-          <a
-            href={plan.fullDayMapUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white/8 px-4 py-2 text-sm hover:bg-white/15"
-          >
+          <a href={plan.fullDayMapUrl} target="_blank" rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white/8 px-4 py-2 text-sm hover:bg-white/15">
             🗺️ View full day route on Maps
           </a>
         )}
-
-        {plan.requests && plan.requests.length > 0 && (
-          <div className="mt-4 rounded-xl border border-glow/30 bg-glow/5 px-4 py-3 text-left">
-            <p className="text-xs font-medium text-glow">You wanted to include</p>
-            <p className="mt-1 text-sm text-white/75">
-              {plan.requests.join(" · ")}
-            </p>
-            <p className="mt-1 text-xs text-white/40">Worked into the day where it fits. Anything not matched to a spot, slot it in yourself.</p>
-          </div>
-        )}
       </div>
+
+      {/* Early heads-up flags */}
+      {plan.flags && plan.flags.length > 0 && (
+        <div className="mt-6 space-y-2">
+          {plan.flags.map((f, i) => (
+            <div key={i} className="flex gap-2.5 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm text-white/80">
+              <span className="shrink-0">{f.icon}</span>
+              <span>{f.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Outfit suggestion */}
+      {plan.outfit && (
+        <div className="mt-3 rounded-xl border border-glow/30 bg-glow/5 px-4 py-3">
+          <p className="text-xs font-medium text-glow">👗 What to wear</p>
+          <p className="mt-1 text-sm text-white/80">{plan.outfit}</p>
+        </div>
+      )}
+
+      {/* Requested activities */}
+      {plan.requests && plan.requests.length > 0 && (
+        <div className="mt-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+          <p className="text-xs font-medium text-white/60">You wanted to include</p>
+          <p className="mt-1 text-sm text-white/80">{plan.requests.join(" · ")}</p>
+          <p className="mt-1 text-xs text-white/40">Worked in where it fits. Anything not matched to a spot, slot it in yourself.</p>
+        </div>
+      )}
 
       <div className="relative mt-8 pl-6">
         <div className="timeline-line absolute left-1.5 top-2 bottom-2 w-0.5 rounded-full" />
         {plan.blocks.map((b, i) => (
           <div key={i}>
             {b.travelFromPrev && (
-              <TravelSegment
-                mins={b.travelFromPrev.mins}
-                fromLabel={b.travelFromPrev.fromLabel}
-                directionsUrl={b.travelFromPrev.directionsUrl}
-              />
+              <TravelSegment mins={b.travelFromPrev.mins} fromLabel={b.travelFromPrev.fromLabel} directionsUrl={b.travelFromPrev.directionsUrl} />
             )}
-            <Block b={b} i={i} />
+            <Block b={b} i={i} shown={shownFor(b, i)} swapped={(swaps[i] ?? 0) > 0} onSwap={() => cycle(i, b.alternatives)} />
           </div>
         ))}
       </div>
 
-      {plan.signoff && (
-        <p className="mt-8 text-center text-white/70 italic">{plan.signoff}</p>
-      )}
-      <button
-        onClick={onRestart}
-        className="mt-4 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30"
-      >
+      {plan.signoff && <p className="mt-8 text-center text-white/70 italic">{plan.signoff}</p>}
+      <button onClick={onRestart} className="mt-4 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30">
         Plan another day
       </button>
     </div>
@@ -81,52 +119,56 @@ function TravelSegment({ mins, fromLabel, directionsUrl }: { mins: number; fromL
     <div className="my-1 flex items-center gap-2 pl-1 text-xs text-white/40">
       <div className="h-4 w-0.5 bg-white/15 mx-1 shrink-0" />
       <span>🚗 {mins} min from {fromLabel}</span>
-      <a
-        href={directionsUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="ml-auto rounded-md bg-white/6 px-2 py-0.5 text-white/50 hover:text-white/80 hover:bg-white/12 shrink-0"
-      >
+      <a href={directionsUrl} target="_blank" rel="noreferrer"
+        className="ml-auto rounded-md bg-white/6 px-2 py-0.5 text-white/50 hover:text-white/80 hover:bg-white/12 shrink-0">
         Directions ↗
       </a>
     </div>
   );
 }
 
-function Block({ b, i }: { b: PlanBlock; i: number }) {
+function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; shown: Shown; swapped: boolean; onSwap: () => void }) {
+  const cat = CAT[b.kind] ?? CAT.activity;
+  const hasAlts = (b.alternatives?.length ?? 0) > 0;
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 12 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: i * 0.08 }}
-      className="relative mb-2"
-    >
+    <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className="relative mb-2">
       <div className="absolute -left-[18px] top-1.5 h-3 w-3 rounded-full bg-glow shadow-[0_0_12px_rgba(167,139,250,.8)]" />
       <div className="glass rounded-2xl p-5">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-glow">{fmt(b.startMin)} – {fmt(b.endMin)}</span>
-          {b.cost > 0 && <span className="text-xs text-white/50">₹{b.cost.toLocaleString("en-IN")}</span>}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-glow">{fmt(b.startMin)} – {fmt(b.endMin)}</span>
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${cat.cls}`}>{cat.label}</span>
+          </div>
+          {shown.cost > 0 && <span className="text-xs text-white/50">₹{shown.cost.toLocaleString("en-IN")}</span>}
         </div>
-        <h3 className="mt-1.5 text-lg font-semibold">{b.title}</h3>
-        {b.place?.area && (
-          <p className="text-xs text-white/40 mt-0.5">📍 {b.place.area}</p>
-        )}
-        <p className="mt-2 text-sm text-white/70">{b.why}</p>
 
+        <div className="mt-1.5 flex items-start justify-between gap-2">
+          <h3 className="text-lg font-semibold leading-snug">{shown.title}</h3>
+          {shown.mustBook && (
+            <span className="shrink-0 rounded-md bg-amber-400/15 px-2 py-1 text-[10px] font-semibold text-amber-200">📅 Book ahead</span>
+          )}
+        </div>
+        {shown.area && <p className="text-xs text-white/40 mt-0.5">📍 {shown.area}</p>}
+        <p className="mt-2 text-sm text-white/70">{shown.blurb}</p>
+
+        {shown.topDishes && shown.topDishes.length > 0 && (
+          <p className="mt-2 text-xs text-white/60"><span className="text-white/40">Order:</span> {shown.topDishes.join(" · ")}</p>
+        )}
+
+        {b.restroom && <p className="mt-2 text-xs text-white/45">🚻 {b.restroom}</p>}
         {b.backup && <p className="mt-2 text-xs text-amber-300/80">☔ {b.backup}</p>}
 
-        <div className="mt-3 flex gap-2">
-          {b.place?.mapsUrl && (
-            <a href={b.place.mapsUrl} target="_blank" rel="noreferrer"
-              className="rounded-lg bg-white/8 px-3 py-1.5 text-xs hover:bg-white/15">
-              Open in Maps
-            </a>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {shown.mapsUrl && (
+            <a href={shown.mapsUrl} target="_blank" rel="noreferrer" className="rounded-lg bg-white/8 px-3 py-1.5 text-xs hover:bg-white/15">Open in Maps</a>
           )}
           {b.place?.bookingUrl && (
-            <a href={b.place.bookingUrl} target="_blank" rel="noreferrer"
-              className="btn-primary rounded-lg px-3 py-1.5 text-xs font-medium text-white">
-              Book
-            </a>
+            <a href={b.place.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary rounded-lg px-3 py-1.5 text-xs font-medium text-white">Book</a>
+          )}
+          {hasAlts && (
+            <button onClick={onSwap} className="ml-auto rounded-lg border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:text-white hover:border-white/30">
+              ↻ {swapped ? "Try another" : "Swap"}
+            </button>
           )}
         </div>
       </div>

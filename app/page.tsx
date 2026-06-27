@@ -21,6 +21,7 @@ const ORDER: Step[] = ["intro", "mood", "personality", "foods", "activities", "b
 
 const HER_NAME = PROFILE.name;
 const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
+const OUTING_MONTH = new Date(PROFILE.birthday + "T00:00:00").getMonth();
 
 export default function Page() {
   const [step, setStep] = useState<Step>("intro");
@@ -58,6 +59,7 @@ export default function Page() {
       startMin: startMin || 600,
       endMin: endMin || 1320,
       dayOfWeek: OUTING_DOW,
+      month: OUTING_MONTH,
       dislikes: PROFILE.dislikes,
     };
     const p = buildPlan(ans);
