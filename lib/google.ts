@@ -68,6 +68,62 @@ export async function searchPlace(q: string): Promise<PlaceMedia> {
   }
 }
 
+export interface LivePlace {
+  id: string;
+  name: string;
+  address?: string;
+  lat?: number;
+  lng?: number;
+  rating?: number;
+  userRatings?: number;
+  priceLevel?: string;
+  types?: string[];
+  summary?: string;
+  photoRef?: string;
+}
+
+const listCache = new Map<string, LivePlace[]>();
+
+// Multi-result Places text search for live discovery (restaurants, cafes, things to do).
+export async function searchPlaces(q: string, max = 5): Promise<LivePlace[]> {
+  if (!KEY) return [];
+  const cacheKey = `${max}:${q.toLowerCase().trim()}`;
+  const hit = listCache.get(cacheKey);
+  if (hit) return hit;
+
+  try {
+    const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": KEY,
+        "X-Goog-FieldMask":
+          "places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.priceLevel,places.types,places.editorialSummary,places.photos",
+      },
+      body: JSON.stringify({ textQuery: q, maxResultCount: max, regionCode: "IN" }),
+    });
+    if (!res.ok) { listCache.set(cacheKey, []); return []; }
+    const data = await res.json();
+    const out: LivePlace[] = (data?.places ?? []).map((p: any) => ({
+      id: p.id,
+      name: p.displayName?.text,
+      address: p.formattedAddress,
+      lat: p.location?.latitude,
+      lng: p.location?.longitude,
+      rating: p.rating,
+      userRatings: p.userRatingCount,
+      priceLevel: p.priceLevel,
+      types: p.types,
+      summary: p.editorialSummary?.text,
+      photoRef: p.photos?.[0]?.name,
+    })).filter((p: LivePlace) => p.id && p.name);
+    listCache.set(cacheKey, out);
+    return out;
+  } catch {
+    return [];
+  }
+}
+
 export function photoMediaUrl(ref: string, widthPx = 800): string {
   return `https://places.googleapis.com/v1/${ref}/media?maxWidthPx=${widthPx}&key=${KEY}`;
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildPlan } from "@/lib/engine";
-import { Answers, Plan } from "@/lib/types";
+import { Answers, Plan, Place } from "@/lib/types";
 import { Chibi } from "@/components/Chibi";
 import { PlanView } from "@/components/PlanView";
 import { PROFILE, randomNickname } from "@/lib/profile";
@@ -33,6 +33,7 @@ export default function Page() {
   const [startMin, setStartMin] = useState(0);
   const [endMin, setEndMin] = useState(0);
   const [plan, setPlan] = useState<Plan | null>(null);
+  const [building, setBuilding] = useState(false);
   const [hello, setHello] = useState("");
   useEffect(() => { setHello(randomNickname()); }, [step]);
 
@@ -48,7 +49,7 @@ export default function Page() {
     if (endMin && endMin <= v) setEndMin(0);
   }
 
-  function generate() {
+  async function generate() {
     const ans: Answers = {
       who: HER_NAME,
       mood: (mood.length ? mood[0] : "Birthday").toLowerCase(),
@@ -62,8 +63,27 @@ export default function Page() {
       month: OUTING_MONTH,
       dislikes: PROFILE.dislikes,
     };
-    const p = buildPlan(ans);
+    setBuilding(true);
+    // Pull live, real places to widen the pool; fall back to curated if it's slow or fails.
+    let extra: Place[] = [];
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 6000);
+      const res = await fetch("/api/discover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ans),
+        signal: ctrl.signal,
+      });
+      clearTimeout(t);
+      const d = await res.json();
+      if (Array.isArray(d.places)) extra = d.places;
+    } catch {
+      /* curated-only fallback */
+    }
+    const p = buildPlan(ans, extra);
     setPlan(p);
+    setBuilding(false);
     setStep("plan");
     upgradeNarration(p, ans);
   }
@@ -93,6 +113,18 @@ export default function Page() {
     step === "intro" ? "wave" :
     step === "plan" ? "happy" :
     personality.includes("Adventure") || mood.includes("Adventure") ? "excited" : "neutral";
+
+  if (building) {
+    return (
+      <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex items-center justify-center">
+        <Screen>
+          <Chibi mood="excited" size={160} />
+          <h2 className="mt-4 text-2xl font-semibold">Planning the day…</h2>
+          <p className="mt-2 text-white/60">Pulling real, current places near your route and putting them in order.</p>
+        </Screen>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex flex-col">

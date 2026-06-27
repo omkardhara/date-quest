@@ -88,6 +88,11 @@ function detectCorridor(ans: Answers): Corridor {
   return "bandra_hub";
 }
 
+// Real zones (for live discovery) the day will actually draw from.
+export function zonesForAnswers(ans: Answers): Zone[] {
+  return CORRIDOR_ZONES[detectCorridor(ans)].filter(z => z !== "multiple" && z !== "home");
+}
+
 // ─── Scoring & filtering ──────────────────────────────────────────────────────
 const FULL_MEALS: Category[] = ["food", "cafe"]; // these need spacing; dessert does not
 const FOODY:      Category[] = ["food", "dessert"];
@@ -152,6 +157,7 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
   // Monsoon: demote exposed outdoor stops that only get a "caution" in heavy rain.
   if (isMonsoon(ans) && p.outdoor && p.monsoonRisk === "caution") s -= 8;
+  if (p.rating) s += (p.rating - 3.8) * 2; // live places: reward strong Google ratings
   if (matchesRequest(p, ans.mustInclude ?? [])) s += 25; // strongly prefer requested things
   return s;
 }
@@ -167,12 +173,12 @@ function blocked(p: Place, ans: Answers): boolean {
 }
 
 function pick(
-  ans: Answers, band: string, cats: Category[],
+  pool: Place[], ans: Answers, band: string, cats: Category[],
   used: Set<string>, currentZone: Zone, corridorZones: Zone[],
   atMin: number, remainingBudget: number, usedCuisines: Set<string>,
   cuisineFilter?: string[],
 ): { place: Place; zone: Zone; alts: Place[] } | undefined {
-  const base = PLACES.filter(p =>
+  const base = pool.filter(p =>
     cats.includes(p.category) &&
     !used.has(p.id) &&
     !blocked(p, ans) &&
@@ -182,10 +188,10 @@ function pick(
   if (!base.length) return undefined;
 
   // Cuisine is a soft preference: only narrow if it leaves something.
-  let pool = base;
+  let cand = base;
   if (cuisineFilter?.length) {
     const filtered = base.filter(p => overlap(p.cuisines ?? [], cuisineFilter) > 0);
-    if (filtered.length) pool = filtered;
+    if (filtered.length) cand = filtered;
   }
 
   const rank = (p: Place) => {
@@ -195,7 +201,7 @@ function pick(
     return v;
   };
 
-  const sorted = [...pool].sort((a, b) => rank(b) - rank(a));
+  const sorted = [...cand].sort((a, b) => rank(b) - rank(a));
   const best = sorted[0];
   return { place: best, zone: (best.zone ?? "multiple") as Zone, alts: sorted.slice(1, 4) };
 }
@@ -210,7 +216,8 @@ function backupFor(p: Place): string | undefined {
 }
 
 // ─── Main builder ─────────────────────────────────────────────────────────────
-export function buildPlan(ans: Answers): Plan {
+export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
+  const pool       = extra.length ? [...PLACES, ...extra] : PLACES;
   const used       = new Set<string>();
   const blocks:      PlanBlock[] = [];
   let cursor         = ans.startMin;
@@ -288,18 +295,18 @@ export function buildPlan(ans: Answers): Plan {
 
   // Morning activity + café (early starts only)
   if (ans.startMin < 660) {
-    add(pick(ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
-    add(pick(ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "cafe");
+    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
+    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "cafe");
   }
 
   // Lunch (skipped automatically by meal-spacing if breakfast was recent)
   if (cursor < 960 && end > 780) {
-    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
   }
 
   // Afternoon / first-half experience or shopping
   if (end > 840) {
-    add(pick(ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "experience");
   }
 
   // Mid-day rest — only if near home and it's a long day
@@ -310,17 +317,17 @@ export function buildPlan(ans: Answers): Plan {
 
   // Evening activity / shopping / café
   if (end > 1080) {
-    add(pick(ans, b(), ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
   }
 
   // Dinner
   if (end > 1140) {
-    add(pick(ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
   }
 
   // Dessert
   if (end - cursor > 15) {
-    add(pick(ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "dessert");
+    add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "dessert");
   }
 
   // Full-day map URL with all waypoints

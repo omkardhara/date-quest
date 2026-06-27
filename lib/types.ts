@@ -28,6 +28,8 @@ export interface Place {
   outdoor?: boolean;      // exposed to rain (matters in monsoon)
   monsoonRisk?: "ok" | "caution" | "avoid"; // how it holds up in heavy monsoon
   closedDays?: number[];  // 0=Sun..6=Sat the venue is closed
+  rating?: number;        // live: Google rating
+  source?: "curated" | "live"; // where this place came from
 }
 
 export interface Answers {
