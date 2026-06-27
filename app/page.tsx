@@ -20,6 +20,7 @@ type Step = "intro" | "mood" | "personality" | "foods" | "activities" | "budget"
 const ORDER: Step[] = ["intro", "mood", "personality", "foods", "activities", "budget", "time", "plan"];
 
 const HER_NAME = PROFILE.name;
+const OUTING_DATE = PROFILE.birthday; // "YYYY-MM-DD"
 const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
 const OUTING_MONTH = new Date(PROFILE.birthday + "T00:00:00").getMonth();
 
@@ -64,24 +65,41 @@ export default function Page() {
       dislikes: PROFILE.dislikes,
     };
     setBuilding(true);
-    // Pull live, real places to widen the pool; fall back to curated if it's slow or fails.
-    let extra: Place[] = [];
-    try {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), 6000);
-      const res = await fetch("/api/discover", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(ans),
-        signal: ctrl.signal,
-      });
-      clearTimeout(t);
-      const d = await res.json();
-      if (Array.isArray(d.places)) extra = d.places;
-    } catch {
-      /* curated-only fallback */
-    }
+
+    // Live places to widen the pool + live events for the day, in parallel.
+    const eventQ =
+      personality.includes("Culture") || personality.includes("Artsy") ? "art exhibitions and events in Mumbai" :
+      personality.includes("Nightlife") || personality.includes("Playful") ? "live music and events in Mumbai" :
+      "Events in Mumbai";
+
+    const discover = (async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 6000);
+        const res = await fetch("/api/discover", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ans), signal: ctrl.signal,
+        });
+        clearTimeout(t);
+        const d = await res.json();
+        return Array.isArray(d.places) ? (d.places as Place[]) : [];
+      } catch { return []; }
+    })();
+
+    const events = (async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 6000);
+        const res = await fetch(`/api/events?date=${OUTING_DATE}&q=${encodeURIComponent(eventQ)}`, { signal: ctrl.signal });
+        clearTimeout(t);
+        const d = await res.json();
+        return Array.isArray(d.events) ? d.events : [];
+      } catch { return []; }
+    })();
+
+    const [extra, evts] = await Promise.all([discover, events]);
     const p = buildPlan(ans, extra);
+    if (evts.length) p.events = evts;
     setPlan(p);
     setBuilding(false);
     setStep("plan");

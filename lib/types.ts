@@ -82,6 +82,15 @@ export interface Flag {
   text: string;
 }
 
+export interface PlanEvent {
+  title: string;
+  when?: string;
+  venue?: string;
+  address?: string;
+  link?: string;
+  thumbnail?: string;
+}
+
 export interface Plan {
   blocks: PlanBlock[];
   totalCost: number;
@@ -94,4 +103,5 @@ export interface Plan {
   flags?: Flag[];         // early heads-up: monsoon, bookings, veg day
   outfit?: string;        // what to wear given the day's venues + weather
   weatherNote?: string;   // season/weather framing
+  events?: PlanEvent[];   // live events happening around the outing date
 }

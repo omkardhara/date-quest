@@ -102,6 +102,31 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
         </div>
       )}
 
+      {/* Live events happening around the day */}
+      {plan.events && plan.events.length > 0 && (
+        <div className="mt-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+          <p className="text-xs font-medium text-glow">🎉 Happening around her day</p>
+          <p className="mt-0.5 mb-2 text-xs text-white/40">Real events on or near the date. Tap to check, and slot one in if it fits.</p>
+          <div className="space-y-2">
+            {plan.events.map((e, i) => (
+              <a key={i} href={e.link || "#"} target="_blank" rel="noreferrer"
+                className="flex gap-3 rounded-lg bg-white/5 p-2 hover:bg-white/10">
+                {e.thumbnail && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={e.thumbnail} alt="" className="h-12 w-12 rounded-md object-cover shrink-0" loading="lazy" />
+                )}
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-white/85 leading-snug">{e.title}</p>
+                  <p className="text-xs text-white/45 truncate">
+                    {[e.when, e.venue].filter(Boolean).join(" · ")}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Requested activities */}
       {plan.requests && plan.requests.length > 0 && (
         <div className="mt-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
