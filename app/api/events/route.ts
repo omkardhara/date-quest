@@ -9,7 +9,11 @@ export async function GET(req: NextRequest) {
 
   const sp = req.nextUrl.searchParams;
   const date = sp.get("date") ?? undefined;
-  const q = sp.get("q") || "Events in Mumbai";
+  let q = sp.get("q") || "events in Mumbai";
+  if (date) {
+    const monthYear = new Date(date + "T00:00:00").toLocaleDateString("en-US", { month: "long", year: "numeric" });
+    q = `${q} ${monthYear}`;
+  }
 
   const events = await searchEvents(q, date);
   return NextResponse.json({ events }, { headers: { "Cache-Control": "public, max-age=3600" } });

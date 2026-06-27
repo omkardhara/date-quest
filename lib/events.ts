@@ -8,8 +8,8 @@ export function hasEventsKey(): boolean {
 
 const cache = new Map<string, PlanEvent[]>();
 
-// Live events in Mumbai via SerpAPI's Google Events engine, optionally filtered
-// to the outing date. Returns [] gracefully if the key is missing or it fails.
+// Live, structured events in Mumbai via SerpAPI's Google Events engine, narrowed
+// to the outing date when possible. Returns [] gracefully if key missing/invalid.
 export async function searchEvents(q: string, dateISO?: string): Promise<PlanEvent[]> {
   if (!KEY) return [];
   const cacheKey = `${q}|${dateISO ?? ""}`;
@@ -19,7 +19,7 @@ export async function searchEvents(q: string, dateISO?: string): Promise<PlanEve
   try {
     const url = `https://serpapi.com/search.json?engine=google_events&q=${encodeURIComponent(q)}&hl=en&gl=in&api_key=${KEY}`;
     const r = await fetch(url);
-    const data = await r.json().catch(() => ({}));
+    const data = await r.json().catch(() => ({} as any));
     if (!r.ok || data?.error) {
       console.warn("[events] SerpAPI", r.status, data?.error ?? "");
       cache.set(cacheKey, []);
@@ -36,7 +36,7 @@ export async function searchEvents(q: string, dateISO?: string): Promise<PlanEve
       thumbnail: e.thumbnail,
     })).filter((e: PlanEvent) => e.title);
 
-    // Try to narrow to the outing date (e.g. "Jul 8"); keep all if nothing matches.
+    // Narrow to the outing date (e.g. "Jul 8") if any match; otherwise keep all upcoming.
     if (dateISO) {
       const d = new Date(dateISO + "T00:00:00");
       const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); // "Jul 8"
@@ -47,7 +47,8 @@ export async function searchEvents(q: string, dateISO?: string): Promise<PlanEve
     const out: PlanEvent[] = items.slice(0, 6).map(({ startDate, ...rest }) => rest);
     cache.set(cacheKey, out);
     return out;
-  } catch {
+  } catch (e) {
+    console.warn("[events] SerpAPI error", e);
     return [];
   }
 }
