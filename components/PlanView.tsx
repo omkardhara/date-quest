@@ -40,7 +40,12 @@ const CAT: Record<string, { label: string; cls: string }> = {
 };
 
 // What a card actually shows, after any swap is applied.
-interface Shown { title: string; area?: string; blurb: string; cost: number; mapsUrl?: string; topDishes?: string[]; mustBook?: boolean; }
+export interface Shown { title: string; area?: string; blurb: string; cost: number; mapsUrl?: string; topDishes?: string[]; mustBook?: boolean; }
+
+// Non-swapped view of a block (used by the getaway view, which has no swapping).
+export function shownFromBlock(b: PlanBlock): Shown {
+  return { title: b.title, area: b.place?.area, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
+}
 
 export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; onRestart: () => void }) {
   // swaps[i] = 0 → original place; 1..n → that alternative
@@ -169,7 +174,7 @@ function TravelSegment({ mins, fromLabel, directionsUrl }: { mins: number; fromL
   );
 }
 
-function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; shown: Shown; swapped: boolean; onSwap: () => void }) {
+export function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: number; shown: Shown; swapped: boolean; onSwap: () => void }) {
   const cat = CAT[b.kind] ?? CAT.activity;
   const hasAlts = (b.alternatives?.length ?? 0) > 0;
   const noVenue = b.kind === "rest" || b.place?.id === "movie-premium" || !shown.area;

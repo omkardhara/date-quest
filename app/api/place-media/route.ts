@@ -32,7 +32,9 @@ export async function GET(req: NextRequest) {
   const area = (sp.get("area") ?? "").trim();
   if (!name) return NextResponse.json({ found: false });
 
-  const q = `${name} ${area} Mumbai`.replace(/\s+/g, " ").trim();
+  // Area already carries the locality (e.g. "Bandra West" or "Lonavala"); only
+  // fall back to "Mumbai" when we have no area at all.
+  const q = (area ? `${name} ${area}` : `${name} Mumbai`).replace(/\s+/g, " ").trim();
   const m = await searchPlace(q);
   if (!m.found || !nameMatches(name, m.name)) return NextResponse.json({ found: false });
 

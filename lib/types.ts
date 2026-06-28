@@ -91,6 +91,27 @@ export interface PlanEvent {
   thumbnail?: string;
 }
 
+export interface GetawayDay {
+  label: string;       // "Day 1"
+  subtitle?: string;   // "Getting there & settling in"
+  blocks: PlanBlock[];
+}
+
+export interface GetawayPlan {
+  destination: string;
+  region: string;
+  summary: string;
+  nights: number;
+  driveNote: string;
+  monsoonNote?: string;
+  bestMonths: string;
+  outfit?: string;
+  flags: Flag[];
+  days: GetawayDay[];
+  stays: AltPlace[];
+  events?: PlanEvent[];
+}
+
 export interface Plan {
   blocks: PlanBlock[];
   totalCost: number;

@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildPlan } from "@/lib/engine";
-import { Answers, Plan, Place } from "@/lib/types";
+import { Answers, Plan, Place, GetawayPlan } from "@/lib/types";
 import { Chibi } from "@/components/Chibi";
 import { PlanView } from "@/components/PlanView";
+import { GetawayView } from "@/components/GetawayView";
 import { PROFILE, randomNickname } from "@/lib/profile";
 
 const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Celebrate", "Adventure", "Group outing", "Proposal", "Reunion", "Just because"];
@@ -16,13 +17,23 @@ const BUDGETS = [2000, 5000, 10000, 20000];
 const STARTS = [["6 AM", 360], ["8 AM", 480], ["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200]] as const;
 const ENDS = [["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
 
-type Step = "intro" | "mood" | "personality" | "foods" | "activities" | "budget" | "time" | "plan";
+const GETAWAYS = [
+  { id: "lonavala", name: "Lonavala" },
+  { id: "karjat", name: "Karjat" },
+  { id: "mulshi", name: "Mulshi" },
+  { id: "malshej", name: "Malshej Ghat" },
+  { id: "palghar", name: "Palghar" },
+];
+const NIGHTS = [["Day trip", 0], ["1 night", 1], ["2 nights", 2]] as const;
+
+type Step = "intro" | "mood" | "personality" | "foods" | "activities" | "budget" | "time" | "plan" | "getaway-pick" | "getaway-plan";
 const ORDER: Step[] = ["intro", "mood", "personality", "foods", "activities", "budget", "time", "plan"];
 
 const HER_NAME = PROFILE.name;
 const OUTING_DATE = PROFILE.birthday; // "YYYY-MM-DD"
 const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
 const OUTING_MONTH = new Date(PROFILE.birthday + "T00:00:00").getMonth();
+const IS_MONSOON = [5, 6, 7, 8].includes(OUTING_MONTH);
 
 export default function Page() {
   const [step, setStep] = useState<Step>("intro");
@@ -35,6 +46,9 @@ export default function Page() {
   const [endMin, setEndMin] = useState(0);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [building, setBuilding] = useState(false);
+  const [dest, setDest] = useState("");
+  const [nights, setNights] = useState(1);
+  const [getaway, setGetaway] = useState<GetawayPlan | null>(null);
   const [hello, setHello] = useState("");
   useEffect(() => { setHello(randomNickname()); }, [step]);
 
@@ -106,6 +120,23 @@ export default function Page() {
     upgradeNarration(p, ans);
   }
 
+  async function generateGetaway() {
+    if (!dest) return;
+    setBuilding(true);
+    try {
+      const res = await fetch("/api/getaway", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ destId: dest, nights, monsoon: IS_MONSOON, date: OUTING_DATE }),
+      });
+      const d = await res.json();
+      if (d.plan) { setGetaway(d.plan); setStep("getaway-plan"); }
+    } catch {
+      /* ignore */
+    }
+    setBuilding(false);
+  }
+
   async function upgradeNarration(p: Plan, ans: Answers) {
     try {
       const blocks = p.blocks
@@ -146,7 +177,7 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex flex-col">
-      {step !== "plan" && (
+      {ORDER.includes(step) && step !== "plan" && step !== "intro" && (
         <div className="mb-6 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
           <motion.div className="h-full btn-primary" animate={{ width: `${progress}%` }} />
         </div>
@@ -167,9 +198,27 @@ export default function Page() {
               {hello && <p className="mt-4 text-glow font-medium">Hey {hello} 👋</p>}
               <h1 className="mt-2 text-3xl font-bold tracking-tight">A quest for your perfect day</h1>
               <p className="mt-3 text-white/70">
-                Answer a few quick things and I will plan the whole day for you. Real places, real plan, made for your mood.
+                Tell me a few quick things and I will plan it for real. Real places, real timings, made for your mood.
               </p>
-              <PrimaryBtn onClick={() => setStep("mood")}>Press start</PrimaryBtn>
+              <PrimaryBtn onClick={() => setStep("mood")}>Plan a day in Mumbai</PrimaryBtn>
+              <button
+                onClick={() => setStep("getaway-pick")}
+                className="mt-3 w-full rounded-xl border border-white/15 py-3.5 font-semibold text-white/80 hover:text-white hover:border-white/30"
+              >
+                Plan a weekend getaway
+              </button>
+            </Screen>
+          )}
+
+          {step === "getaway-pick" && (
+            <Screen>
+              <Chibi mood="excited" />
+              <Q>A weekend away. Where to?</Q>
+              <Hint>Quick escapes from Mumbai. {IS_MONSOON ? "It's monsoon, so the green hill spots shine right now." : ""}</Hint>
+              <Chips options={GETAWAYS.map((g) => g.name)} selected={dest ? [GETAWAYS.find((g) => g.id === dest)!.name] : []} onTap={(v) => setDest(GETAWAYS.find((g) => g.name === v)!.id)} />
+              <p className="mt-4 text-sm text-white/50">How long?</p>
+              <Chips options={NIGHTS.map((n) => n[0])} selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])} onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])} />
+              <Nav onBack={() => setStep("intro")} onNext={generateGetaway} canNext={!!dest} nextLabel="Plan the trip" />
             </Screen>
           )}
 
@@ -261,6 +310,10 @@ export default function Page() {
 
           {step === "plan" && plan && (
             <PlanView plan={plan} name={HER_NAME} onRestart={() => setStep("intro")} />
+          )}
+
+          {step === "getaway-plan" && getaway && (
+            <GetawayView plan={getaway} onRestart={() => setStep("intro")} />
           )}
         </motion.div>
       </AnimatePresence>
