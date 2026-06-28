@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plan, PlanBlock, AltPlace } from "@/lib/types";
 import { Chibi } from "./Chibi";
+import { Memories } from "./Memories";
 
 interface Media { photo?: string | null; map?: string | null; rating?: number; userRatings?: number; address?: string; }
 
@@ -62,6 +63,7 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
 
   const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
   const over = liveTotal > plan.budget;
+  const isBirthday = (plan.greeting ?? "").toLowerCase().includes("happy birthday");
 
   const cycle = (i: number, alts?: AltPlace[]) => {
     if (!alts?.length) return;
@@ -72,12 +74,18 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
     <div>
       <div className="text-center">
         <Chibi mood="happy" />
-        <h1 className="mt-4 text-3xl font-bold">{plan.greeting ?? `Here is the day, ${name}`} ✨</h1>
+        <h1 className={`mt-4 font-display text-3xl font-semibold leading-tight ${isBirthday ? "birthday-shimmer" : "hero-text"}`}>
+          {plan.greeting ?? `Here is the day, ${name}`}
+        </h1>
         <p className="mt-2 text-white/60">
           {plan.blocks.length} stops ·{" "}
           <span className={over ? "text-rose-400" : "text-emerald-400"}>₹{liveTotal.toLocaleString("en-IN")}</span>{" "}
           of ₹{plan.budget.toLocaleString("en-IN")}
         </p>
+
+        {plan.weatherNote && (
+          <p className="mt-2 inline-block rounded-full bg-white/8 px-3 py-1 text-xs text-white/60">{plan.weatherNote}</p>
+        )}
 
         {plan.fullDayMapUrl && (
           <a href={plan.fullDayMapUrl} target="_blank" rel="noreferrer"
@@ -153,8 +161,12 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
         ))}
       </div>
 
-      {plan.signoff && <p className="mt-8 text-center text-white/70 italic">{plan.signoff}</p>}
-      <button onClick={onRestart} className="mt-4 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30">
+      <div className="mt-10">
+        <Memories title="and today, we add one more" />
+      </div>
+
+      {plan.signoff && <p className="mt-6 text-center font-hand text-2xl text-amber-200/90">{plan.signoff}</p>}
+      <button onClick={onRestart} className="mt-5 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30">
         Plan another day
       </button>
     </div>

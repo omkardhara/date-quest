@@ -1,6 +1,7 @@
 "use client";
 import { GetawayPlan } from "@/lib/types";
 import { Chibi } from "./Chibi";
+import { Memories } from "./Memories";
 import { Block, shownFromBlock } from "./PlanView";
 
 function fmt(min: number) {
@@ -14,8 +15,8 @@ export function GetawayView({ plan, onRestart }: { plan: GetawayPlan; onRestart:
     <div>
       <div className="text-center">
         <Chibi mood="happy" />
-        <h1 className="mt-4 text-3xl font-bold">{plan.destination} ✨</h1>
-        <p className="mt-1 text-sm text-white/50">{plan.region} · {plan.nights === 0 ? "day trip" : `${plan.nights}-night trip`}</p>
+        <h1 className="mt-4 font-display text-4xl font-semibold hero-text">{plan.destination}</h1>
+        <p className="mt-1 text-sm text-white/50">{plan.region} · {plan.nights === 0 ? "day trip" : `${plan.nights}-night escape`}</p>
         <p className="mt-3 text-white/70">{plan.summary}</p>
         <p className="mt-2 text-xs text-white/45">{plan.driveNote}</p>
         <p className="mt-1 text-xs text-white/40">Best months: {plan.bestMonths}</p>
@@ -86,7 +87,11 @@ export function GetawayView({ plan, onRestart }: { plan: GetawayPlan; onRestart:
         </div>
       ))}
 
-      <button onClick={onRestart} className="mt-8 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30">
+      <div className="mt-10">
+        <Memories title="a weekend worth remembering" />
+      </div>
+
+      <button onClick={onRestart} className="mt-6 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30">
         Plan something else
       </button>
     </div>

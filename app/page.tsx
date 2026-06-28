@@ -7,6 +7,7 @@ import { Answers, Plan, Place, GetawayPlan } from "@/lib/types";
 import { Chibi } from "@/components/Chibi";
 import { PlanView } from "@/components/PlanView";
 import { GetawayView } from "@/components/GetawayView";
+import { Memories } from "@/components/Memories";
 import { PROFILE, randomNickname } from "@/lib/profile";
 
 const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Celebrate", "Adventure", "Group outing", "Proposal", "Reunion", "Just because"];
@@ -179,8 +180,8 @@ export default function Page() {
       <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex items-center justify-center">
         <Screen>
           <Chibi mood="excited" size={160} />
-          <h2 className="mt-4 text-2xl font-semibold">Planning the day…</h2>
-          <p className="mt-2 text-white/60">Pulling real, current places near your route and putting them in order.</p>
+          <h2 className="mt-4 font-display text-2xl font-semibold hero-text">Planning the day…</h2>
+          <p className="mt-2 text-white/60">Checking the weather, pulling real places near your route, and putting them in order.</p>
         </Screen>
       </main>
     );
@@ -205,18 +206,23 @@ export default function Page() {
         >
           {step === "intro" && (
             <Screen>
-              <Chibi mood={chibiMood} size={180} />
-              {hello && <p className="mt-4 text-glow font-medium">Hey {hello} 👋</p>}
-              <h1 className="mt-2 text-3xl font-bold tracking-tight">A quest for your perfect day</h1>
+              <Chibi mood={chibiMood} size={150} />
+              {hello && <p className="mt-3 font-hand text-2xl text-amber-200/90">hey {hello} 👋</p>}
+              <h1 className="mt-1 font-display text-4xl font-semibold leading-[1.05] hero-text">A day made for you</h1>
               <p className="mt-3 text-white/70">
-                Tell me a few quick things and I will plan it for real. Real places, real timings, made for your mood.
+                From Muscat to Mumbai, here is a day planned for real, around your mood, the weather, and the things you love.
               </p>
+
+              <div className="mt-6">
+                <Memories title="our little archive" />
+              </div>
+
               <PrimaryBtn onClick={() => setStep("mood")}>Plan a day in Mumbai</PrimaryBtn>
               <button
                 onClick={() => setStep("getaway-pick")}
                 className="mt-3 w-full rounded-xl border border-white/15 py-3.5 font-semibold text-white/80 hover:text-white hover:border-white/30"
               >
-                Plan a weekend getaway
+                Plan a weekend away
               </button>
             </Screen>
           )}
@@ -336,7 +342,7 @@ function Screen({ children }: { children: React.ReactNode }) {
   return <div className="glass rounded-3xl p-7">{children}</div>;
 }
 function Q({ children }: { children: React.ReactNode }) {
-  return <h2 className="mt-6 text-2xl font-semibold leading-snug">{children}</h2>;
+  return <h2 className="mt-6 font-display text-2xl font-semibold leading-snug">{children}</h2>;
 }
 function Hint({ children }: { children: React.ReactNode }) {
   return <p className="mt-2 text-sm text-white/50">{children}</p>;
