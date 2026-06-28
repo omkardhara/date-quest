@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 // Full-body chibi art lives in /public/chibi/<mood>.png (wave, neutral, excited, happy).
 // Until art exists, a soft animated placeholder shows.
 export function Chibi({ mood = "neutral", size = 150 }: { mood?: string; size?: number }) {
   const [broken, setBroken] = useState(false);
+  const reduce = useReducedMotion();
   return (
     <div className="relative mx-auto flex items-end justify-center" style={{ height: size }}>
       {/* glow under the character */}
@@ -24,8 +25,8 @@ export function Chibi({ mood = "neutral", size = 150 }: { mood?: string; size?: 
           alt="character"
           onError={() => setBroken(true)}
           initial={{ y: 8, opacity: 0 }}
-          animate={{ y: [0, -6, 0], opacity: 1 }}
-          transition={{ y: { duration: 3, repeat: Infinity, ease: "easeInOut" }, opacity: { duration: 0.4 } }}
+          animate={reduce ? { y: 0, opacity: 1 } : { y: [0, -6, 0], opacity: 1 }}
+          transition={reduce ? { duration: 0.4 } : { y: { duration: 3, repeat: Infinity, ease: "easeInOut" }, opacity: { duration: 0.4 } }}
           style={{ height: size }}
           className="relative object-contain drop-shadow-[0_10px_30px_rgba(99,102,241,.45)]"
         />
