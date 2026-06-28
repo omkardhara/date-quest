@@ -83,10 +83,6 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
           of ₹{plan.budget.toLocaleString("en-IN")}
         </p>
 
-        {plan.weatherNote && (
-          <p className="mt-2 inline-block rounded-full bg-white/8 px-3 py-1 text-xs text-white/60">{plan.weatherNote}</p>
-        )}
-
         {plan.fullDayMapUrl && (
           <a href={plan.fullDayMapUrl} target="_blank" rel="noreferrer"
             className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white/8 px-4 py-2 text-sm hover:bg-white/15">

@@ -180,7 +180,7 @@ export default function Page() {
       <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex items-center justify-center">
         <Screen>
           <Chibi mood="excited" size={160} />
-          <h2 className="mt-4 font-display text-2xl font-semibold hero-text">Planning the day…</h2>
+          <h2 className="mt-4 font-display text-2xl font-semibold hero-text">Planning something good…</h2>
           <p className="mt-2 text-white/60">Checking the weather, pulling real places near your route, and putting them in order.</p>
         </Screen>
       </main>
