@@ -42,6 +42,8 @@ export interface Answers {
   endMin: number;
   dayOfWeek?: number;     // 0=Sun..6=Sat, controls veg-day rule
   month?: number;         // 0=Jan..11=Dec, for monsoon-aware planning
+  wetDay?: boolean;       // live forecast: is meaningful rain expected (overrides season)
+  weatherSummary?: string;// live forecast summary for display
   dislikes?: string[];    // ingredients to avoid
   mustInclude?: string[]; // specific activities the user already wants in the day
 }

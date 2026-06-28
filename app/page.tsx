@@ -111,7 +111,18 @@ export default function Page() {
       } catch { return []; }
     })();
 
-    const [extra, evts] = await Promise.all([discover, events]);
+    const weather = (async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 6000);
+        const res = await fetch(`/api/weather?date=${OUTING_DATE}&place=mumbai`, { signal: ctrl.signal });
+        clearTimeout(t);
+        return await res.json();
+      } catch { return { available: false }; }
+    })();
+
+    const [extra, evts, wx] = await Promise.all([discover, events, weather]);
+    if (wx?.available) { ans.wetDay = !!wx.wet; ans.weatherSummary = wx.summary; }
     const p = buildPlan(ans, extra);
     if (evts.length) p.events = evts;
     setPlan(p);

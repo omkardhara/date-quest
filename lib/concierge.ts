@@ -39,11 +39,19 @@ export function outfitFor(places: Place[], isMonsoon: boolean): string {
 }
 
 // Early heads-up flags so nothing surprises you on the day.
-export function buildFlags(blocks: PlanBlock[], _ans: Answers, isMonsoon: boolean, vegDay: boolean): Flag[] {
+export function buildFlags(blocks: PlanBlock[], ans: Answers, isWet: boolean, vegDay: boolean): Flag[] {
   const flags: Flag[] = [];
 
-  if (isMonsoon) {
-    const outdoor = blocks.some(b => b.place?.outdoor);
+  const outdoor = blocks.some(b => b.place?.outdoor);
+  if (ans.weatherSummary) {
+    // Live forecast available — be specific.
+    flags.push({
+      icon: isWet ? "🌧️" : "⛅",
+      text: isWet
+        ? `Forecast: ${ans.weatherSummary}. Rain is likely, so the plan leans indoors and every outdoor stop has a backup.`
+        : `Forecast: ${ans.weatherSummary}. Looking dry, so outdoor stops are in.`,
+    });
+  } else if (isWet) {
     flags.push({
       icon: "🌧️",
       text: outdoor

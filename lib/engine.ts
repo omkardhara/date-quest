@@ -79,8 +79,8 @@ const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
 function detectCorridor(ans: Answers): Corridor {
   const p = ans.personality;
   const dayMins = ans.endMin - ans.startMin;
-  const monsoon = isMonsoon(ans);
-  // In peak monsoon the far waterfalls are unsafe, so never route a full day out to them.
+  const monsoon = wet(ans);
+  // On a wet day the far waterfalls are unsafe, so never route a full day out to them.
   if (!monsoon && p.includes("adventure") && ans.startMin <= 480 && dayMins >= 660) return "full_day_out";
   if (p.includes("adventure") && ans.startMin <= 600 && dayMins >= 480) return "north_adventure";
   if (p.includes("adventure")) return "thane_east";
@@ -143,6 +143,11 @@ function isMonsoon(ans: Answers): boolean {
   return ans.month !== undefined && MONSOON_MONTHS.includes(ans.month);
 }
 
+// Live forecast wins when we have it; otherwise fall back to the season.
+function wet(ans: Answers): boolean {
+  return ans.wetDay !== undefined ? ans.wetDay : isMonsoon(ans);
+}
+
 function score(p: Place, ans: Answers, band: string, remainingBudget: number): number {
   let s = 0;
   s += overlap(p.vibes, ans.personality) * 3;
@@ -155,8 +160,8 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   else if (cost > remainingBudget * 1.3)  s -= 5;
   if (ans.personality.includes("adventure")) s += p.adventureLevel;
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
-  // Monsoon: demote exposed outdoor stops that only get a "caution" in heavy rain.
-  if (isMonsoon(ans) && p.outdoor && p.monsoonRisk === "caution") s -= 8;
+  // Wet day: demote exposed outdoor stops that only get a "caution" in heavy rain.
+  if (wet(ans) && p.outdoor && p.monsoonRisk === "caution") s -= 8;
   if (p.rating) s += (p.rating - 3.6) * 3; // reward strong Google ratings (mostly live places)
   if (p.source === "live") s += 2;          // counter curated's structural tag advantage
   if (matchesRequest(p, ans.mustInclude ?? [])) s += 25; // strongly prefer requested things
@@ -168,8 +173,8 @@ function blocked(p: Place, ans: Answers): boolean {
   if (ans.dislikes && overlap(p.contains ?? [], ans.dislikes) > 0) return true;
   // Closed that day of the week.
   if (ans.dayOfWeek !== undefined && (p.closedDays ?? []).includes(ans.dayOfWeek)) return true;
-  // Genuinely unsafe outdoors in peak monsoon (e.g. waterfalls in flood).
-  if (isMonsoon(ans) && p.outdoor && p.monsoonRisk === "avoid") return true;
+  // Genuinely unsafe outdoors on a wet day (e.g. waterfalls in flood).
+  if (wet(ans) && p.outdoor && p.monsoonRisk === "avoid") return true;
   return false;
 }
 
@@ -243,7 +248,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   let runningCost    = 0;
   let lastMealEnd    = 0; // end time of the last full meal (food/cafe), for spacing
   const usedCuisines = new Set<string>(); // avoid repeating a cuisine across the day
-  const monsoon      = isMonsoon(ans);
+  const monsoon      = wet(ans);
   const end          = ans.endMin;
   const dayMins      = end - ans.startMin;
   const vegDay       = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
@@ -367,7 +372,9 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     requests:    requests.length ? requests : undefined,
     flags:       buildFlags(blocks, ans, monsoon, vegDay),
     outfit:      placesInPlan.length ? outfitFor(placesInPlan, monsoon) : undefined,
-    weatherNote: monsoon ? "Planned for monsoon: indoor-leaning, with rain backups." : undefined,
+    weatherNote: ans.weatherSummary
+      ? `Forecast for the day: ${ans.weatherSummary}.`
+      : (monsoon ? "Planned for monsoon: indoor-leaning, with rain backups." : undefined),
   };
 
   return plan;

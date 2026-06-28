@@ -50,7 +50,7 @@ function block(startMin: number, durMin: number, kind: Category | "buffer", titl
   return { startMin, endMin: startMin + durMin, title, place, why, cost: place?.costPerPerson ? place.costPerPerson * 2 : 0, kind, backup };
 }
 
-export async function buildGetaway(destId: string, nights: number, monsoon: boolean): Promise<GetawayPlan | null> {
+export async function buildGetaway(destId: string, nights: number, monsoon: boolean, weatherSummary?: string): Promise<GetawayPlan | null> {
   const d = DESTS.find(x => x.id === destId);
   if (!d) return null;
 
@@ -134,6 +134,9 @@ export async function buildGetaway(destId: string, nights: number, monsoon: bool
 
   // Flags.
   const flags: Flag[] = [];
+  if (weatherSummary) {
+    flags.push({ icon: monsoon ? "🌧️" : "⛅", text: `Forecast for ${d.name}: ${weatherSummary}. ${monsoon ? "Rain likely, so keep the waterfall and viewpoint stops cautious and have indoor backups." : "Looking clear enough for the outdoor stops."}` });
+  }
   flags.push({ icon: "🚗", text: `It's about ${hrs(d.driveFromMumbaiMins)} from Mumbai (${d.driveFromMumbaiKm} km). From your Pune house it's ~${hrs(d.driveFromPuneMins)}.` });
   if (monsoon && d.highlights.some(h => h.outdoor && h.monsoonRisk !== "ok")) {
     flags.push({ icon: "🌧️", text: "Monsoon here means waterfalls and mist, but wet, slippery roads and viewpoints too. Drive slow and keep off fast water." });

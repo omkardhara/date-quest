@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildGetaway } from "@/lib/getaway";
 import { searchEvents } from "@/lib/events";
+import { getWeather, COORDS } from "@/lib/weather";
 
 export const runtime = "nodejs";
 
@@ -10,9 +11,17 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const destId: string = body.destId;
     const nights: number = Math.max(0, Math.min(2, Number(body.nights) || 1));
-    const monsoon: boolean = !!body.monsoon;
 
-    const plan = await buildGetaway(destId, nights, monsoon);
+    // Live forecast for the destination; fall back to the season hint.
+    let wet = !!body.monsoon;
+    let weatherSummary: string | undefined;
+    const coord = COORDS[destId];
+    if (coord && body.date) {
+      const wx = await getWeather(coord[0], coord[1], body.date);
+      if (wx.available) { wet = wx.wet; weatherSummary = wx.summary; }
+    }
+
+    const plan = await buildGetaway(destId, nights, wet, weatherSummary);
     if (!plan) return NextResponse.json({ error: "unknown destination" }, { status: 404 });
 
     // Events in the destination around the date (best-effort).
