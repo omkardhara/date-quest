@@ -149,7 +149,7 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   if (p.moods.includes(ans.mood)) s += 2;
   if (p.bestTime === band || p.bestTime === "any") s += 2;
   if (FOODY.includes(p.category)) s += overlap(p.cuisines, ans.foods) * 4;
-  s += overlap(p.tags ?? [], PROFILE.loves) * 2;
+  s += overlap(p.tags ?? [], PROFILE.loves); // her standing loves (kept modest so it doesn't always win)
   const cost = p.costPerPerson * 2;
   if (cost <= remainingBudget)            s += 2;
   else if (cost > remainingBudget * 1.3)  s -= 5;
@@ -157,7 +157,8 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
   // Monsoon: demote exposed outdoor stops that only get a "caution" in heavy rain.
   if (isMonsoon(ans) && p.outdoor && p.monsoonRisk === "caution") s -= 8;
-  if (p.rating) s += (p.rating - 3.8) * 2; // live places: reward strong Google ratings
+  if (p.rating) s += (p.rating - 3.6) * 3; // reward strong Google ratings (mostly live places)
+  if (p.source === "live") s += 2;          // counter curated's structural tag advantage
   if (matchesRequest(p, ans.mustInclude ?? [])) s += 25; // strongly prefer requested things
   return s;
 }
@@ -201,9 +202,24 @@ function pick(
     return v;
   };
 
-  const sorted = [...cand].sort((a, b) => rank(b) - rank(a));
-  const best = sorted[0];
-  return { place: best, zone: (best.zone ?? "multiple") as Zone, alts: sorted.slice(1, 4) };
+  const ranked = cand.map(p => ({ p, v: rank(p) })).sort((a, b) => b.v - a.v);
+  // Pick from the close contenders, not always #1, so re-runs vary and the live
+  // pool actually surfaces. A clear winner (e.g. a requested stop) still wins.
+  const top = ranked[0].v;
+  const contenders = ranked.filter(r => r.v >= top - 6).slice(0, 6).map(r => r.p);
+  const best = weightedPick(contenders);
+  const alts = ranked.map(r => r.p).filter(p => p.id !== best.id).slice(0, 3);
+  return { place: best, zone: (best.zone ?? "multiple") as Zone, alts };
+}
+
+// Weighted random favouring the front of the list (geometric falloff).
+function weightedPick<T>(arr: T[]): T {
+  if (arr.length <= 1) return arr[0];
+  const weights = arr.map((_, i) => Math.pow(0.55, i));
+  const sum = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * sum;
+  for (let i = 0; i < arr.length; i++) { r -= weights[i]; if (r <= 0) return arr[i]; }
+  return arr[0];
 }
 
 function backupFor(p: Place): string | undefined {

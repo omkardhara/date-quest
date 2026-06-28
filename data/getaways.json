@@ -1,0 +1,105 @@
+[
+  {
+    "id": "lonavala",
+    "name": "Lonavala",
+    "region": "Western Ghats",
+    "driveFromMumbaiMins": 150,
+    "driveFromMumbaiKm": 83,
+    "driveFromPuneMins": 75,
+    "driveFromPuneKm": 65,
+    "monsoon": "great",
+    "bestMonths": "Jun–Sep for green and waterfalls, Oct–Feb for pleasant weather",
+    "summary": "The classic monsoon hill station: misty ghats, waterfalls, lakes and chikki. About 2 hours from Mumbai on the Expressway, and barely an hour from your Pune house.",
+    "vibes": ["romantic", "chill", "nature"],
+    "highlights": [
+      { "name": "Lion's Point", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "Sweeping valley views at golden hour. Often fogged in during peak monsoon, which is its own kind of magic." },
+      { "name": "Bhushi Dam", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Stepped dam that overflows in monsoon. Beautiful but crowded and slippery, go early and stay off the fast water." },
+      { "name": "Tiger's Leap", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "A dramatic cliff drop with a seasonal waterfall across the valley." },
+      { "name": "Karla Caves", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "Ancient rock-cut Buddhist caves. A good indoor-ish option if it pours." },
+      { "name": "Lonavala Lake", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "Calm and brimming green in the rains." }
+    ],
+    "stays": ["Della Resorts", "Fariyas Resort Lonavala", "Rhythm Lonavala"],
+    "eat": ["The Kinara Village Dhaba", "German Bakery Lonavala"]
+  },
+  {
+    "id": "karjat",
+    "name": "Karjat",
+    "region": "Sahyadri foothills",
+    "driveFromMumbaiMins": 120,
+    "driveFromMumbaiKm": 62,
+    "driveFromPuneMins": 110,
+    "driveFromPuneKm": 95,
+    "monsoon": "great",
+    "bestMonths": "Jun–Sep for rivers and green, year-round for farm stays",
+    "summary": "Riverside and farm-stay country at the foot of the Sahyadris. Closest of the lot to Mumbai, lush and full of water in the monsoon.",
+    "vibes": ["adventure", "chill", "nature"],
+    "highlights": [
+      { "name": "Kondana Caves trail", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "A green walk to rock-cut caves with a monsoon waterfall. Slippery, wear grippy shoes." },
+      { "name": "Ulhas river point", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Riverside spots run strong in monsoon; stay on the banks." },
+      { "name": "ND Studios tour", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "A film-set studio tour, fun and dry on a wet day." },
+      { "name": "Farm-stay pool and lawns", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "Most of Karjat's charm is a good farm stay with views." }
+    ],
+    "stays": ["Saj by The Lake", "Della Resorts (Lonavala-Karjat)", "a riverside farm stay"],
+    "eat": ["Hotel Sai Palace", "a farm-stay kitchen"]
+  },
+  {
+    "id": "mulshi",
+    "name": "Mulshi",
+    "region": "near Pune",
+    "driveFromMumbaiMins": 210,
+    "driveFromMumbaiKm": 145,
+    "driveFromPuneMins": 60,
+    "driveFromPuneKm": 40,
+    "monsoon": "great",
+    "bestMonths": "Jun–Sep for full lakes and waterfalls",
+    "summary": "Lake-and-dam country an hour from your Pune house, so it makes most sense as a Pune-side trip. Tamhini Ghat nearby turns into a wall of waterfalls in the rains.",
+    "vibes": ["romantic", "peaceful", "nature"],
+    "highlights": [
+      { "name": "Mulshi Dam and lake", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "Vast lake ringed by green hills, calm and uncrowded on weekdays." },
+      { "name": "Tamhini Ghat waterfalls", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "A ghat road lined with waterfalls in monsoon. Drive slow, fog and water on the road." },
+      { "name": "Temghar backwaters", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "Quiet backwater views, beautiful in the rains." }
+    ],
+    "stays": ["Your Pune (Wakad) house", "Radisson Blu Mulshi", "a lakeside resort"],
+    "eat": ["Malhar Machi", "a resort restaurant"]
+  },
+  {
+    "id": "malshej",
+    "name": "Malshej Ghat",
+    "region": "Sahyadri pass",
+    "driveFromMumbaiMins": 180,
+    "driveFromMumbaiKm": 130,
+    "driveFromPuneMins": 180,
+    "driveFromPuneKm": 125,
+    "monsoon": "great",
+    "bestMonths": "Jul–Sep is the whole point: waterfalls, mist and flamingos",
+    "summary": "The monsoon spot. A mountain pass that becomes a curtain of waterfalls and mist in the rains, with pink flamingos at the dam. Limited stays, so book ahead.",
+    "vibes": ["adventure", "nature", "romantic"],
+    "highlights": [
+      { "name": "Malshej waterfalls stretch", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "Roadside falls everywhere in monsoon. Stunning, but the road is narrow and wet, drive carefully." },
+      { "name": "Pimpalgaon Joga Dam (flamingos)", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "Flamingos gather here in the rains." },
+      { "name": "Harishchandragad base", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Serious trek; only with a guide and not in heavy rain." }
+    ],
+    "stays": ["MTDC Flamingo Hill Resort, Malshej", "a hilltop camp (book ahead)"],
+    "eat": ["MTDC restaurant", "roadside misal and vada pav"]
+  },
+  {
+    "id": "palghar",
+    "name": "Palghar",
+    "region": "Konkan coast",
+    "driveFromMumbaiMins": 130,
+    "driveFromMumbaiKm": 110,
+    "driveFromPuneMins": 240,
+    "driveFromPuneKm": 230,
+    "monsoon": "caution",
+    "bestMonths": "Oct–Feb for the beaches; monsoon seas are rough",
+    "summary": "Quiet Konkan beaches, forts and hot springs north of Mumbai. Lovely in winter; in monsoon the sea is rough, so lean on temples, springs and forts over swimming.",
+    "vibes": ["chill", "romantic", "culture"],
+    "highlights": [
+      { "name": "Kelva Beach", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Long casuarina-lined beach. No swimming in monsoon, the sea is rough, but a fine walk." },
+      { "name": "Shirgaon Fort", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "A small coastal fort, green and quiet in the rains." },
+      { "name": "Vajreshwari hot springs and temple", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "Warm sulphur springs and a temple, a good rainy-day pick. Dress modestly." }
+    ],
+    "stays": ["a Kelva beach resort", "an MTDC property"],
+    "eat": ["a Konkan thali place", "fresh seafood shack (in season)"]
+  }
+]
