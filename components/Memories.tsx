@@ -3,13 +3,12 @@ import { useState } from "react";
 
 export interface Memory { src: string; cap: string; }
 
-// Placeholder captions. Drop real photos at /public/memories/1.jpg … 4.jpg and
-// they appear automatically; until then a tasteful gradient placeholder shows.
 const DEFAULT: Memory[] = [
-  { src: "/memories/1.jpg", cap: "Muscat days ☀️" },
-  { src: "/memories/2.jpg", cap: "us, somewhere" },
-  { src: "/memories/3.jpg", cap: "by the sea" },
-  { src: "/memories/4.jpg", cap: "happy birthday 🎂" },
+  { src: "/memories/1.jpeg", cap: "Muscat days ☀️" },
+  { src: "/memories/2.jpeg", cap: "us, somewhere" },
+  { src: "/memories/3.jpeg", cap: "by the sea" },
+  { src: "/memories/4.jpeg", cap: "happy birthday 🎂" },
+  { src: "/memories/5.jpeg", cap: "one more" },
 ];
 
 const TILT = [-3, 2, -2, 3, -1, 2];
