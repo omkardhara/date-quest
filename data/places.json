@@ -9,7 +9,10 @@
       "birthday",
       "adventure",
       "chill",
-      "celebrate"
+      "celebrate",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "adventure",
@@ -32,7 +35,8 @@
       "nature",
       "forest",
       "lowcrowd",
-      "monsoon"
+      "monsoon",
+      "picnic"
     ],
     "safety": "Monsoon trails are slippery and leech-prone. Closed-toe shoes, poncho, go early, skip after heavy rain."
   },
@@ -226,7 +230,8 @@
     "moods": [
       "birthday",
       "romantic",
-      "chill"
+      "chill",
+      "proposal"
     ],
     "vibes": [
       "peaceful",
@@ -263,7 +268,11 @@
     "moods": [
       "birthday",
       "romantic",
-      "chill"
+      "chill",
+      "proposal",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -286,7 +295,8 @@
     "tags": [
       "lowcrowd",
       "instagrammable",
-      "sunset"
+      "sunset",
+      "picnic"
     ],
     "safety": "Waves splash over the promenade at monsoon high tide. Check the tide; keep a backup indoor plan."
   },
@@ -299,7 +309,8 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -311,7 +322,8 @@
     "cuisines": [
       "cafe",
       "continental",
-      "brunch"
+      "brunch",
+      "coffee"
     ],
     "budgetLevel": 3,
     "costPerPerson": 700,
@@ -344,7 +356,8 @@
     "zone": "bandra",
     "moods": [
       "birthday",
-      "chill"
+      "chill",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -354,7 +367,8 @@
     "cuisines": [
       "cafe",
       "continental",
-      "brunch"
+      "brunch",
+      "coffee"
     ],
     "budgetLevel": 2,
     "costPerPerson": 550,
@@ -385,7 +399,10 @@
     "zone": "central",
     "moods": [
       "birthday",
-      "chill"
+      "chill",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -395,7 +412,8 @@
     "cuisines": [
       "indian",
       "brunch",
-      "street"
+      "street",
+      "healthy"
     ],
     "budgetLevel": 1,
     "costPerPerson": 250,
@@ -427,7 +445,9 @@
       "birthday",
       "romantic",
       "celebrate",
-      "anniversary"
+      "anniversary",
+      "proposal",
+      "reunion"
     ],
     "vibes": [
       "foodie",
@@ -438,7 +458,8 @@
     ],
     "cuisines": [
       "lebanese",
-      "mediterranean"
+      "mediterranean",
+      "seafood"
     ],
     "budgetLevel": 3,
     "costPerPerson": 1200,
@@ -496,7 +517,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Royal+China+Bandra+Mumbai",
     "summary": "Dim sum, steamed fish, the dishes that earned the name. Plenty of veg dim sum too.",
     "veg": true,
-    "tags": [],
+    "tags": [
+      "chinese",
+      "instagrammable",
+      "group"
+    ],
     "topDishes": [
       "Assorted dim sum basket",
       "Steamed fish in ginger",
@@ -514,7 +539,9 @@
       "birthday",
       "romantic",
       "celebrate",
-      "anniversary"
+      "anniversary",
+      "proposal",
+      "reunion"
     ],
     "vibes": [
       "foodie",
@@ -555,7 +582,9 @@
     "zone": "andheri_w",
     "moods": [
       "birthday",
-      "chill"
+      "chill",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -596,7 +625,9 @@
     "moods": [
       "birthday",
       "celebrate",
-      "chill"
+      "chill",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -605,7 +636,8 @@
     ],
     "cuisines": [
       "continental",
-      "sizzler"
+      "sizzler",
+      "asian"
     ],
     "budgetLevel": 2,
     "costPerPerson": 900,
@@ -636,7 +668,9 @@
     "moods": [
       "birthday",
       "celebrate",
-      "chill"
+      "chill",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -677,7 +711,8 @@
     "moods": [
       "birthday",
       "celebrate",
-      "romantic"
+      "romantic",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -720,7 +755,10 @@
       "birthday",
       "chill",
       "celebrate",
-      "romantic"
+      "romantic",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "playful",
@@ -761,7 +799,9 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "playful",
@@ -835,7 +875,10 @@
     "zone": "south",
     "moods": [
       "birthday",
-      "chill"
+      "chill",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "culture",
@@ -860,7 +903,9 @@
     "veg": true,
     "tags": [
       "instagrammable",
-      "lowcrowd"
+      "lowcrowd",
+      "workshop",
+      "artsy"
     ],
     "safety": "Most galleries (incl. Jehangir) shut on Mondays. Good rainy-day pick otherwise."
   },
@@ -873,7 +918,10 @@
     "moods": [
       "birthday",
       "chill",
-      "celebrate"
+      "celebrate",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "queen",
@@ -895,7 +943,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=PVR+INOX+recliner+Mumbai",
     "summary": "Check BookMyShow for showtimes at a recliner screen near your route. Book a day ahead.",
     "veg": true,
-    "tags": [],
+    "tags": [
+      "nightlife",
+      "cozy",
+      "date"
+    ],
     "safety": "Confirm the showtime on BookMyShow before building the day around it."
   },
   {
@@ -907,7 +959,10 @@
     "moods": [
       "birthday",
       "chill",
-      "celebrate"
+      "celebrate",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "shopper",
@@ -942,7 +997,9 @@
     "zone": "bandra",
     "moods": [
       "birthday",
-      "chill"
+      "chill",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "shopper",
@@ -1052,7 +1109,9 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "spiritual",
@@ -1169,7 +1228,8 @@
     "moods": [
       "birthday",
       "celebrate",
-      "romantic"
+      "romantic",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -1214,7 +1274,11 @@
       "birthday",
       "romantic",
       "chill",
-      "anniversary"
+      "anniversary",
+      "proposal",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1238,7 +1302,8 @@
     "tags": [
       "instagrammable",
       "sunset",
-      "lowcrowd"
+      "lowcrowd",
+      "picnic"
     ]
   },
   {
@@ -1250,7 +1315,11 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "proposal",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1273,7 +1342,8 @@
     "tags": [
       "lowcrowd",
       "sunset",
-      "instagrammable"
+      "instagrammable",
+      "picnic"
     ]
   },
   {
@@ -1285,7 +1355,10 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "spiritual",
@@ -1323,7 +1396,10 @@
       "birthday",
       "celebrate",
       "romantic",
-      "chill"
+      "chill",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -1333,7 +1409,8 @@
     ],
     "cuisines": [
       "indian",
-      "continental"
+      "continental",
+      "italian"
     ],
     "budgetLevel": 3,
     "costPerPerson": 1400,
@@ -1365,7 +1442,10 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "culture",
@@ -1376,7 +1456,8 @@
     ],
     "cuisines": [
       "cafe",
-      "continental"
+      "continental",
+      "coffee"
     ],
     "budgetLevel": 2,
     "costPerPerson": 600,
@@ -1390,7 +1471,8 @@
     "summary": "Mario Miranda murals on every wall, cold beer, good grub. A Mumbai institution since 1932.",
     "veg": true,
     "tags": [
-      "instagrammable"
+      "instagrammable",
+      "live music"
     ],
     "topDishes": [
       "Cheese omelette",
@@ -1407,7 +1489,9 @@
     "moods": [
       "birthday",
       "celebrate",
-      "romantic"
+      "romantic",
+      "proposal",
+      "reunion"
     ],
     "vibes": [
       "foodie",
@@ -1451,7 +1535,9 @@
       "birthday",
       "chill",
       "romantic",
-      "adventure"
+      "adventure",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1472,7 +1558,8 @@
     "veg": true,
     "tags": [
       "lowcrowd",
-      "sunset"
+      "sunset",
+      "picnic"
     ],
     "safety": "No swimming in monsoon: rough surf and undertow. Fine for a seaside walk."
   },
@@ -1485,7 +1572,10 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "proposal",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "spiritual",
@@ -1522,7 +1612,11 @@
     "moods": [
       "birthday",
       "romantic",
-      "chill"
+      "chill",
+      "proposal",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1556,7 +1650,10 @@
     "moods": [
       "birthday",
       "chill",
-      "celebrate"
+      "celebrate",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "playful",
@@ -1581,7 +1678,9 @@
     "summary": "Converted mill, industrial interiors, inventive cocktails and food that actually hits. Good for a lazy afternoon.",
     "veg": true,
     "tags": [
-      "instagrammable"
+      "instagrammable",
+      "live music",
+      "nightlife"
     ],
     "topDishes": [
       "Loaded fries",
@@ -1599,7 +1698,8 @@
       "birthday",
       "romantic",
       "chill",
-      "anniversary"
+      "anniversary",
+      "proposal"
     ],
     "vibes": [
       "queen",
@@ -1633,7 +1733,10 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1654,7 +1757,8 @@
     "veg": true,
     "tags": [
       "sunset",
-      "instagrammable"
+      "instagrammable",
+      "picnic"
     ],
     "safety": "Rough surf in peak monsoon, no swimming. Fine for the golden-hour stroll and beach snacks."
   },
@@ -1667,7 +1771,9 @@
     "moods": [
       "birthday",
       "chill",
-      "romantic"
+      "romantic",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "culture",
@@ -1677,7 +1783,8 @@
       "cozy"
     ],
     "cuisines": [
-      "cafe"
+      "cafe",
+      "coffee"
     ],
     "budgetLevel": 2,
     "costPerPerson": 400,
@@ -1693,7 +1800,9 @@
     "tags": [
       "lowcrowd",
       "instagrammable",
-      "books"
+      "books",
+      "workshop",
+      "bookstore"
     ]
   },
   {
@@ -1705,7 +1814,10 @@
     "moods": [
       "birthday",
       "chill",
-      "adventure"
+      "adventure",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "culture",
@@ -1743,7 +1855,9 @@
       "birthday",
       "chill",
       "romantic",
-      "date night"
+      "date night",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1765,7 +1879,8 @@
     "tags": [
       "nature",
       "lowcrowd",
-      "sunset"
+      "sunset",
+      "picnic"
     ]
   },
   {
@@ -1778,7 +1893,9 @@
       "birthday",
       "chill",
       "adventure",
-      "romantic"
+      "romantic",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "peaceful",
@@ -1800,7 +1917,8 @@
     "tags": [
       "nature",
       "lowcrowd",
-      "instagrammable"
+      "instagrammable",
+      "picnic"
     ]
   },
   {
@@ -1858,7 +1976,8 @@
     "cuisines": [
       "cafe",
       "continental",
-      "brunch"
+      "brunch",
+      "coffee"
     ],
     "budgetLevel": 2,
     "costPerPerson": 500,
@@ -1891,7 +2010,10 @@
       "birthday",
       "chill",
       "celebrate",
-      "date night"
+      "date night",
+      "group outing",
+      "reunion",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -2025,7 +2147,10 @@
       "birthday",
       "chill",
       "celebrate",
-      "date night"
+      "date night",
+      "reunion",
+      "group outing",
+      "just because"
     ],
     "vibes": [
       "foodie",
@@ -2059,5 +2184,166 @@
       "Kulfi falooda"
     ],
     "safety": "Sea is rough in monsoon, stay back from the waterline."
+  },
+  {
+    "id": "thai-funjabi-bandra",
+    "name": "Thai Funjabi",
+    "category": "food",
+    "area": "Bandra West",
+    "zone": "bandra",
+    "moods": ["birthday","date night","chill","just because","group outing"],
+    "vibes": ["foodie","playful"],
+    "cuisines": ["thai","asian","continental"],
+    "budgetLevel": 2,
+    "costPerPerson": 600,
+    "durationMins": 75,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Thai+Funjabi+Bandra+Mumbai",
+    "summary": "Bandra's go-to for Thai food — pad thai, green curry, satay. Relaxed, consistent, good value.",
+    "veg": false,
+    "tags": ["thai","asian"],
+    "topDishes": ["Pad Thai","Green curry","Chicken satay"]
+  },
+  {
+    "id": "mizu-japanese-bkc",
+    "name": "Mizu Japanese restaurant",
+    "category": "food",
+    "area": "BKC, Bandra East",
+    "zone": "bandra",
+    "moods": ["birthday","date night","anniversary","proposal","just because"],
+    "vibes": ["foodie","queen","luxe"],
+    "cuisines": ["japanese","asian","continental"],
+    "budgetLevel": 3,
+    "costPerPerson": 1200,
+    "durationMins": 90,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Japanese+restaurant+BKC+Mumbai",
+    "summary": "Clean, precise Japanese food in BKC — sushi, ramen, robata grill. One of the few serious Japanese kitchens in the city.",
+    "veg": false,
+    "tags": ["japanese","asian","instagrammable"],
+    "topDishes": ["Salmon sashimi","Tonkotsu ramen","Robata chicken"]
+  },
+  {
+    "id": "suzette-crepes",
+    "name": "Suzette (crêpes and healthy bowls)",
+    "category": "food",
+    "area": "Bandra West",
+    "zone": "bandra",
+    "moods": ["birthday","chill","date night","just because","reunion"],
+    "vibes": ["foodie","peaceful","cozy"],
+    "cuisines": ["healthy","continental","brunch","coffee"],
+    "budgetLevel": 2,
+    "costPerPerson": 600,
+    "durationMins": 60,
+    "bestTime": "morning",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Suzette+Bandra+Mumbai",
+    "summary": "Light, fresh, and French-leaning — crêpes, salads, grain bowls, and very good coffee. The go-to for a meal that doesn't weigh you down.",
+    "veg": false,
+    "tags": ["healthy","cozy","instagrammable"],
+    "topDishes": ["Buckwheat crêpe","Grain bowl","Café au lait"]
+  },
+  {
+    "id": "pizza-by-the-bay",
+    "name": "Pizza by the Bay",
+    "category": "food",
+    "area": "Marine Lines, South Mumbai",
+    "zone": "south",
+    "moods": ["birthday","chill","group outing","reunion","just because"],
+    "vibes": ["foodie","playful","cozy"],
+    "cuisines": ["pizza","italian","continental"],
+    "budgetLevel": 2,
+    "costPerPerson": 700,
+    "durationMins": 75,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Pizza+by+the+Bay+Mumbai",
+    "summary": "An old Mumbai institution — wood-fired pizza, a bay view, and a vibe that hasn't changed in 30 years. Comfortable and consistent.",
+    "veg": false,
+    "tags": ["pizza","cozy","instagrammable"],
+    "topDishes": ["Wood-fired margherita","Garlic bread","Pasta arrabiata"]
+  },
+  {
+    "id": "blue-tokai-coffee",
+    "name": "Blue Tokai Coffee Roasters",
+    "category": "cafe",
+    "area": "Bandra West",
+    "zone": "bandra",
+    "moods": ["birthday","chill","date night","just because","reunion"],
+    "vibes": ["foodie","peaceful","cozy","artsy"],
+    "cuisines": ["coffee","cafe","brunch"],
+    "budgetLevel": 1,
+    "costPerPerson": 300,
+    "durationMins": 60,
+    "bestTime": "morning",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Blue+Tokai+Coffee+Bandra+Mumbai",
+    "summary": "India's best specialty coffee roaster. Single-origin filter, excellent pour-overs, and a calm enough space to actually have a conversation.",
+    "veg": true,
+    "tags": ["coffee","cozy","instagrammable"],
+    "topDishes": ["Filter coffee","Pour-over single origin","Cold brew"]
+  },
+  {
+    "id": "anticlockwise-workshop",
+    "name": "Anticlockwise (pottery and art workshops)",
+    "category": "experience",
+    "area": "Bandra West",
+    "zone": "bandra",
+    "moods": ["birthday","date night","chill","reunion","just because"],
+    "vibes": ["artsy","playful","cozy","peaceful"],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 800,
+    "durationMins": 120,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=pottery+art+workshop+Bandra+Mumbai",
+    "summary": "A pottery studio in Bandra that runs walk-in and booked sessions. Getting your hands muddy together is a genuinely good date.",
+    "veg": true,
+    "tags": ["workshop","artsy","instagrammable","lowcrowd"],
+    "mustBook": true
+  },
+  {
+    "id": "bluefrog-music-venue",
+    "name": "Blue Frog (live music venue)",
+    "category": "experience",
+    "area": "Lower Parel, Mumbai",
+    "zone": "central",
+    "moods": ["birthday","date night","celebrate","group outing","reunion","just because"],
+    "vibes": ["nightlife","playful","artsy","foodie"],
+    "cuisines": [],
+    "budgetLevel": 3,
+    "costPerPerson": 1000,
+    "durationMins": 120,
+    "bestTime": "night",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Blue+Frog+Lower+Parel+Mumbai",
+    "summary": "Mumbai's most iconic live music space — good sound system, eclectic lineup, bar, and a crowd that actually listens. Check what's on before you go.",
+    "veg": false,
+    "tags": ["live music","nightlife","instagrammable"],
+    "mustBook": true
   }
 ]

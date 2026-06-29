@@ -57,7 +57,7 @@ function fallbackSummary(lp: LivePlace, category: Category): string {
   return r ? `${r} on Google.` : "A local pick worth exploring.";
 }
 
-function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, cuisine?: string, outdoor = false): Place {
+function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, cuisine?: string, outdoor = false, extraVibes: string[] = []): Place {
   const cost = costFrom(lp.priceLevel);
   return {
     id: "live:" + lp.id,
@@ -66,7 +66,7 @@ function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, 
     zone,
     category,
     moods: [mood],
-    vibes: VIBES[category] ?? [],
+    vibes: [...new Set([...(VIBES[category] ?? []), ...extraVibes])],
     cuisines: cuisine ? [cuisine] : [],
     budgetLevel: budgetLevelFrom(cost),
     costPerPerson: cost,
@@ -132,16 +132,19 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
         const cLabel = c === "icecream" ? "ice cream" : c;
         tasks.push(searchPlaces(`best ${cLabel} restaurants in ${area}`, 4).then(rs => rs.map(r => toPlace(r, zone, foodCat(c), mood, c))));
       }
-      tasks.push(searchPlaces(restaurantQuery(personality, area), 3).then(rs => rs.map(r => toPlace(r, zone, "food", mood))));
+      // Pass personality vibes so live restaurants score properly for luxe/romantic/etc.
+      const restVibes = personality.filter(p => ["luxe","romantic","cozy","artsy","nightlife"].includes(p));
+      tasks.push(searchPlaces(restaurantQuery(personality, area), 3).then(rs => rs.map(r => toPlace(r, zone, "food", mood, undefined, false, restVibes))));
     }
 
-    // Personality-aware activity + experience search.
+    // Personality-aware activity + experience search — pass matching vibes through.
+    const actVibes = personality.filter(p => ["adventure","artsy","culture","nightlife","nature","spiritual","luxe","queen","cozy","romantic"].includes(p));
     tasks.push(searchPlaces(activityQuery(personality, area), 4).then(rs => rs.map(r => {
       const cat = catFromTypes(r.types);
       const outdoor = (r.types ?? []).some(t => ["park", "tourist_attraction", "hiking_area", "beach"].includes(t)) && !(r.types ?? []).includes("museum");
-      return toPlace(r, zone, cat, mood, undefined, outdoor);
+      return toPlace(r, zone, cat, mood, undefined, outdoor, actVibes);
     })));
-    tasks.push(searchPlaces(`best cafes in ${area}`, 3).then(rs => rs.map(r => toPlace(r, zone, "cafe", mood, "cafe"))));
+    tasks.push(searchPlaces(`best cafes in ${area}`, 3).then(rs => rs.map(r => toPlace(r, zone, "cafe", mood, "cafe", false, ["cozy"]))));
   }
 
   const all = (await Promise.all(tasks)).flat();
