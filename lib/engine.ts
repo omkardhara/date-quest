@@ -365,7 +365,12 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   // Extra afternoon slot for very long days (6am–midnight etc.) — bridges the gap between
   // morning stops and the 6pm evening window, especially on tight budgets with free places.
   if (end - ans.startMin >= 720 && cursor < 1020 && end > 1080) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests), "experience");
+    // If dinner will still fire (end>1140), hold back enough to cover it so shopping/experience
+    // doesn't consume the entire remaining budget and leave nothing for food.
+    const extraBudget = end > 1140
+      ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
+      : remaining();
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, extraBudget, usedCuisines, pendingRequests), "experience");
   }
 
   // Mid-day rest — only if near home, long day, meaningful budget still left, and plan has content.
@@ -377,7 +382,11 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
 
   // Evening activity / shopping — no cafe here (morning cafés always fail meal spacing at this hour)
   if (end > 1080) {
-    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests), "activity");
+    // Hold back dinner budget so an expensive evening activity can't crowd out food.
+    const eveningBudget = end > 1140
+      ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
+      : remaining();
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, eveningBudget, usedCuisines, pendingRequests), "activity");
   }
 
   // Dinner
