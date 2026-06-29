@@ -15,46 +15,120 @@ const COMBOS: Array<{ startMin: number; endMin: number; label: string }> = [
 
 const BUDGETS = [1000, 2000, 5000, 10000, 20000];
 
-const BASE: Omit<Answers, "budget" | "startMin" | "endMin"> = {
-  who: "Amruta",
-  mood: "birthday",
-  moodList: ["birthday", "romantic"],
-  personality: ["peaceful", "foodie"],
-  foods: ["arabic", "indian", "dessert"],
-  dayOfWeek: 3,   // Wednesday (Jul 8 2026)
-  month: 6,       // July — monsoon
-  wetDay: true,
-  dislikes: ["mushroom", "capsicum", "oily", "spicy"],
-};
+// Multiple profile combos so we exercise different corridors, moods and food filters.
+const PROFILES: Array<{ label: string; base: Omit<Answers, "budget" | "startMin" | "endMin"> }> = [
+  {
+    label: "birthday / foodie / bandra_hub / monsoon",
+    base: {
+      who: "Amruta",
+      mood: "birthday",
+      moodList: ["birthday", "romantic"],
+      personality: ["peaceful", "foodie"],
+      foods: ["arabic", "indian", "dessert"],
+      dayOfWeek: 3,    // Wednesday
+      month: 6,        // July — monsoon
+      wetDay: true,
+      dislikes: ["mushroom", "capsicum", "oily", "spicy"],
+    },
+  },
+  {
+    label: "anniversary / culture+spiritual / south_loop / dry",
+    base: {
+      who: "Amruta",
+      mood: "anniversary",
+      moodList: ["anniversary", "romantic"],
+      personality: ["culture", "spiritual", "peaceful"],
+      foods: ["continental", "seafood", "dessert"],
+      dayOfWeek: 6,    // Saturday
+      month: 1,        // February — dry
+      wetDay: false,
+      dislikes: [],
+    },
+  },
+  {
+    label: "chill / nature+adventure / north_adventure / weekend",
+    base: {
+      who: "Amruta",
+      mood: "chill",
+      moodList: ["chill", "adventure"],
+      personality: ["adventure", "nature", "playful"],
+      foods: ["street", "indian"],
+      dayOfWeek: 0,    // Sunday
+      month: 10,       // November — dry
+      wetDay: false,
+      dislikes: [],
+    },
+  },
+  {
+    label: "date night / luxe / bandra_hub / dry",
+    base: {
+      who: "Amruta",
+      mood: "date night",
+      moodList: ["date night", "romantic"],
+      personality: ["luxe", "queen", "foodie"],
+      foods: ["lebanese", "asian", "italian", "dessert"],
+      dayOfWeek: 5,    // Friday
+      month: 3,        // April — dry
+      wetDay: false,
+      dislikes: ["spicy"],
+    },
+  },
+  {
+    label: "birthday / street-food focus / weekday / monsoon",
+    base: {
+      who: "Amruta",
+      mood: "birthday",
+      moodList: ["birthday", "chill"],
+      personality: ["foodie", "playful"],
+      foods: ["street", "chaat", "dessert"],
+      dayOfWeek: 2,    // Tuesday
+      month: 7,        // August — monsoon
+      wetDay: true,
+      dislikes: [],
+    },
+  },
+];
 
-let fails = 0;
-const rows: string[] = [];
+let totalFails = 0;
 
-for (const combo of COMBOS) {
-  const dayMins = combo.endMin - combo.startMin;
-  const minStops = dayMins >= 480 ? 3 : dayMins >= 240 ? 2 : 1;
-  const minCoverage = 40; // % of window the plan should reach
+for (const profile of PROFILES) {
+  console.log(`\n${"─".repeat(72)}`);
+  console.log(`Profile: ${profile.label}`);
+  console.log("─".repeat(72));
 
-  for (const budget of BUDGETS) {
-    const ans: Answers = { ...BASE, startMin: combo.startMin, endMin: combo.endMin, budget };
-    const plan = buildPlan(ans, []);
+  let profileFails = 0;
+  const rows: string[] = [];
 
-    const stops = plan.blocks.length;
-    const planMins = stops > 0
-      ? plan.blocks[stops - 1].endMin - combo.startMin
-      : 0;
-    const coverage = Math.round((planMins / dayMins) * 100);
-    const ok = stops >= minStops && coverage >= minCoverage;
-    if (!ok) fails++;
+  for (const combo of COMBOS) {
+    const dayMins = combo.endMin - combo.startMin;
+    const minStops   = dayMins > 480 ? 3 : dayMins >= 240 ? 2 : 1;
+    const minCoverage = 40;
 
-    const budgetK = budget >= 1000 ? `₹${budget / 1000}k` : `₹${budget}`;
-    const marker = ok ? "✓" : "✗";
-    rows.push(
-      `${marker} ${combo.label}  ${budgetK.padEnd(5)}  ${String(stops).padStart(2)} stops  ${String(coverage).padStart(3)}%  ₹${plan.totalCost.toLocaleString("en-IN").padEnd(8)}`
-    );
+    for (const budget of BUDGETS) {
+      const ans: Answers = { ...profile.base, startMin: combo.startMin, endMin: combo.endMin, budget };
+      const plan = buildPlan(ans, []);
+
+      const stops = plan.blocks.length;
+      const planMins = stops > 0 ? plan.blocks[stops - 1].endMin - combo.startMin : 0;
+      const coverage = Math.round((planMins / dayMins) * 100);
+      const ok = stops >= minStops && coverage >= minCoverage;
+
+      if (!ok) { profileFails++; totalFails++; }
+
+      const budgetK = budget >= 1000 ? `₹${budget / 1000}k` : `₹${budget}`;
+      rows.push(
+        `${ok ? "✓" : "✗"} ${combo.label}  ${budgetK.padEnd(5)}  ${String(stops).padStart(2)} stops  ${String(coverage).padStart(3)}%  ₹${plan.totalCost.toLocaleString("en-IN").padEnd(8)}`
+      );
+      if (!ok) {
+        plan.blocks.forEach(b => rows.push(`   · [${b.kind}] ${b.title} (${b.startMin}–${b.endMin}) ₹${b.cost}`));
+      }
+    }
+    rows.push("");
   }
-  rows.push("");
+
+  rows.forEach(r => console.log(r));
+  console.log(`Profile failures: ${profileFails} / ${COMBOS.length * BUDGETS.length}`);
 }
 
-rows.forEach(r => console.log(r));
-console.log(`Total failures: ${fails}`);
+console.log(`\n${"═".repeat(72)}`);
+console.log(`TOTAL FAILURES: ${totalFails} / ${PROFILES.length * COMBOS.length * BUDGETS.length}`);

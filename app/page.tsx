@@ -70,7 +70,9 @@ export default function Page() {
       mood: (mood.length ? mood[0] : "Birthday").toLowerCase(),
       moodList: mood.map((m) => m.toLowerCase()),
       personality: personality.map((p) => p.toLowerCase()),
-      foods: foods.map((f) => (f === "Ice cream" ? "icecream" : f.toLowerCase())),
+      foods: foods.map((f) =>
+        f === "Ice cream" ? "icecream" : f === "Street food" ? "street" : f.toLowerCase()
+      ),
       mustInclude: activities,
       budget: budget || 5000,
       startMin: startMin || 600,

@@ -5,8 +5,8 @@ export const runtime = "nodejs";
 
 // Generic words that don't help confirm we found the right venue.
 const STOP = new Set([
-  "cafe", "café", "bar", "kitchen", "restaurant", "the", "and", "bistro", "diner",
-  "shop", "by", "at", "of", "mumbai", "street", "shopping", "ice", "cream",
+  "café", "bar", "the", "and", "diner",
+  "by", "at", "of", "mumbai",
 ]);
 
 function tokens(s: string): string[] {
@@ -14,12 +14,13 @@ function tokens(s: string): string[] {
 }
 
 // Confirm the place Google returned is actually the venue we asked for.
+// Uses a 3-char minimum so short names like "Ali", "Bay", "Le" still match.
 function nameMatches(expected: string, got?: string): boolean {
   if (!got) return false;
   const e = tokens(expected);
   const g = tokens(got);
   if (!e.length) return false;
-  return e.some(t => t.length >= 4 && g.some(x => x.length >= 4 && (x.startsWith(t) || t.startsWith(x))));
+  return e.some(t => t.length >= 3 && g.some(x => x.length >= 3 && (x.startsWith(t) || t.startsWith(x))));
 }
 
 // Returns rating/address + proxied photo & map URLs, only when we're confident
