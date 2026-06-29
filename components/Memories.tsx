@@ -7,7 +7,7 @@ const DEFAULT: Memory[] = [
   { src: "/memories/1.jpeg", cap: "Gili Islands 🤿" },
   { src: "/memories/2.jpeg", cap: "Sikkim ✨" },
   { src: "/memories/3.jpeg", cap: "waterfall day 💚" },
-  { src: "/memories/4.jpeg", cap: "old fort ☀️" },
+  { src: "/memories/4.jpeg", cap: "Alibag fort ☀️" },
   { src: "/memories/5.jpeg", cap: "Muscat 🕌" },
 ];
 
