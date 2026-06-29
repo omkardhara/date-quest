@@ -89,12 +89,38 @@ function foodCat(cuisine: string): Category {
   return ["dessert", "icecream", "coffee"].includes(cuisine) ? "dessert" : "food";
 }
 
+// Pick an activity/experience search query that actually reflects the user's personality.
+function activityQuery(personality: string[], area: string): string {
+  const p = personality;
+  if (p.includes("adventure"))                    return `outdoor adventure activities parks in ${area}`;
+  if (p.includes("artsy") || p.includes("culture")) return `art galleries museums creative spaces in ${area}`;
+  if (p.includes("spiritual"))                    return `temples heritage spiritual places in ${area}`;
+  if (p.includes("nightlife"))                    return `bars live music rooftop venues in ${area}`;
+  if (p.includes("luxe") || p.includes("queen"))  return `luxury upscale experiences fine dining in ${area}`;
+  if (p.includes("nature"))                       return `parks gardens nature walks in ${area}`;
+  if (p.includes("cozy"))                         return `cozy cafes bookstores quiet spaces in ${area}`;
+  if (p.includes("shopper"))                      return `best shopping markets boutiques in ${area}`;
+  if (p.includes("playful"))                      return `fun activities games entertainment in ${area}`;
+  return `unique experiences things to do in ${area}`;
+}
+
+function restaurantQuery(personality: string[], area: string): string {
+  const p = personality;
+  if (p.includes("luxe") || p.includes("queen"))  return `fine dining upscale restaurants in ${area}`;
+  if (p.includes("cozy"))                         return `cozy casual restaurants in ${area}`;
+  if (p.includes("romantic"))                     return `romantic restaurants with view in ${area}`;
+  if (p.includes("artsy"))                        return `trendy independent restaurants in ${area}`;
+  if (p.includes("nature") || p.includes("peaceful")) return `outdoor garden restaurants in ${area}`;
+  return `popular local restaurants in ${area}`;
+}
+
 // Pull live, real places for the day's zones + tastes and normalise them for the engine.
 export async function discoverPlaces(ans: Answers): Promise<Place[]> {
   const zones = zonesForAnswers(ans).filter(z => ZONE_AREA[z]).slice(0, 2);
   if (!zones.length) return [];
   const vegDay = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
   const mood = ans.mood;
+  const personality = (ans.personality ?? []).map(p => p.toLowerCase());
 
   const tasks: Promise<Place[]>[] = [];
   for (const zone of zones) {
@@ -103,15 +129,14 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
     // Restaurants by cuisine — skipped on veg days since live veg status is unknown.
     if (!vegDay) {
       for (const c of (ans.foods ?? []).slice(0, 3)) {
-        // Normalise: "icecream" → "ice cream" for better Google results.
         const cLabel = c === "icecream" ? "ice cream" : c;
         tasks.push(searchPlaces(`best ${cLabel} restaurants in ${area}`, 4).then(rs => rs.map(r => toPlace(r, zone, foodCat(c), mood, c))));
       }
-      tasks.push(searchPlaces(`popular highly rated restaurants in ${area}`, 3).then(rs => rs.map(r => toPlace(r, zone, "food", mood))));
+      tasks.push(searchPlaces(restaurantQuery(personality, area), 3).then(rs => rs.map(r => toPlace(r, zone, "food", mood))));
     }
 
-    // Things to do + cafes for breadth.
-    tasks.push(searchPlaces(`top things to do in ${area}`, 4).then(rs => rs.map(r => {
+    // Personality-aware activity + experience search.
+    tasks.push(searchPlaces(activityQuery(personality, area), 4).then(rs => rs.map(r => {
       const cat = catFromTypes(r.types);
       const outdoor = (r.types ?? []).some(t => ["park", "tourist_attraction", "hiking_area", "beach"].includes(t)) && !(r.types ?? []).includes("museum");
       return toPlace(r, zone, cat, mood, undefined, outdoor);

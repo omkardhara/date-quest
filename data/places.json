@@ -5,8 +5,17 @@
     "category": "activity",
     "area": "Borivali East",
     "zone": "borivali",
-    "moods": ["birthday", "adventure", "chill", "celebrate"],
-    "vibes": ["adventure", "peaceful", "queen"],
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful",
+      "queen"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 200,
@@ -19,7 +28,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kanheri+Caves+SGNP+Borivali",
     "summary": "Real forest air 30 minutes from home. Green and misty in July, quiet if you go early.",
     "veg": true,
-    "tags": ["nature", "forest", "lowcrowd", "monsoon"],
+    "tags": [
+      "nature",
+      "forest",
+      "lowcrowd",
+      "monsoon"
+    ],
     "safety": "Monsoon trails are slippery and leech-prone. Closed-toe shoes, poncho, go early, skip after heavy rain."
   },
   {
@@ -28,8 +42,15 @@
     "category": "activity",
     "area": "Thane West",
     "zone": "thane",
-    "moods": ["birthday", "adventure", "chill"],
-    "vibes": ["adventure", "peaceful"],
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 100,
@@ -42,7 +63,13 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Yeoor+Hills+Thane",
     "summary": "Part of SGNP on the Thane side. Streams and dense green in monsoon, far fewer people than Borivali gate.",
     "veg": true,
-    "tags": ["nature", "forest", "lowcrowd", "monsoon", "instagrammable"],
+    "tags": [
+      "nature",
+      "forest",
+      "lowcrowd",
+      "monsoon",
+      "instagrammable"
+    ],
     "safety": "Forest checkpost has timings. Slippery and leech-prone in rain; go early, avoid after heavy downpour."
   },
   {
@@ -51,8 +78,14 @@
     "category": "activity",
     "area": "Vasai East",
     "zone": "vasai",
-    "moods": ["birthday", "adventure"],
-    "vibes": ["adventure", "peaceful"],
+    "moods": [
+      "birthday",
+      "adventure"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 150,
@@ -65,7 +98,13 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tungareshwar+Waterfall+Vasai",
     "summary": "Waterfall inside a wildlife sanctuary near Vasai. Lush, but the falls run dangerously strong in peak monsoon.",
     "veg": true,
-    "tags": ["nature", "waterfall", "forest", "monsoon", "lowcrowd"],
+    "tags": [
+      "nature",
+      "waterfall",
+      "forest",
+      "monsoon",
+      "lowcrowd"
+    ],
     "safety": "Not advisable in July: flash flow and slippery rock cause real accidents. Better in Sep-Feb."
   },
   {
@@ -74,8 +113,14 @@
     "category": "activity",
     "area": "Karjat",
     "zone": "karjat",
-    "moods": ["birthday", "adventure"],
-    "vibes": ["adventure", "peaceful"],
+    "moods": [
+      "birthday",
+      "adventure"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 100,
@@ -88,7 +133,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bhivpuri+Waterfall+Karjat",
     "summary": "Offbeat falls near Karjat, train-accessible, no stalls or tour groups. Just green and water.",
     "veg": true,
-    "tags": ["nature", "waterfall", "lowcrowd", "monsoon"],
+    "tags": [
+      "nature",
+      "waterfall",
+      "lowcrowd",
+      "monsoon"
+    ],
     "safety": "Strong current in peak monsoon is dangerous. Go with locals who know the water, or visit post-monsoon."
   },
   {
@@ -97,8 +147,16 @@
     "category": "activity",
     "area": "Karjat",
     "zone": "karjat",
-    "moods": ["birthday", "adventure", "chill"],
-    "vibes": ["adventure", "peaceful", "nature"],
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful",
+      "nature"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -111,7 +169,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ulhas+river+Karjat",
     "summary": "After the waterfall, the Ulhas river pools are calm enough for a proper soak on the rocky banks. Half the fun is the sitting-around part.",
     "veg": true,
-    "tags": ["nature", "lowcrowd", "adventure"],
+    "tags": [
+      "nature",
+      "lowcrowd",
+      "adventure"
+    ],
     "safety": "River level rises quickly after rain. Get out immediately if the flow increases — don't wade into deep pools."
   },
   {
@@ -120,9 +182,20 @@
     "category": "food",
     "area": "Karjat",
     "zone": "karjat",
-    "moods": ["birthday", "adventure", "chill"],
-    "vibes": ["adventure", "peaceful"],
-    "cuisines": ["indian", "street", "chaat"],
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful"
+    ],
+    "cuisines": [
+      "indian",
+      "street",
+      "chaat"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 200,
     "durationMins": 45,
@@ -134,8 +207,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=dhaba+Karjat+village",
     "summary": "Local roadside dhabas near the station serve simple thali, chai, and bhaji-pav all day. Exactly what you want after a waterfall walk.",
     "veg": true,
-    "tags": ["local", "lowcrowd"],
-    "topDishes": ["Veg thali", "Bhaji-pav", "Chai"]
+    "tags": [
+      "local",
+      "lowcrowd"
+    ],
+    "topDishes": [
+      "Veg thali",
+      "Bhaji-pav",
+      "Chai"
+    ]
   },
   {
     "id": "kolad-lake",
@@ -143,8 +223,17 @@
     "category": "activity",
     "area": "Kolad",
     "zone": "kolad",
-    "moods": ["birthday", "romantic", "chill"],
-    "vibes": ["peaceful", "queen", "adventure"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "adventure",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 600,
@@ -157,7 +246,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kolad+Maharashtra",
     "summary": "Quiet lake ringed by green hills, about 2.5 hours out. Serene and uncrowded on weekdays.",
     "veg": true,
-    "tags": ["nature", "lakeside", "lowcrowd", "monsoon"],
+    "tags": [
+      "nature",
+      "lakeside",
+      "lowcrowd",
+      "monsoon"
+    ],
     "safety": "Long drive; better suited to a full day or overnight than a tight schedule."
   },
   {
@@ -166,8 +260,17 @@
     "category": "activity",
     "area": "Nariman Point, South Mumbai",
     "zone": "south",
-    "moods": ["birthday", "romantic", "chill"],
-    "vibes": ["peaceful", "queen", "culture"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "culture",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -180,7 +283,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Marine+Drive+Mumbai",
     "summary": "The bay, the breeze, the lights coming on. Magic at golden hour if the rain holds off.",
     "veg": true,
-    "tags": ["lowcrowd", "instagrammable", "sunset"],
+    "tags": [
+      "lowcrowd",
+      "instagrammable",
+      "sunset"
+    ],
     "safety": "Waves splash over the promenade at monsoon high tide. Check the tide; keep a backup indoor plan."
   },
   {
@@ -189,9 +296,23 @@
     "category": "cafe",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["foodie", "queen", "peaceful"],
-    "cuisines": ["cafe", "continental", "brunch"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "peaceful",
+      "luxe",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe",
+      "continental",
+      "brunch"
+    ],
     "budgetLevel": 3,
     "costPerPerson": 700,
     "durationMins": 75,
@@ -203,8 +324,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Sequel+Bistro+Bandra+Mumbai",
     "summary": "Clean, pretty, plant-forward. The brunch plate she photographs.",
     "veg": true,
-    "tags": ["brunch", "instagrammable", "exoticfruit"],
-    "topDishes": ["Avocado toast", "Dragon fruit smoothie bowl", "Big Sequel breakfast"],
+    "tags": [
+      "brunch",
+      "instagrammable",
+      "exoticfruit"
+    ],
+    "topDishes": [
+      "Avocado toast",
+      "Dragon fruit smoothie bowl",
+      "Big Sequel breakfast"
+    ],
     "mustBook": true
   },
   {
@@ -213,9 +342,20 @@
     "category": "cafe",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill"],
-    "vibes": ["foodie", "peaceful"],
-    "cuisines": ["cafe", "continental", "brunch"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "peaceful",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe",
+      "continental",
+      "brunch"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 550,
     "durationMins": 60,
@@ -227,8 +367,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kitchen+Garden+by+Suzette+Bandra",
     "summary": "Bright and easy in the morning. Big salads, fresh juices, proper breakfasts.",
     "veg": true,
-    "tags": ["brunch", "instagrammable"],
-    "topDishes": ["Chicken sausage breakfast", "Quinoa salad bowl", "Cold-pressed juice"]
+    "tags": [
+      "brunch",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Chicken sausage breakfast",
+      "Quinoa salad bowl",
+      "Cold-pressed juice"
+    ]
   },
   {
     "id": "ramashray-dosa",
@@ -236,9 +383,20 @@
     "category": "cafe",
     "area": "Matunga East",
     "zone": "central",
-    "moods": ["birthday", "chill"],
-    "vibes": ["foodie", "culture"],
-    "cuisines": ["indian", "brunch", "street"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "culture",
+      "cozy"
+    ],
+    "cuisines": [
+      "indian",
+      "brunch",
+      "street"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 250,
     "durationMins": 45,
@@ -250,8 +408,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ramashray+Matunga+Mumbai",
     "summary": "Crisp rava dosa and filter coffee done the old way. Cheap, fast, exactly right some mornings.",
     "veg": true,
-    "tags": ["brunch"],
-    "topDishes": ["Rava dosa", "Filter coffee", "Soft idli"]
+    "tags": [
+      "brunch"
+    ],
+    "topDishes": [
+      "Rava dosa",
+      "Filter coffee",
+      "Soft idli"
+    ]
   },
   {
     "id": "bayroute-lebanese",
@@ -259,9 +423,23 @@
     "category": "food",
     "area": "Pali Naka, Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "romantic", "celebrate", "anniversary"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["lebanese", "mediterranean"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "celebrate",
+      "anniversary"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "luxe",
+      "romantic",
+      "nightlife"
+    ],
+    "cuisines": [
+      "lebanese",
+      "mediterranean"
+    ],
     "budgetLevel": 3,
     "costPerPerson": 1200,
     "durationMins": 80,
@@ -273,9 +451,17 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bayroute+Bandra+Mumbai",
     "summary": "Mezze, hummus, grills. Pretty plating, strong veg spread too.",
     "veg": true,
-    "tags": ["instagrammable"],
-    "contains": ["capsicum"],
-    "topDishes": ["Hummus Beiruti", "Mezze platter", "Grilled chicken shish"],
+    "tags": [
+      "instagrammable"
+    ],
+    "contains": [
+      "capsicum"
+    ],
+    "topDishes": [
+      "Hummus Beiruti",
+      "Mezze platter",
+      "Grilled chicken shish"
+    ],
     "mustBook": true
   },
   {
@@ -284,9 +470,21 @@
     "category": "food",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "celebrate", "romantic", "anniversary"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["chinese", "asian"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic",
+      "anniversary"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "luxe"
+    ],
+    "cuisines": [
+      "chinese",
+      "asian"
+    ],
     "budgetLevel": 3,
     "costPerPerson": 1300,
     "durationMins": 90,
@@ -299,7 +497,11 @@
     "summary": "Dim sum, steamed fish, the dishes that earned the name. Plenty of veg dim sum too.",
     "veg": true,
     "tags": [],
-    "topDishes": ["Assorted dim sum basket", "Steamed fish in ginger", "Veg crispy lotus stem"],
+    "topDishes": [
+      "Assorted dim sum basket",
+      "Steamed fish in ginger",
+      "Veg crispy lotus stem"
+    ],
     "mustBook": true
   },
   {
@@ -308,9 +510,22 @@
     "category": "food",
     "area": "Bandra West (Pali Hill)",
     "zone": "bandra",
-    "moods": ["birthday", "romantic", "celebrate", "anniversary"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["italian", "mediterranean"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "celebrate",
+      "anniversary"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "luxe",
+      "romantic"
+    ],
+    "cuisines": [
+      "italian",
+      "mediterranean"
+    ],
     "budgetLevel": 4,
     "costPerPerson": 2000,
     "durationMins": 100,
@@ -322,8 +537,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Olive+Bar+and+Kitchen+Bandra",
     "summary": "White-washed, fairy-lit, very instagrammable. A real occasion dinner.",
     "veg": true,
-    "tags": ["instagrammable"],
-    "topDishes": ["Wood-fired pizza", "Handmade ravioli", "Tiramisu"],
+    "tags": [
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Wood-fired pizza",
+      "Handmade ravioli",
+      "Tiramisu"
+    ],
     "mustBook": true
   },
   {
@@ -332,9 +553,20 @@
     "category": "food",
     "area": "Versova, Andheri West",
     "zone": "andheri_w",
-    "moods": ["birthday", "chill"],
-    "vibes": ["foodie", "playful"],
-    "cuisines": ["italian", "continental"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "nightlife",
+      "cozy"
+    ],
+    "cuisines": [
+      "italian",
+      "continental"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 800,
     "durationMins": 75,
@@ -346,8 +578,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Jamjar+Diner+Versova+Mumbai",
     "summary": "Fun, colourful diner close to home. Easy on the wallet.",
     "veg": true,
-    "tags": ["instagrammable"],
-    "topDishes": ["Baked lasagna", "Mac and cheese", "Thin-crust pizza"]
+    "tags": [
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Baked lasagna",
+      "Mac and cheese",
+      "Thin-crust pizza"
+    ]
   },
   {
     "id": "yoko-sizzlers",
@@ -355,9 +593,20 @@
     "category": "food",
     "area": "Tardeo, South-Central",
     "zone": "central",
-    "moods": ["birthday", "celebrate", "chill"],
-    "vibes": ["foodie", "playful"],
-    "cuisines": ["continental", "sizzler"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "nightlife"
+    ],
+    "cuisines": [
+      "continental",
+      "sizzler"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 900,
     "durationMins": 80,
@@ -369,8 +618,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Yoko+Sizzlers+Tardeo+Mumbai",
     "summary": "Sizzling chicken and fish steaks the way she likes them. Veg sizzlers on veg days.",
     "veg": true,
-    "tags": ["sizzler"],
-    "topDishes": ["Chicken Hawaiian sizzler", "Fish sizzler", "Veg satay sizzler"]
+    "tags": [
+      "sizzler"
+    ],
+    "topDishes": [
+      "Chicken Hawaiian sizzler",
+      "Fish sizzler",
+      "Veg satay sizzler"
+    ]
   },
   {
     "id": "bombay-sweet-shop",
@@ -378,9 +633,20 @@
     "category": "dessert",
     "area": "Byculla",
     "zone": "central",
-    "moods": ["birthday", "celebrate", "chill"],
-    "vibes": ["foodie", "playful", "queen"],
-    "cuisines": ["dessert"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "queen",
+      "cozy"
+    ],
+    "cuisines": [
+      "dessert"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 400,
     "durationMins": 40,
@@ -392,8 +658,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bombay+Sweet+Shop+Byculla",
     "summary": "Indian sweets reimagined and beautifully boxed. The most photogenic dessert stop in the city.",
     "veg": true,
-    "tags": ["dessert", "instagrammable"],
-    "topDishes": ["Ghevar", "Mishti doi", "Sustainable chocolate barfi"]
+    "tags": [
+      "dessert",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Ghevar",
+      "Mishti doi",
+      "Sustainable chocolate barfi"
+    ]
   },
   {
     "id": "le15-patisserie",
@@ -401,9 +674,20 @@
     "category": "dessert",
     "area": "Colaba",
     "zone": "south",
-    "moods": ["birthday", "celebrate", "romantic"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["dessert"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "romantic",
+      "cozy"
+    ],
+    "cuisines": [
+      "dessert"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 350,
     "durationMins": 30,
@@ -415,8 +699,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Le15+Patisserie+Colaba+Mumbai",
     "summary": "Pastel French pastries and a birthday-worthy cake. Pretty enough to photograph before the first bite.",
     "veg": true,
-    "tags": ["dessert", "instagrammable"],
-    "topDishes": ["Macarons", "Celebration cake (pre-order)", "Chocolate hazelnut tart"],
+    "tags": [
+      "dessert",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Macarons",
+      "Celebration cake (pre-order)",
+      "Chocolate hazelnut tart"
+    ],
     "mustBook": true
   },
   {
@@ -425,9 +716,21 @@
     "category": "dessert",
     "area": "Multiple outlets citywide",
     "zone": "multiple",
-    "moods": ["birthday", "chill", "celebrate", "romantic"],
-    "vibes": ["playful", "foodie"],
-    "cuisines": ["icecream", "dessert"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "playful",
+      "foodie",
+      "cozy"
+    ],
+    "cuisines": [
+      "icecream",
+      "dessert"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 150,
     "durationMins": 25,
@@ -439,8 +742,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Naturals+Ice+Cream+near+me",
     "summary": "Real-fruit ice cream, a Mumbai institution. Tender coconut, alphonso, sitaphal in season.",
     "veg": true,
-    "tags": ["dessert", "exoticfruit"],
-    "topDishes": ["Tender coconut", "Alphonso mango", "Sitaphal (custard apple)"]
+    "tags": [
+      "dessert",
+      "exoticfruit"
+    ],
+    "topDishes": [
+      "Tender coconut",
+      "Alphonso mango",
+      "Sitaphal (custard apple)"
+    ]
   },
   {
     "id": "k-rustom",
@@ -448,9 +758,20 @@
     "category": "dessert",
     "area": "Churchgate",
     "zone": "south",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["playful", "culture"],
-    "cuisines": ["icecream", "dessert"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "playful",
+      "culture",
+      "cozy"
+    ],
+    "cuisines": [
+      "icecream",
+      "dessert"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 120,
     "durationMins": 20,
@@ -462,8 +783,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=K+Rustom+Churchgate",
     "summary": "A wafer-pressed ice cream slab from 1953. Tiny shop, big memory.",
     "veg": true,
-    "tags": ["dessert"],
-    "topDishes": ["Classic vanilla sandwich", "Mawa malai", "Roasted almond crunch"]
+    "tags": [
+      "dessert"
+    ],
+    "topDishes": [
+      "Classic vanilla sandwich",
+      "Mawa malai",
+      "Roasted almond crunch"
+    ]
   },
   {
     "id": "rest-home",
@@ -471,8 +798,21 @@
     "category": "rest",
     "area": "Marol, Andheri East",
     "zone": "home",
-    "moods": ["birthday", "chill", "romantic", "adventure", "celebrate"],
-    "vibes": ["peaceful", "queen", "adventure", "foodie", "playful", "culture"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic",
+      "adventure",
+      "celebrate"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "adventure",
+      "foodie",
+      "playful",
+      "culture"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -493,8 +833,16 @@
     "category": "experience",
     "area": "Kala Ghoda, Fort",
     "zone": "south",
-    "moods": ["birthday", "chill"],
-    "vibes": ["culture", "queen", "peaceful"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "culture",
+      "queen",
+      "peaceful",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 100,
@@ -504,11 +852,16 @@
     "outdoor": false,
     "monsoonRisk": "ok",
     "adventureLevel": 1,
-    "closedDays": [1],
+    "closedDays": [
+      1
+    ],
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kala+Ghoda+Fort+Mumbai",
     "summary": "Street art, the Jehangir gallery, the Sassoon library lawns. Walkable and unhurried, indoors when it rains.",
     "veg": true,
-    "tags": ["instagrammable", "lowcrowd"],
+    "tags": [
+      "instagrammable",
+      "lowcrowd"
+    ],
     "safety": "Most galleries (incl. Jehangir) shut on Mondays. Good rainy-day pick otherwise."
   },
   {
@@ -517,8 +870,17 @@
     "category": "experience",
     "area": "Pick a PVR/INOX near your route",
     "zone": "multiple",
-    "moods": ["birthday", "chill", "celebrate"],
-    "vibes": ["queen", "playful", "culture"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "queen",
+      "playful",
+      "culture",
+      "nightlife"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 500,
@@ -542,8 +904,17 @@
     "category": "shopping",
     "area": "Colaba",
     "zone": "south",
-    "moods": ["birthday", "chill", "celebrate"],
-    "vibes": ["shopper", "playful", "culture"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "shopper",
+      "playful",
+      "culture",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 600,
@@ -556,7 +927,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Colaba+Causeway+Mumbai",
     "summary": "The classic street haul: silver, bags, kurtas, knick-knacks. Bargain and you will win.",
     "veg": true,
-    "tags": ["shopping", "street", "instagrammable"],
+    "tags": [
+      "shopping",
+      "street",
+      "instagrammable"
+    ],
     "safety": "Open-air stalls; a downpour shuts it down. Keep nearby cafes as cover."
   },
   {
@@ -565,8 +940,15 @@
     "category": "shopping",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill"],
-    "vibes": ["shopper", "playful"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "shopper",
+      "playful",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 600,
@@ -579,7 +961,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Hill+Road+Bandra+Mumbai",
     "summary": "Bandra's street racks for shoes, accessories and trendy finds. Close to home, easy evening.",
     "veg": true,
-    "tags": ["shopping", "street", "instagrammable"],
+    "tags": [
+      "shopping",
+      "street",
+      "instagrammable"
+    ],
     "safety": "Mostly open-air; pivot to Bandra's indoor stores if it pours."
   },
   {
@@ -588,8 +974,15 @@
     "category": "shopping",
     "area": "Mutton Street, South Mumbai",
     "zone": "south",
-    "moods": ["birthday", "adventure"],
-    "vibes": ["shopper", "culture"],
+    "moods": [
+      "birthday",
+      "adventure"
+    ],
+    "vibes": [
+      "shopper",
+      "culture",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 500,
@@ -599,11 +992,22 @@
     "outdoor": true,
     "monsoonRisk": "caution",
     "adventureLevel": 2,
-    "closedDays": [0, 1, 2, 3, 4, 6],
+    "closedDays": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6
+    ],
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Chor+Bazaar+Mumbai",
     "summary": "Old-world flea for vintage, brass, records and odd treasures. The thrift hunter's paradise.",
     "veg": true,
-    "tags": ["shopping", "thrift", "vintage"],
+    "tags": [
+      "shopping",
+      "thrift",
+      "vintage"
+    ],
     "safety": "Really only worth it on Fridays. Bargain hard and watch your bag in the crowd."
   },
   {
@@ -612,8 +1016,15 @@
     "category": "shopping",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill"],
-    "vibes": ["shopper", "queen"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "shopper",
+      "queen",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 700,
@@ -626,7 +1037,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bombay+Closet+Cleanse+Bandra",
     "summary": "Curated secondhand and vintage in a cool little store. Thrift without the dust, very photogenic.",
     "veg": true,
-    "tags": ["shopping", "thrift", "instagrammable"]
+    "tags": [
+      "shopping",
+      "thrift",
+      "instagrammable"
+    ]
   },
   {
     "id": "banganga-tank",
@@ -634,8 +1049,17 @@
     "category": "experience",
     "area": "Walkeshwar, South Mumbai",
     "zone": "south",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["spiritual", "peaceful", "culture"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "spiritual",
+      "peaceful",
+      "culture",
+      "cozy"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -648,7 +1072,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Banganga+Tank+Walkeshwar+Mumbai",
     "summary": "An ancient stone tank ringed by tiny temples and steps. Hushed, old, almost no crowd.",
     "veg": true,
-    "tags": ["temple", "serene", "lowcrowd", "instagrammable"],
+    "tags": [
+      "temple",
+      "serene",
+      "lowcrowd",
+      "instagrammable"
+    ],
     "safety": "Temple site: dress modestly (covered shoulders and knees). Stone steps are slippery in rain."
   },
   {
@@ -657,8 +1086,14 @@
     "category": "experience",
     "area": "Gorai",
     "zone": "gorai",
-    "moods": ["birthday", "chill"],
-    "vibes": ["spiritual", "peaceful"],
+    "moods": [
+      "birthday",
+      "chill"
+    ],
+    "vibes": [
+      "spiritual",
+      "peaceful"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 100,
@@ -671,7 +1106,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Global+Vipassana+Pagoda+Gorai",
     "summary": "A vast golden meditation dome by the sea, reached by a short ferry. Deeply calm inside.",
     "veg": true,
-    "tags": ["temple", "serene", "lowcrowd", "instagrammable"],
+    "tags": [
+      "temple",
+      "serene",
+      "lowcrowd",
+      "instagrammable"
+    ],
     "safety": "Reached by ferry: check timings, and the crossing can be rough in heavy monsoon. Dress modestly."
   },
   {
@@ -680,9 +1120,23 @@
     "category": "food",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "romantic", "celebrate", "anniversary"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["arabic", "lebanese", "mediterranean", "middleeastern"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "celebrate",
+      "anniversary"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "luxe"
+    ],
+    "cuisines": [
+      "arabic",
+      "lebanese",
+      "mediterranean",
+      "middleeastern"
+    ],
     "budgetLevel": 3,
     "costPerPerson": 1100,
     "durationMins": 90,
@@ -694,8 +1148,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Cafe+Arabia+Bandra",
     "summary": "Mandi, hummus, grills and proper Arabic coffee. The closest thing to a Muscat evening in Bombay.",
     "veg": true,
-    "tags": ["muscat", "arabic", "instagrammable"],
-    "topDishes": ["Chicken mandi", "Hummus with lamb (or veg)", "Arabic coffee and dates"],
+    "tags": [
+      "muscat",
+      "arabic",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Chicken mandi",
+      "Hummus with lamb (or veg)",
+      "Arabic coffee and dates"
+    ],
     "mustBook": true
   },
   {
@@ -704,9 +1166,22 @@
     "category": "dessert",
     "area": "Bandra West / Mohammed Ali Road",
     "zone": "bandra",
-    "moods": ["birthday", "celebrate", "romantic"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["dessert", "arabic", "middleeastern"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "romantic",
+      "cozy"
+    ],
+    "cuisines": [
+      "dessert",
+      "arabic",
+      "middleeastern"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 250,
     "durationMins": 30,
@@ -718,8 +1193,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=kunafa+Bandra+Mumbai",
     "summary": "Warm cheese kunafa and dates, the dessert of home for her. A sweet, nostalgic finish.",
     "veg": true,
-    "tags": ["dessert", "muscat", "arabic"],
-    "topDishes": ["Cheese kunafa", "Baklava", "Medjool dates"]
+    "tags": [
+      "dessert",
+      "muscat",
+      "arabic"
+    ],
+    "topDishes": [
+      "Cheese kunafa",
+      "Baklava",
+      "Medjool dates"
+    ]
   },
   {
     "id": "bandstand-promenade",
@@ -727,8 +1210,19 @@
     "category": "activity",
     "area": "Bandstand, Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "romantic", "chill", "anniversary"],
-    "vibes": ["peaceful", "queen", "culture"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill",
+      "anniversary"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "culture",
+      "romantic",
+      "nightlife"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -741,7 +1235,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bandstand+Promenade+Bandra+West",
     "summary": "The sea railing, the locks, the city lights behind you and the bay ahead. A proper Bandra evening.",
     "veg": true,
-    "tags": ["instagrammable", "sunset", "lowcrowd"]
+    "tags": [
+      "instagrammable",
+      "sunset",
+      "lowcrowd"
+    ]
   },
   {
     "id": "carter-road",
@@ -749,8 +1247,17 @@
     "category": "activity",
     "area": "Carter Road, Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["peaceful", "playful"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "peaceful",
+      "playful",
+      "romantic",
+      "nightlife"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -763,7 +1270,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Carter+Road+Bandra+Mumbai",
     "summary": "Bandra's easy waterfront strip: joggers, street food stalls, sea breeze, and the bay turning gold.",
     "veg": true,
-    "tags": ["lowcrowd", "sunset", "instagrammable"]
+    "tags": [
+      "lowcrowd",
+      "sunset",
+      "instagrammable"
+    ]
   },
   {
     "id": "mount-mary-basilica",
@@ -771,8 +1282,17 @@
     "category": "experience",
     "area": "Bandra Hill, Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["spiritual", "peaceful", "culture"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "spiritual",
+      "peaceful",
+      "culture",
+      "cozy"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -785,7 +1305,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Mount+Mary+Basilica+Bandra",
     "summary": "A hilltop Portuguese-era church with arched ceilings and a calming quiet that requires no belief to feel.",
     "veg": true,
-    "tags": ["temple", "serene", "lowcrowd", "instagrammable"],
+    "tags": [
+      "temple",
+      "serene",
+      "lowcrowd",
+      "instagrammable"
+    ],
     "safety": "Dress modestly: covered shoulders and knees. Often packed on the 8th of each month."
   },
   {
@@ -794,9 +1319,22 @@
     "category": "food",
     "area": "Lower Parel",
     "zone": "central",
-    "moods": ["birthday", "celebrate", "romantic", "chill"],
-    "vibes": ["foodie", "queen", "culture"],
-    "cuisines": ["indian", "continental"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic",
+      "chill"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "culture",
+      "luxe"
+    ],
+    "cuisines": [
+      "indian",
+      "continental"
+    ],
     "budgetLevel": 3,
     "costPerPerson": 1400,
     "durationMins": 90,
@@ -808,8 +1346,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Bombay+Canteen+Lower+Parel",
     "summary": "Indian ingredients done with real creativity. One of the best dinners the city has to offer.",
     "veg": true,
-    "tags": ["instagrammable"],
-    "topDishes": ["Bhutta chicken", "Local fish of the day", "Masala chai panna cotta"],
+    "tags": [
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Bhutta chicken",
+      "Local fish of the day",
+      "Masala chai panna cotta"
+    ],
     "mustBook": true
   },
   {
@@ -818,9 +1362,22 @@
     "category": "cafe",
     "area": "Colaba, South Mumbai",
     "zone": "south",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["culture", "foodie", "peaceful"],
-    "cuisines": ["cafe", "continental"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "culture",
+      "foodie",
+      "peaceful",
+      "artsy",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe",
+      "continental"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 600,
     "durationMins": 60,
@@ -832,8 +1389,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Cafe+Mondegar+Colaba+Mumbai",
     "summary": "Mario Miranda murals on every wall, cold beer, good grub. A Mumbai institution since 1932.",
     "veg": true,
-    "tags": ["instagrammable"],
-    "topDishes": ["Cheese omelette", "Caramel custard", "Chicken tikka masala"]
+    "tags": [
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Cheese omelette",
+      "Caramel custard",
+      "Chicken tikka masala"
+    ]
   },
   {
     "id": "bastian-bandra",
@@ -841,9 +1404,22 @@
     "category": "food",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "celebrate", "romantic"],
-    "vibes": ["foodie", "queen"],
-    "cuisines": ["seafood", "continental", "asian"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "romantic"
+    ],
+    "vibes": [
+      "foodie",
+      "queen",
+      "luxe",
+      "romantic"
+    ],
+    "cuisines": [
+      "seafood",
+      "continental",
+      "asian"
+    ],
     "budgetLevel": 4,
     "costPerPerson": 2200,
     "durationMins": 100,
@@ -855,8 +1431,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bastian+Bandra+Mumbai",
     "summary": "Big, beautiful seafood: lobster, crab rice, oysters. One of Bandra's finest special-occasion restaurants.",
     "veg": false,
-    "tags": ["instagrammable"],
-    "topDishes": ["Lobster in butter garlic", "Crab fried rice", "Fish and chips"],
+    "tags": [
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Lobster in butter garlic",
+      "Crab fried rice",
+      "Fish and chips"
+    ],
     "mustBook": true
   },
   {
@@ -865,8 +1447,17 @@
     "category": "activity",
     "area": "Versova, Andheri West",
     "zone": "andheri_w",
-    "moods": ["birthday", "chill", "romantic", "adventure"],
-    "vibes": ["peaceful", "adventure"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic",
+      "adventure"
+    ],
+    "vibes": [
+      "peaceful",
+      "adventure",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -879,7 +1470,10 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Versova+Beach+Mumbai",
     "summary": "A quieter city beach close to home. Fishing boats, coconut vendors, and the sea turning amber.",
     "veg": true,
-    "tags": ["lowcrowd", "sunset"],
+    "tags": [
+      "lowcrowd",
+      "sunset"
+    ],
     "safety": "No swimming in monsoon: rough surf and undertow. Fine for a seaside walk."
   },
   {
@@ -888,8 +1482,17 @@
     "category": "experience",
     "area": "Worli, Mumbai",
     "zone": "central",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["spiritual", "peaceful", "culture"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "spiritual",
+      "peaceful",
+      "culture",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -902,7 +1505,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Haji+Ali+Dargah+Mumbai",
     "summary": "A marble dargah on a tidal islet, reached by a narrow causeway. Beautiful at any tide, but especially at golden hour.",
     "veg": true,
-    "tags": ["temple", "serene", "instagrammable", "lowcrowd"],
+    "tags": [
+      "temple",
+      "serene",
+      "instagrammable",
+      "lowcrowd"
+    ],
     "safety": "The causeway floods at high tide. Go 2-3 hours after high tide. Dress modestly."
   },
   {
@@ -911,8 +1519,16 @@
     "category": "activity",
     "area": "Worli, Mumbai",
     "zone": "central",
-    "moods": ["birthday", "romantic", "chill"],
-    "vibes": ["peaceful", "queen"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill"
+    ],
+    "vibes": [
+      "peaceful",
+      "queen",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -925,7 +1541,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Worli+Sea+Face+Mumbai",
     "summary": "The sea wall walk with the Bandra-Worli Sea Link framing the horizon. Magic at golden hour.",
     "veg": true,
-    "tags": ["instagrammable", "sunset", "lowcrowd"]
+    "tags": [
+      "instagrammable",
+      "sunset",
+      "lowcrowd"
+    ]
   },
   {
     "id": "todi-mill-social",
@@ -933,9 +1553,22 @@
     "category": "experience",
     "area": "Lower Parel, Mumbai",
     "zone": "central",
-    "moods": ["birthday", "chill", "celebrate"],
-    "vibes": ["playful", "foodie", "culture"],
-    "cuisines": ["continental", "cafe"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate"
+    ],
+    "vibes": [
+      "playful",
+      "foodie",
+      "culture",
+      "artsy",
+      "nightlife"
+    ],
+    "cuisines": [
+      "continental",
+      "cafe"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 800,
     "durationMins": 75,
@@ -947,8 +1580,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Todi+Mill+Social+Lower+Parel+Mumbai",
     "summary": "Converted mill, industrial interiors, inventive cocktails and food that actually hits. Good for a lazy afternoon.",
     "veg": true,
-    "tags": ["instagrammable"],
-    "topDishes": ["Loaded fries", "Social tikka pizza", "Kokum shrub cocktail"]
+    "tags": [
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Loaded fries",
+      "Social tikka pizza",
+      "Kokum shrub cocktail"
+    ]
   },
   {
     "id": "quan-spa",
@@ -956,8 +1595,17 @@
     "category": "experience",
     "area": "Juhu, Andheri West",
     "zone": "andheri_w",
-    "moods": ["birthday", "romantic", "chill", "anniversary"],
-    "vibes": ["queen", "peaceful"],
+    "moods": [
+      "birthday",
+      "romantic",
+      "chill",
+      "anniversary"
+    ],
+    "vibes": [
+      "queen",
+      "peaceful",
+      "luxe"
+    ],
     "cuisines": [],
     "budgetLevel": 4,
     "costPerPerson": 3500,
@@ -970,7 +1618,10 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Quan+Spa+JW+Marriott+Juhu+Mumbai",
     "summary": "A proper spa afternoon: massages, steam, and quiet. The kind of afternoon she would never book just for herself.",
     "veg": true,
-    "tags": ["spa", "lowcrowd"],
+    "tags": [
+      "spa",
+      "lowcrowd"
+    ],
     "mustBook": true
   },
   {
@@ -979,8 +1630,16 @@
     "category": "activity",
     "area": "Juhu, Andheri West",
     "zone": "andheri_w",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["peaceful", "playful"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "peaceful",
+      "playful",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 100,
@@ -993,7 +1652,10 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Juhu+Beach+Mumbai",
     "summary": "Mumbai's most beloved beach: street food, the wide bay, and the city receding behind you.",
     "veg": true,
-    "tags": ["sunset", "instagrammable"],
+    "tags": [
+      "sunset",
+      "instagrammable"
+    ],
     "safety": "Rough surf in peak monsoon, no swimming. Fine for the golden-hour stroll and beach snacks."
   },
   {
@@ -1002,9 +1664,21 @@
     "category": "experience",
     "area": "Fort, South Mumbai",
     "zone": "south",
-    "moods": ["birthday", "chill", "romantic"],
-    "vibes": ["culture", "peaceful", "queen"],
-    "cuisines": ["cafe"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic"
+    ],
+    "vibes": [
+      "culture",
+      "peaceful",
+      "queen",
+      "artsy",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 400,
     "durationMins": 75,
@@ -1016,7 +1690,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kitab+Khana+Fort+Mumbai",
     "summary": "A beautiful independent bookstore and café in Fort. The kind of afternoon that stretches.",
     "veg": true,
-    "tags": ["lowcrowd", "instagrammable", "books"]
+    "tags": [
+      "lowcrowd",
+      "instagrammable",
+      "books"
+    ]
   },
   {
     "id": "elephanta-caves",
@@ -1024,8 +1702,17 @@
     "category": "experience",
     "area": "Gateway of India → Elephanta Island",
     "zone": "south",
-    "moods": ["birthday", "chill", "adventure"],
-    "vibes": ["culture", "adventure", "peaceful"],
+    "moods": [
+      "birthday",
+      "chill",
+      "adventure"
+    ],
+    "vibes": [
+      "culture",
+      "adventure",
+      "peaceful",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 350,
@@ -1038,7 +1725,12 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Elephanta+Caves+Mumbai",
     "summary": "A ferry from the Gateway, ancient rock-cut Shiva shrines, and a green island — half day well spent.",
     "veg": true,
-    "tags": ["nature", "temple", "instagrammable", "lowcrowd"],
+    "tags": [
+      "nature",
+      "temple",
+      "instagrammable",
+      "lowcrowd"
+    ],
     "safety": "Ferry service gets rough in heavy monsoon, sometimes suspended. Check MTDC schedule the morning before."
   },
   {
@@ -1047,8 +1739,17 @@
     "category": "activity",
     "area": "Thane West",
     "zone": "thane",
-    "moods": ["birthday", "chill", "romantic", "date night"],
-    "vibes": ["peaceful", "nature", "adventure"],
+    "moods": [
+      "birthday",
+      "chill",
+      "romantic",
+      "date night"
+    ],
+    "vibes": [
+      "peaceful",
+      "nature",
+      "adventure"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -1061,7 +1762,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Upvan+Lake+Thane",
     "summary": "Thane's prettiest spot — a tree-lined promenade around a calm lake with a view of the Sahyadri hills in the distance. Quiet, easy, a good stretch of the legs.",
     "veg": true,
-    "tags": ["nature", "lowcrowd", "sunset"]
+    "tags": [
+      "nature",
+      "lowcrowd",
+      "sunset"
+    ]
   },
   {
     "id": "powai-lake-walk",
@@ -1069,8 +1774,17 @@
     "category": "activity",
     "area": "Powai, Mumbai",
     "zone": "thane",
-    "moods": ["birthday", "chill", "adventure", "romantic"],
-    "vibes": ["peaceful", "nature", "adventure"],
+    "moods": [
+      "birthday",
+      "chill",
+      "adventure",
+      "romantic"
+    ],
+    "vibes": [
+      "peaceful",
+      "nature",
+      "adventure"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -1083,7 +1797,11 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Powai+Lake+Mumbai",
     "summary": "Mumbai's inland lake with IIT's green campus on one side and Hiranandani's skyline on the other. A calm, uncrowded walk — completely different energy to the city you just left.",
     "veg": true,
-    "tags": ["nature", "lowcrowd", "instagrammable"]
+    "tags": [
+      "nature",
+      "lowcrowd",
+      "instagrammable"
+    ]
   },
   {
     "id": "yeoor-hills",
@@ -1091,8 +1809,16 @@
     "category": "activity",
     "area": "Thane East",
     "zone": "thane",
-    "moods": ["birthday", "adventure", "chill"],
-    "vibes": ["adventure", "nature", "peaceful"],
+    "moods": [
+      "birthday",
+      "adventure",
+      "chill"
+    ],
+    "vibes": [
+      "adventure",
+      "nature",
+      "peaceful"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -1105,7 +1831,10 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Yeoor+Hills+Thane",
     "summary": "A forested hillside inside Sanjay Gandhi National Park's Thane section. Light trail, some elevation, good bird sightings in the morning. Green and misty in the rains.",
     "veg": true,
-    "tags": ["nature", "lowcrowd"],
+    "tags": [
+      "nature",
+      "lowcrowd"
+    ],
     "safety": "Slippery in heavy monsoon. Wear proper shoes and carry water."
   },
   {
@@ -1114,9 +1843,23 @@
     "category": "cafe",
     "area": "Powai, Mumbai",
     "zone": "thane",
-    "moods": ["birthday", "chill", "date night", "romantic"],
-    "vibes": ["peaceful", "foodie", "queen"],
-    "cuisines": ["cafe", "continental", "brunch"],
+    "moods": [
+      "birthday",
+      "chill",
+      "date night",
+      "romantic"
+    ],
+    "vibes": [
+      "peaceful",
+      "foodie",
+      "queen",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe",
+      "continental",
+      "brunch"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 500,
     "durationMins": 60,
@@ -1128,8 +1871,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=cafes+in+Hiranandani+Powai+Mumbai",
     "summary": "Hiranandani has a surprisingly good café strip — think Theobroma, Moshe's or similar. Good coffee, pastries, and a much calmer vibe than Bandra.",
     "veg": true,
-    "tags": ["cafe", "instagrammable"],
-    "topDishes": ["Croissant", "Iced coffee", "Cheesecake slice"]
+    "tags": [
+      "cafe",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Croissant",
+      "Iced coffee",
+      "Cheesecake slice"
+    ]
   },
   {
     "id": "elco-market-bandra",
@@ -1137,9 +1887,22 @@
     "category": "food",
     "area": "Bandra West",
     "zone": "bandra",
-    "moods": ["birthday", "chill", "celebrate", "date night"],
-    "vibes": ["foodie", "playful", "culture"],
-    "cuisines": ["street", "indian", "chaat"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate",
+      "date night"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "culture"
+    ],
+    "cuisines": [
+      "street",
+      "indian",
+      "chaat"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 250,
     "durationMins": 60,
@@ -1151,8 +1914,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Elco+Arcade+Bandra+Mumbai",
     "summary": "Bandra's legendary street food spot. The pani puri here is life-changing, the pav bhaji is the real deal. Always crowded, always worth it.",
     "veg": true,
-    "tags": ["street", "instagrammable"],
-    "topDishes": ["Sev puri", "Pani puri", "Pav bhaji"],
+    "tags": [
+      "street",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Sev puri",
+      "Pani puri",
+      "Pav bhaji"
+    ],
     "safety": "Open-air — pivot to a nearby café if it rains heavily."
   },
   {
@@ -1161,9 +1931,22 @@
     "category": "food",
     "area": "Juhu",
     "zone": "andheri_w",
-    "moods": ["birthday", "chill", "celebrate", "date night"],
-    "vibes": ["foodie", "playful", "peaceful"],
-    "cuisines": ["street", "indian", "chaat"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate",
+      "date night"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "peaceful"
+    ],
+    "cuisines": [
+      "street",
+      "indian",
+      "chaat"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 200,
     "durationMins": 60,
@@ -1175,8 +1958,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Juhu+Beach+street+food+stalls+Mumbai",
     "summary": "Evening street food on Juhu Beach is peak Mumbai: bhel puri in the sea breeze, pav bhaji on the sand, the whole city unwinding around you.",
     "veg": true,
-    "tags": ["sunset", "street", "instagrammable"],
-    "topDishes": ["Bhel puri", "Pav bhaji", "Kulfi"],
+    "tags": [
+      "sunset",
+      "street",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Bhel puri",
+      "Pav bhaji",
+      "Kulfi"
+    ],
     "safety": "Rough surf in peak monsoon; stay back from the water."
   },
   {
@@ -1185,9 +1976,23 @@
     "category": "food",
     "area": "Mohammed Ali Road, South Mumbai",
     "zone": "south",
-    "moods": ["birthday", "celebrate", "date night", "adventure"],
-    "vibes": ["foodie", "culture", "adventure"],
-    "cuisines": ["street", "arabic", "indian", "middleeastern"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "date night",
+      "adventure"
+    ],
+    "vibes": [
+      "foodie",
+      "culture",
+      "adventure"
+    ],
+    "cuisines": [
+      "street",
+      "arabic",
+      "indian",
+      "middleeastern"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 400,
     "durationMins": 75,
@@ -1199,8 +2004,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Mohammed+Ali+Road+Mumbai+street+food",
     "summary": "The city's most legendary food street. Nalli nihari, seekh kebabs, Shaikh biryani, fresh juice — it's a full sensory experience best done on foot at night.",
     "veg": false,
-    "tags": ["street", "instagrammable", "culture"],
-    "topDishes": ["Nalli nihari", "Seekh kebab", "Sheer khurma"]
+    "tags": [
+      "street",
+      "instagrammable",
+      "culture"
+    ],
+    "topDishes": [
+      "Nalli nihari",
+      "Seekh kebab",
+      "Sheer khurma"
+    ]
   },
   {
     "id": "chowpatty-beach-chaat",
@@ -1208,9 +2021,22 @@
     "category": "food",
     "area": "Girgaum Chowpatty, South Mumbai",
     "zone": "central",
-    "moods": ["birthday", "chill", "celebrate", "date night"],
-    "vibes": ["foodie", "playful", "peaceful"],
-    "cuisines": ["street", "indian", "chaat"],
+    "moods": [
+      "birthday",
+      "chill",
+      "celebrate",
+      "date night"
+    ],
+    "vibes": [
+      "foodie",
+      "playful",
+      "peaceful"
+    ],
+    "cuisines": [
+      "street",
+      "indian",
+      "chaat"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 200,
     "durationMins": 60,
@@ -1222,8 +2048,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Chowpatty+Beach+chaat+Mumbai",
     "summary": "The OG Mumbai beach food scene — bhel puri, sev puri and kulfi against the Marine Drive skyline. Touristy but genuinely great.",
     "veg": true,
-    "tags": ["sunset", "street", "instagrammable"],
-    "topDishes": ["Bhel puri", "Sev puri", "Kulfi falooda"],
+    "tags": [
+      "sunset",
+      "street",
+      "instagrammable"
+    ],
+    "topDishes": [
+      "Bhel puri",
+      "Sev puri",
+      "Kulfi falooda"
+    ],
     "safety": "Sea is rough in monsoon, stay back from the waterline."
   }
 ]
