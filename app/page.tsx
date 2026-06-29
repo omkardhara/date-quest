@@ -179,6 +179,7 @@ export default function Page() {
     const extra = await discover;
     const p = buildPlan(lastAns, extra);
     if (plan?.events?.length) p.events = plan.events; // reuse cached events
+    if (budget === 0) p.budget = 0;
     setPlan(p);
     setBuilding(false);
     setStep("plan");
