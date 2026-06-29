@@ -14,7 +14,10 @@ const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Ce
 const PERSONALITY = ["Queen", "Adventure", "Peaceful", "Foodie", "Shopper", "Spiritual", "Playful", "Culture", "Nature", "Artsy", "Nightlife", "Cozy", "Luxe", "Romantic"];
 const FOODS = ["Lebanese", "Arabic", "Chinese", "Italian", "Sizzler", "Dessert", "Ice cream", "Brunch", "Indian", "Mediterranean", "Continental", "Asian", "Thai", "Japanese", "Seafood", "Street food", "Healthy", "Cafe", "Pizza", "Coffee"];
 const ACTIVITIES = ["Watch a movie", "Spa or massage", "Long drive", "Beach time", "Live music", "Stand up comedy", "Art gallery", "Boat ride", "Arcade or gaming", "Workshop", "Sunset point", "Bookstore café", "Picnic"];
-const BUDGETS = [1000, 2000, 5000, 10000, 20000];
+const BUDGETS = [0, 1000, 2000, 5000, 10000, 20000];
+const BUDGET_LABELS: Record<number, string> = { 0: "Free 🌊" };
+// "Free 🌊" maps to ₹400 in the engine — just enough for 1-2 street food stops, nothing else.
+const BUDGET_ENGINE_VALUE: Record<number, number> = { 0: 400 };
 const STARTS = [["6 AM", 360], ["8 AM", 480], ["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200]] as const;
 const ENDS = [["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
 
@@ -74,7 +77,7 @@ export default function Page() {
         f === "Ice cream" ? "icecream" : f === "Street food" ? "street" : f.toLowerCase()
       ),
       mustInclude: activities,
-      budget: budget || 5000,
+      budget: BUDGET_ENGINE_VALUE[budget] ?? (budget != null ? budget : 5000),
       startMin: startMin || 600,
       endMin: endMin || 1320,
       dayOfWeek: d.getDay(),
@@ -128,6 +131,9 @@ export default function Page() {
     if (wx?.available) { ans.wetDay = !!wx.wet; ans.weatherSummary = wx.summary; }
     const p = buildPlan(ans, extra);
     p.outingDate = outingDate;
+    // When user picked "Free 🌊" (budget=0 in UI), reset display budget to 0 so PlanView
+    // shows "free day" rather than the engine's internal ₹400 street-food allowance.
+    if (budget === 0) p.budget = 0;
     if (evts.length) p.events = evts;
     setLastAns(ans);
     setPlan(p);
@@ -315,22 +321,25 @@ export default function Page() {
               <Q>What is the budget for the day?</Q>
               <Hint>For two people. Pick one or enter your own.</Hint>
               <Chips
-                options={BUDGETS.map((b) => `₹${b.toLocaleString("en-IN")}`)}
-                selected={budget && BUDGETS.includes(budget) ? [`₹${budget.toLocaleString("en-IN")}`] : []}
-                onTap={(v) => setBudget(Number(v.replace(/[₹,]/g, "")))}
+                options={BUDGETS.map((b) => BUDGET_LABELS[b] ?? `₹${b.toLocaleString("en-IN")}`)}
+                selected={BUDGETS.includes(budget) ? [BUDGET_LABELS[budget] ?? `₹${budget.toLocaleString("en-IN")}`] : []}
+                onTap={(v) => {
+                  const match = BUDGETS.find((b) => (BUDGET_LABELS[b] ?? `₹${b.toLocaleString("en-IN")}`) === v);
+                  if (match !== undefined) setBudget(match);
+                }}
               />
               <div className="mt-3 flex items-center gap-2">
                 <span className="text-white/50">₹</span>
                 <input
                   type="number"
                   min={0}
-                  value={budget || ""}
+                  value={budget > 0 ? budget : ""}
                   onChange={(e) => setBudget(Number(e.target.value) || 0)}
                   placeholder="Enter a custom amount"
                   className="flex-1 rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm outline-none focus:border-glow"
                 />
               </div>
-              <Nav onBack={() => setStep("activities")} onNext={() => setStep("time")} canNext={!!budget} />
+              <Nav onBack={() => setStep("activities")} onNext={() => setStep("time")} canNext={budget >= 0 && BUDGETS.includes(budget) || budget > 0} />
             </Screen>
           )}
 

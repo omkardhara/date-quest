@@ -62,7 +62,8 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
   };
 
   const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
-  const over = liveTotal > plan.budget;
+  const isFreeDay = plan.budget === 0;
+  const over = !isFreeDay && liveTotal > plan.budget;
   const isBirthday = (plan.greeting ?? "").toLowerCase().includes("happy birthday");
 
   const cycle = (i: number, alts?: AltPlace[]) => {
@@ -79,8 +80,10 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
         </h1>
         <p className="mt-2 text-white/60">
           {plan.blocks.length} stops ·{" "}
-          <span className={over ? "text-rose-400" : "text-emerald-400"}>₹{liveTotal.toLocaleString("en-IN")}</span>{" "}
-          of ₹{plan.budget.toLocaleString("en-IN")}
+          <span className={over ? "text-rose-400" : "text-emerald-400"}>
+            {isFreeDay && liveTotal === 0 ? "Free 🌊" : `₹${liveTotal.toLocaleString("en-IN")}`}
+          </span>
+          {isFreeDay ? (liveTotal > 0 ? " (street food only)" : "") : ` of ₹${plan.budget.toLocaleString("en-IN")}`}
         </p>
         {plan.blocks.length > 0 && (() => {
           const s = plan.blocks[0].startMin;

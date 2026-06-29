@@ -5,6 +5,7 @@
       "name": "date-quest",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "cwd": ".",
       "port": 3000
     }
   ]
