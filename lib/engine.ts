@@ -78,13 +78,19 @@ const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
 
 function detectCorridor(ans: Answers): Corridor {
   const p = ans.personality;
+  const allMoods = ans.moodList ?? [ans.mood];
   const dayMins = ans.endMin - ans.startMin;
   const monsoon = wet(ans);
+  const isRomantic = allMoods.some(m => ["romantic", "anniversary"].includes(m));
+  // Romantic/anniversary day without adventure intent → stay in city, scenic corridors.
+  if (isRomantic && !p.includes("adventure")) {
+    return p.includes("culture") || p.includes("spiritual") ? "south_loop" : "bandra_hub";
+  }
   // On a wet day the far waterfalls are unsafe, so never route a full day out to them.
   if (!monsoon && p.includes("adventure") && ans.startMin <= 480 && dayMins >= 660) return "full_day_out";
   if (p.includes("adventure") && ans.startMin <= 600 && dayMins >= 480) return "north_adventure";
   if (p.includes("adventure")) return "thane_east";
-  if (p.includes("culture") || p.includes("spiritual") || ans.mood === "romantic") return "south_loop";
+  if (p.includes("culture") || p.includes("spiritual") || allMoods.includes("romantic")) return "south_loop";
   return "bandra_hub";
 }
 
@@ -133,8 +139,8 @@ function matchesRequest(p: Place, requests: string[]): boolean {
   const tokens = `${p.name} ${p.area} ${(p.tags ?? []).join(" ")} ${(p.cuisines ?? []).join(" ")} ${(p.vibes ?? []).join(" ")}`
     .toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).map(stem);
   return requests.some(term =>
-    term.toLowerCase().split(/\s+/).map(stem).filter(w => w.length >= 4).some(w =>
-      tokens.some(t => t.length >= 4 && (t.startsWith(w) || w.startsWith(t))),
+    term.toLowerCase().split(/\s+/).map(stem).filter(w => w.length >= 3).some(w =>
+      tokens.some(t => t.length >= 3 && (t.startsWith(w) || w.startsWith(t))),
     ),
   );
 }
@@ -151,7 +157,9 @@ function wet(ans: Answers): boolean {
 function score(p: Place, ans: Answers, band: string, remainingBudget: number): number {
   let s = 0;
   s += overlap(p.vibes, ans.personality) * 3;
-  if (p.moods.includes(ans.mood)) s += 2;
+  // Score against ALL selected moods, not just the primary one.
+  const allMoods = ans.moodList ?? [ans.mood];
+  if (p.moods.some(m => allMoods.includes(m))) s += 2;
   if (p.bestTime === band || p.bestTime === "any") s += 2;
   if (FOODY.includes(p.category)) s += overlap(p.cuisines, ans.foods) * 4;
   s += overlap(p.tags ?? [], PROFILE.loves); // her standing loves (kept modest so it doesn't always win)
@@ -189,6 +197,7 @@ function pick(
     !used.has(p.id) &&
     !blocked(p, ans) &&
     timeAllowed(p, atMin) &&
+    p.costPerPerson * 2 <= remainingBudget &&
     (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple"),
   );
   if (!base.length) return undefined;
@@ -314,31 +323,55 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   const remaining = () => ans.budget - runningCost;
   const b = () => bandFor(cursor); // band follows the real clock, so any start time works
 
-  // Morning activity + café (early starts only)
+  // Morning activity + café (early starts only).
+  // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
   if (ans.startMin < 660) {
     add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
-    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "cafe");
+    const cafeBudget = Math.min(remaining(), Math.max(800, Math.round(ans.budget * 0.20)));
+    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines), "cafe");
   }
 
-  // Lunch (skipped automatically by meal-spacing if breakfast was recent)
+  // Lunch — reserve 35% of budget for post-lunch slots on the first food stop of the day,
+  // so one expensive pick can't starve the rest of the plan.
   if (cursor < 960 && end > 780) {
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "food");
+    const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
+    const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.35));
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, ans.foods), "food");
   }
 
-  // Afternoon / first-half experience or shopping
+  // Afternoon / first-half experience or shopping.
+  // If this is the very first stop of the day (late starts skip opener + lunch), reserve 35%
+  // so one expensive activity can't exhaust the budget and starve dessert/dinner.
   if (end > 840) {
+    const firstStop = blocks.length === 0;
+    const afternoonBudget = firstStop
+      ? Math.max(0, remaining() - Math.floor(ans.budget * 0.35))
+      : remaining();
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, afternoonBudget, usedCuisines), "experience");
+  }
+
+  // Second afternoon slot: fills the pre-evening gap on long days (noon–midnight, 4pm–midnight).
+  // No "cafe" here — morning cafés score high but fail meal spacing and cascade-block the slot.
+  if (end - ans.startMin >= 360 && cursor < 1080 && end > 960) {
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
+  }
+
+  // Extra afternoon slot for very long days (6am–midnight etc.) — bridges the gap between
+  // morning stops and the 6pm evening window, especially on tight budgets with free places.
+  if (end - ans.startMin >= 720 && cursor < 1020 && end > 1080) {
     add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "experience");
   }
 
-  // Mid-day rest — only if near home and it's a long day
-  if (longDay && cursor < 1140 && (currentZone === "home" || currentZone === "andheri_w" || currentZone === "bandra")) {
+  // Mid-day rest — only if near home, long day, meaningful budget still left, and plan has content.
+  if (longDay && cursor < 1140 && remaining() >= 1500 && blocks.length >= 2 &&
+      (currentZone === "home" || currentZone === "andheri_w" || currentZone === "bandra")) {
     const restPlace = PLACES.find(p => p.category === "rest");
     if (restPlace) add({ place: restPlace, zone: "home" }, "rest");
   }
 
-  // Evening activity / shopping / café
+  // Evening activity / shopping — no cafe here (morning cafés always fail meal spacing at this hour)
   if (end > 1080) {
-    add(pick(pool, ans, b(), ["activity", "experience", "shopping", "cafe"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines), "activity");
   }
 
   // Dinner

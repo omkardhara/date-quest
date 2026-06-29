@@ -24,16 +24,27 @@ export function restroomFor(zone?: string): string | undefined {
 export function outfitFor(places: Place[], isMonsoon: boolean): string {
   const hasTemple   = places.some(p => (p.tags ?? []).includes("temple"));
   const hasFancy    = places.some(p => p.budgetLevel >= 4 || (p.mustBook && p.category === "food"));
+  const hasSpa      = places.some(p => (p.tags ?? []).includes("spa"));
   const hasOutdoor  = places.some(p => p.outdoor);
   const lotsWalking = places.filter(p => p.category === "shopping" || (p.outdoor && p.category !== "food")).length >= 2;
 
   const parts: string[] = [];
-  parts.push(hasFancy
-    ? "smart-casual she feels like the queen in, something that photographs well"
-    : "something comfortable she feels great in");
-  if (lotsWalking || hasOutdoor) parts.push("flats or block heels she can walk in all day");
-  if (hasTemple) parts.push("covered shoulders and knees for the temple stop");
-  if (isMonsoon) parts.push("quick-dry fabrics over silk or suede, and a compact umbrella in the bag");
+
+  if (hasFancy) {
+    parts.push(isMonsoon
+      ? "a breezy co-ord or flowy dress in a print she loves — something that handles July humidity with grace and still looks great in a candlelit room"
+      : "smart-casual she genuinely feels like the queen in — something that photographs naturally, not forced");
+  } else {
+    parts.push(isMonsoon
+      ? "comfortable separates she can move in — a light kurta or a casual dress she isn't precious about getting slightly damp"
+      : "something effortless she'd pick herself on a free day");
+  }
+
+  if (hasSpa) parts.push("she'll change at the spa, so comfortable separates that are easy to slip off and back on");
+  if (lotsWalking || hasOutdoor) parts.push("block heels or ballet flats she can walk in for hours — not the ones that look great but hurt by noon");
+  if (hasTemple) parts.push("covered shoulders and knees for the temple stop — a dupatta or light jacket in the bag works fine");
+  if (isMonsoon) parts.push("quick-dry fabrics only, nothing silk or suede; a compact fold-up umbrella tucked in her bag");
+  else parts.push("sunscreen, and something breathable — July in Mumbai is warm even without rain");
 
   return parts.join("; ") + ".";
 }

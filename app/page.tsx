@@ -14,7 +14,7 @@ const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Ce
 const PERSONALITY = ["Queen", "Adventure", "Peaceful", "Foodie", "Shopper", "Spiritual", "Playful", "Culture", "Nature", "Artsy", "Nightlife", "Cozy", "Luxe", "Romantic"];
 const FOODS = ["Lebanese", "Arabic", "Chinese", "Italian", "Sizzler", "Dessert", "Ice cream", "Brunch", "Indian", "Mediterranean", "Continental", "Asian", "Thai", "Japanese", "Seafood", "Street food", "Healthy", "Cafe", "Pizza", "Coffee"];
 const ACTIVITIES = ["Watch a movie", "Spa or massage", "Long drive", "Beach time", "Live music", "Art gallery", "Boat ride", "Arcade or gaming", "Workshop", "Sunset point", "Bookstore café", "Picnic"];
-const BUDGETS = [2000, 5000, 10000, 20000];
+const BUDGETS = [1000, 2000, 5000, 10000, 20000];
 const STARTS = [["6 AM", 360], ["8 AM", 480], ["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200]] as const;
 const ENDS = [["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
 
@@ -31,10 +31,6 @@ type Step = "intro" | "mood" | "personality" | "foods" | "activities" | "budget"
 const ORDER: Step[] = ["intro", "mood", "personality", "foods", "activities", "budget", "time", "plan"];
 
 const HER_NAME = PROFILE.name;
-const OUTING_DATE = PROFILE.birthday; // "YYYY-MM-DD"
-const OUTING_DOW = new Date(PROFILE.birthday + "T00:00:00").getDay();
-const OUTING_MONTH = new Date(PROFILE.birthday + "T00:00:00").getMonth();
-const IS_MONSOON = [5, 6, 7, 8].includes(OUTING_MONTH);
 
 export default function Page() {
   const [step, setStep] = useState<Step>("intro");
@@ -47,9 +43,11 @@ export default function Page() {
   const [endMin, setEndMin] = useState(0);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [building, setBuilding] = useState(false);
+  const [lastAns, setLastAns] = useState<Answers | null>(null);
   const [dest, setDest] = useState("");
   const [nights, setNights] = useState(1);
   const [getaway, setGetaway] = useState<GetawayPlan | null>(null);
+  const [outingDate, setOutingDate] = useState(PROFILE.birthday); // "YYYY-MM-DD"
   const [hello, setHello] = useState("");
   useEffect(() => { setHello(randomNickname()); }, [step]);
 
@@ -66,17 +64,19 @@ export default function Page() {
   }
 
   async function generate() {
+    const d = new Date(outingDate + "T00:00:00");
     const ans: Answers = {
       who: HER_NAME,
       mood: (mood.length ? mood[0] : "Birthday").toLowerCase(),
+      moodList: mood.map((m) => m.toLowerCase()),
       personality: personality.map((p) => p.toLowerCase()),
       foods: foods.map((f) => (f === "Ice cream" ? "icecream" : f.toLowerCase())),
       mustInclude: activities,
       budget: budget || 5000,
       startMin: startMin || 600,
       endMin: endMin || 1320,
-      dayOfWeek: OUTING_DOW,
-      month: OUTING_MONTH,
+      dayOfWeek: d.getDay(),
+      month: d.getMonth(),
       dislikes: PROFILE.dislikes,
     };
     setBuilding(true);
@@ -96,8 +96,8 @@ export default function Page() {
           body: JSON.stringify(ans), signal: ctrl.signal,
         });
         clearTimeout(t);
-        const d = await res.json();
-        return Array.isArray(d.places) ? (d.places as Place[]) : [];
+        const data = await res.json();
+        return Array.isArray(data.places) ? (data.places as Place[]) : [];
       } catch { return []; }
     })();
 
@@ -105,10 +105,10 @@ export default function Page() {
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
-        const res = await fetch(`/api/events?date=${OUTING_DATE}&q=${encodeURIComponent(eventQ)}`, { signal: ctrl.signal });
+        const res = await fetch(`/api/events?date=${outingDate}&q=${encodeURIComponent(eventQ)}`, { signal: ctrl.signal });
         clearTimeout(t);
-        const d = await res.json();
-        return Array.isArray(d.events) ? d.events : [];
+        const data = await res.json();
+        return Array.isArray(data.events) ? data.events : [];
       } catch { return []; }
     })();
 
@@ -116,7 +116,7 @@ export default function Page() {
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
-        const res = await fetch(`/api/weather?date=${OUTING_DATE}&place=mumbai`, { signal: ctrl.signal });
+        const res = await fetch(`/api/weather?date=${outingDate}&place=mumbai`, { signal: ctrl.signal });
         clearTimeout(t);
         return await res.json();
       } catch { return { available: false }; }
@@ -125,7 +125,9 @@ export default function Page() {
     const [extra, evts, wx] = await Promise.all([discover, events, weather]);
     if (wx?.available) { ans.wetDay = !!wx.wet; ans.weatherSummary = wx.summary; }
     const p = buildPlan(ans, extra);
+    p.outingDate = outingDate;
     if (evts.length) p.events = evts;
+    setLastAns(ans);
     setPlan(p);
     setBuilding(false);
     setStep("plan");
@@ -139,7 +141,7 @@ export default function Page() {
       const res = await fetch("/api/getaway", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ destId: dest, nights, monsoon: IS_MONSOON, date: OUTING_DATE }),
+        body: JSON.stringify({ destId: dest, nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate }),
       });
       const d = await res.json();
       if (d.plan) { setGetaway(d.plan); setStep("getaway-plan"); }
@@ -147,6 +149,32 @@ export default function Page() {
       /* ignore */
     }
     setBuilding(false);
+  }
+
+  async function regenerate() {
+    if (!lastAns) return;
+    setBuilding(true);
+    // Re-fetch live places so different ones may surface; weather/events from cache.
+    const discover = (async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 6000);
+        const res = await fetch("/api/discover", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lastAns), signal: ctrl.signal,
+        });
+        clearTimeout(t);
+        const d = await res.json();
+        return Array.isArray(d.places) ? (d.places as Place[]) : [];
+      } catch { return []; }
+    })();
+    const extra = await discover;
+    const p = buildPlan(lastAns, extra);
+    if (plan?.events?.length) p.events = plan.events; // reuse cached events
+    setPlan(p);
+    setBuilding(false);
+    setStep("plan");
+    upgradeNarration(p, lastAns);
   }
 
   async function upgradeNarration(p: Plan, ans: Answers) {
@@ -231,7 +259,7 @@ export default function Page() {
             <Screen>
               <Chibi mood="excited" />
               <Q>A weekend away. Where to?</Q>
-              <Hint>Quick escapes from Mumbai. {IS_MONSOON ? "It's monsoon, so the green hill spots shine right now." : ""}</Hint>
+              <Hint>Quick escapes from Mumbai. {[5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()) ? "It's monsoon, so the green hill spots shine right now." : ""}</Hint>
               <Chips options={GETAWAYS.map((g) => g.name)} selected={dest ? [GETAWAYS.find((g) => g.id === dest)!.name] : []} onTap={(v) => setDest(GETAWAYS.find((g) => g.name === v)!.id)} />
               <p className="mt-4 text-sm text-white/50">How long?</p>
               <Chips options={NIGHTS.map((n) => n[0])} selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])} onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])} />
@@ -307,9 +335,22 @@ export default function Page() {
           {step === "time" && (
             <Screen>
               <Chibi mood={chibiMood} />
-              <Q>How long is the day?</Q>
-              <Hint>Start and end any time. The plan fills whatever window you pick.</Hint>
-              <p className="mt-3 text-sm text-white/50">Start</p>
+              <Q>When is the day?</Q>
+              <Hint>Pick any date and time window. The plan fills the whole slot.</Hint>
+              <p className="mt-5 text-sm text-white/50">Date</p>
+              <div className="mt-2">
+                <input
+                  type="date"
+                  value={outingDate}
+                  onChange={(e) => setOutingDate(e.target.value || PROFILE.birthday)}
+                  style={{ colorScheme: "dark" }}
+                  className="w-full rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm text-white outline-none focus:border-glow"
+                />
+                {outingDate === PROFILE.birthday && (
+                  <p className="mt-1.5 text-xs text-amber-200/60">🎂 Her birthday</p>
+                )}
+              </div>
+              <p className="mt-5 text-sm text-white/50">Start</p>
               <Chips
                 options={STARTS.map((s) => s[0])}
                 selected={STARTS.filter((s) => s[1] === startMin).map((s) => s[0])}
@@ -326,7 +367,7 @@ export default function Page() {
           )}
 
           {step === "plan" && plan && (
-            <PlanView plan={plan} name={HER_NAME} onRestart={() => setStep("intro")} />
+            <PlanView plan={plan} name={HER_NAME} onRestart={() => setStep("intro")} onRegenerate={regenerate} />
           )}
 
           {step === "getaway-plan" && getaway && (

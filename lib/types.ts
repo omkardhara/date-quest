@@ -34,7 +34,8 @@ export interface Place {
 
 export interface Answers {
   who: string;            // her name
-  mood: string;
+  mood: string;           // primary mood (first selected)
+  moodList?: string[];    // all selected moods, for scoring
   personality: string[];  // queen, adventure, peaceful, foodie, playful, culture
   foods: string[];        // cuisines she wants
   budget: number;         // total INR
@@ -127,4 +128,5 @@ export interface Plan {
   outfit?: string;        // what to wear given the day's venues + weather
   weatherNote?: string;   // season/weather framing
   events?: PlanEvent[];   // live events happening around the outing date
+  outingDate?: string;    // ISO "YYYY-MM-DD" for the planned day
 }

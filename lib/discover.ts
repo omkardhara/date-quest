@@ -37,6 +37,26 @@ function catFromTypes(types: string[] = []): Category {
   return "experience";
 }
 
+// Pick a realistic bestTime for a live place so the time-band gate works properly.
+function bestTimeFor(category: Category): import("./types").TimeBand {
+  if (category === "cafe") return "morning";
+  if (category === "food") return "night";
+  if (category === "dessert") return "afternoon";
+  if (category === "activity") return "afternoon"; // prevents dawn suggestions (water parks at 6am etc.)
+  return "afternoon"; // experience, shopping
+}
+
+// Generate a warm, human fallback when Google has no editorial summary.
+function fallbackSummary(lp: LivePlace, category: Category): string {
+  const r = lp.rating ? `${lp.rating}★` : null;
+  const loc = lp.address?.split(",")[0]?.trim();
+  if (category === "food") return [r && `${r} on Google.`, loc && `Found in ${loc}.`, "Check the menu before you go."].filter(Boolean).join(" ");
+  if (category === "cafe") return [r && `${r} on Google.`, "A well-reviewed local café — good for coffee and a bite."].filter(Boolean).join(" ");
+  if (category === "dessert") return [r && `${r} on Google.`, "Worth the stop for something sweet."].filter(Boolean).join(" ");
+  if (category === "activity" || category === "experience") return [r && `${r} on Google.`, loc && `In ${loc}.`, "A locally rated spot to explore."].filter(Boolean).join(" ");
+  return r ? `${r} on Google.` : "A local pick worth exploring.";
+}
+
 function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, cuisine?: string, outdoor = false): Place {
   const cost = costFrom(lp.priceLevel);
   return {
@@ -51,13 +71,13 @@ function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, 
     budgetLevel: budgetLevelFrom(cost),
     costPerPerson: cost,
     durationMins: DUR[category] ?? 75,
-    bestTime: "any",
+    bestTime: bestTimeFor(category),
     indoor: !outdoor,
     outdoor,
     monsoonRisk: outdoor ? "caution" : "ok",
     adventureLevel: 0,
     mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lp.name)}&query_place_id=${lp.id}`,
-    summary: lp.summary ?? `Rated ${lp.rating ?? "—"}★ on Google${lp.userRatings ? ` (${lp.userRatings.toLocaleString("en-IN")} reviews)` : ""}.`,
+    summary: lp.summary ?? fallbackSummary(lp, category),
     veg: undefined,
     tags: [],
     rating: lp.rating,
@@ -83,7 +103,9 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
     // Restaurants by cuisine — skipped on veg days since live veg status is unknown.
     if (!vegDay) {
       for (const c of (ans.foods ?? []).slice(0, 3)) {
-        tasks.push(searchPlaces(`best ${c} restaurants in ${area}`, 4).then(rs => rs.map(r => toPlace(r, zone, foodCat(c), mood, c))));
+        // Normalise: "icecream" → "ice cream" for better Google results.
+        const cLabel = c === "icecream" ? "ice cream" : c;
+        tasks.push(searchPlaces(`best ${cLabel} restaurants in ${area}`, 4).then(rs => rs.map(r => toPlace(r, zone, foodCat(c), mood, c))));
       }
       tasks.push(searchPlaces(`popular highly rated restaurants in ${area}`, 3).then(rs => rs.map(r => toPlace(r, zone, "food", mood))));
     }
@@ -101,5 +123,7 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
   const seen = new Set<string>();
   const out: Place[] = [];
   for (const p of all) if (p.name && !seen.has(p.id)) { seen.add(p.id); out.push(p); }
-  return out;
+  // Drop live activities that would eat too large a share of the day's budget.
+  const maxActivity2 = Math.max(800, Math.round(ans.budget * 0.35));
+  return out.filter(p => p.category !== "activity" || p.costPerPerson * 2 <= maxActivity2);
 }

@@ -8,7 +8,7 @@ export const PROFILE = {
   vegDays: [1, 4, 6], // Monday, Thursday, Saturday: pure vegetarian
   noMeat: ["mutton", "lamb", "beef", "pork"], // eats only chicken and fish
   dislikes: ["mushroom", "capsicum", "oily" , "spicy"],
-  loves: ["dessert", "nature", "lowcrowd", "instagrammable", "exoticfruit", "brunch", "waterfall", "lakeside", "forest", "sizzler", "shopping", "thrift", "temple", "serene", "muscat", "arabic"],
+  loves: ["dessert", "nature", "lowcrowd", "instagrammable", "exoticfruit", "brunch", "waterfall", "lakeside", "forest", "sizzler", "shopping", "thrift", "temple", "serene", "muscat", "arabic", "sunset", "spa"],
   misses: "Muscat (20 years there), so an Omani/Arabic touch always lands.",
   nostalgia: ["muscat", "arabic", "middleeastern"],
   transport: {

@@ -48,7 +48,7 @@ export function shownFromBlock(b: PlanBlock): Shown {
   return { title: b.title, area: b.place?.area, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
 }
 
-export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; onRestart: () => void }) {
+export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; name: string; onRestart: () => void; onRegenerate?: () => void }) {
   // swaps[i] = 0 → original place; 1..n → that alternative
   const [swaps, setSwaps] = useState<Record<number, number>>({});
 
@@ -82,6 +82,14 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
           <span className={over ? "text-rose-400" : "text-emerald-400"}>₹{liveTotal.toLocaleString("en-IN")}</span>{" "}
           of ₹{plan.budget.toLocaleString("en-IN")}
         </p>
+        {plan.blocks.length > 0 && (() => {
+          const s = plan.blocks[0].startMin;
+          const e = plan.blocks[plan.blocks.length - 1].endMin;
+          const dateLabel = plan.outingDate
+            ? new Date(plan.outingDate + "T00:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
+            : "";
+          return <p className="mt-0.5 text-xs text-amber-200/50">{dateLabel && `${dateLabel} · `}{fmt(s)} – {fmt(e)}</p>;
+        })()}
 
         {plan.fullDayMapUrl && (
           <a href={plan.fullDayMapUrl} target="_blank" rel="noreferrer"
@@ -162,18 +170,27 @@ export function PlanView({ plan, name, onRestart }: { plan: Plan; name: string; 
       </div>
 
       {plan.signoff && <p className="mt-6 text-center font-hand text-2xl text-amber-200/90">{plan.signoff}</p>}
-      <button onClick={onRestart} className="mt-5 w-full rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30">
-        Plan another day
-      </button>
+      <div className="mt-5 flex gap-3">
+        {onRegenerate && (
+          <button onClick={onRegenerate} className="flex-1 rounded-xl border border-glow/30 py-3 text-glow hover:bg-glow/10">
+            ↺ Different picks
+          </button>
+        )}
+        <button onClick={onRestart} className={`rounded-xl border border-white/15 py-3 text-white/70 hover:text-white hover:border-white/30 ${onRegenerate ? "flex-1" : "w-full"}`}>
+          Plan another day
+        </button>
+      </div>
     </div>
   );
 }
 
 function TravelSegment({ mins, fromLabel, directionsUrl }: { mins: number; fromLabel: string; directionsUrl: string }) {
+  // Shorten very long place names so they don't overflow on mobile.
+  const label = fromLabel.length > 28 ? fromLabel.slice(0, 26) + "…" : fromLabel;
   return (
     <div className="my-1 flex items-center gap-2 pl-1 text-xs text-white/40">
       <div className="h-4 w-0.5 bg-white/15 mx-1 shrink-0" />
-      <span>🚗 {mins} min from {fromLabel}</span>
+      <span className="truncate min-w-0">🚗 {mins} min from {label}</span>
       <a href={directionsUrl} target="_blank" rel="noreferrer"
         className="ml-auto rounded-md bg-white/6 px-2 py-0.5 text-white/50 hover:text-white/80 hover:bg-white/12 shrink-0">
         Directions ↗
