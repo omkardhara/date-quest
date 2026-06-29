@@ -4,11 +4,11 @@ import { useState } from "react";
 export interface Memory { src: string; cap: string; }
 
 const DEFAULT: Memory[] = [
-  { src: "/memories/1.jpeg", cap: "Muscat days ☀️" },
-  { src: "/memories/2.jpeg", cap: "us, somewhere" },
-  { src: "/memories/3.jpeg", cap: "by the sea" },
-  { src: "/memories/4.jpeg", cap: "happy birthday 🎂" },
-  { src: "/memories/5.jpeg", cap: "one more" },
+  { src: "/memories/1.jpeg", cap: "Gili Islands 🤿" },
+  { src: "/memories/2.jpeg", cap: "Sikkim ✨" },
+  { src: "/memories/3.jpeg", cap: "waterfall day 💚" },
+  { src: "/memories/4.jpeg", cap: "old fort ☀️" },
+  { src: "/memories/5.jpeg", cap: "Muscat 🕌" },
 ];
 
 const TILT = [-3, 2, -2, 3, -1, 2];
