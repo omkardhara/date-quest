@@ -384,6 +384,14 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, ans.foods), "dessert");
   }
 
+  // Strip alternatives that ended up as the main block elsewhere in the plan.
+  const usedIds = new Set(blocks.map(b => b.place?.id).filter(Boolean) as string[]);
+  for (const b of blocks) {
+    if (b.alternatives?.length) {
+      b.alternatives = b.alternatives.filter(a => !usedIds.has(a.id));
+    }
+  }
+
   // Full-day map URL with all waypoints
   const waypoints = blocks.filter(x => x.place).map(x => `${x.place!.name}, ${x.place!.area}, Mumbai`);
   const fullDayMapUrl = waypoints.length >= 2
