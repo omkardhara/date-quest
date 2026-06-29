@@ -185,12 +185,34 @@ function blocked(p: Place, ans: Answers): boolean {
   return false;
 }
 
+// Classify a place into a broad environment bucket for diversity scoring.
+function environment(p: Place): string {
+  const name = p.name.toLowerCase();
+  const tags = p.tags ?? [];
+  if (tags.some(t => ["beach","sea","promenade","waterfront","causeway","lake","river"].includes(t)) ||
+      ["sea","beach","promenade","causeway","lake","river","coast"].some(w => name.includes(w)))
+    return "sea";
+  if (tags.some(t => ["garden","park","forest","nature","trek"].includes(t)) ||
+      ["garden","park","colony","forest","hill","trail","nature"].some(w => name.includes(w)))
+    return "park";
+  if (tags.some(t => ["heritage","architecture","walk","historic","fort"].includes(t)) ||
+      ["heritage","walk","fort","temple","basilica","dargah","tank"].some(w => name.includes(w)))
+    return "heritage";
+  if (tags.some(t => ["shopping","browse","market","fashion","bazaar","street food"].includes(t)) ||
+      p.category === "shopping")
+    return "shopping";
+  if (p.category === "food" || p.category === "cafe" || p.category === "dessert") return "food";
+  if (p.indoor) return "indoor";
+  return "outdoor";
+}
+
 function pick(
   pool: Place[], ans: Answers, band: string, cats: Category[],
   used: Set<string>, currentZone: Zone, corridorZones: Zone[],
   atMin: number, remainingBudget: number, usedCuisines: Set<string>,
   pendingRequests: string[] = [],
   cuisineFilter?: string[],
+  recentEnvs: string[] = [],
 ): { place: Place; zone: Zone; alts: Place[] } | undefined {
   const base = pool.filter(p =>
     cats.includes(p.category) &&
@@ -214,6 +236,10 @@ function pick(
     let v = score(p, ans, band, remainingBudget) - travelMins(currentZone, z, atMin) / 15;
     if (overlap(p.cuisines ?? [], Array.from(usedCuisines)) > 0) v -= 6; // don't repeat a cuisine
     if (pendingRequests.length && matchesRequest(p, pendingRequests)) v += 25; // boost only until satisfied
+    // Soft diversity: penalise repeating the same environment in consecutive picks.
+    const env = environment(p);
+    if (env !== "food" && recentEnvs.length > 0 && recentEnvs[recentEnvs.length - 1] === env) v -= 5;
+    if (env !== "food" && recentEnvs.length > 1 && recentEnvs[recentEnvs.length - 2] === env) v -= 3;
     return v;
   };
 
@@ -265,6 +291,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
 
   const corridor      = detectCorridor(ans);
   const corridorZones = CORRIDOR_ZONES[corridor];
+  const recentEnvs:   string[] = []; // last 2 non-food environments for diversity scoring
 
   const toAlt = (p: Place): AltPlace => ({
     id: p.id, name: p.name, area: p.area, summary: p.summary,
@@ -320,6 +347,11 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     }
     if (zone !== "multiple") currentZone = zone;
     else if (FAR_RETURN[currentZone]) currentZone = "home"; // we've driven back to the city
+    // Track environment for consecutive-diversity penalty (food slots vary naturally, skip them)
+    if (!FULL_MEALS.includes(p.category)) {
+      recentEnvs.push(environment(p));
+      if (recentEnvs.length > 2) recentEnvs.shift();
+    }
     prevName = p.name;
     prevArea = p.area;
   };
@@ -332,9 +364,9 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   // Morning activity + café (early starts only).
   // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
   if (ans.startMin < 660) {
-    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs), "activity");
     const cafeBudget = Math.min(remaining(), Math.max(800, Math.round(ans.budget * 0.20)));
-    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests), "cafe");
+    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "cafe");
   }
 
   // Lunch — reserve 35% of budget for post-lunch slots on the first food stop of the day,
@@ -342,7 +374,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   if (cursor < 960 && end > 780) {
     const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
     const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.35));
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, ans.foods), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, ans.foods, recentEnvs), "food");
   }
 
   // Afternoon / first-half experience or shopping.
@@ -353,13 +385,13 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     const afternoonBudget = firstStop
       ? Math.max(0, remaining() - Math.floor(ans.budget * 0.35))
       : remaining();
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, afternoonBudget, usedCuisines, pendingRequests), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, afternoonBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "experience");
   }
 
   // Second afternoon slot: fills the pre-evening gap on long days (noon–midnight, 4pm–midnight).
   // No "cafe" here — morning cafés score high but fail meal spacing and cascade-block the slot.
   if (end - ans.startMin >= 360 && cursor < 1080 && end > 960) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests), "activity");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs), "activity");
   }
 
   // Extra afternoon slot for very long days (6am–midnight etc.) — bridges the gap between
@@ -370,7 +402,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     const extraBudget = end > 1140
       ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
       : remaining();
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, extraBudget, usedCuisines, pendingRequests), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, extraBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "experience");
   }
 
   // Mid-day rest — only if near home, long day, meaningful budget still left, and plan has content.
@@ -386,17 +418,17 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     const eveningBudget = end > 1140
       ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
       : remaining();
-    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, eveningBudget, usedCuisines, pendingRequests), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, eveningBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "activity");
   }
 
   // Dinner
   if (end > 1140) {
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs), "food");
   }
 
   // Dessert
   if (end - cursor > 15) {
-    add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods), "dessert");
+    add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs), "dessert");
   }
 
   // Strip alternatives that ended up as the main block elsewhere in the plan.
