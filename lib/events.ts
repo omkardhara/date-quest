@@ -124,32 +124,33 @@ export async function searchEvents(
   const now = Date.now();
 
   if (!cachedEvents || now - cacheTime > CACHE_TTL_MS) {
-    // 1. Load GitHub-Actions-scraped file cache (allevents.in data with prices)
     const fileEvents = loadFileCache();
-
-    // 2. Run SerpAPI multi-category queries (live, date-aware)
-    // 3. Try allevents live scrape (only works if not on Vercel datacenter IPs)
-    const [serpEvents, liveScraped] = await Promise.allSettled([
+    const [serpResult, liveResult] = await Promise.allSettled([
       searchSerpAll(dateISO),
       scrapeAllEvents(),
     ]);
+    const serp   = serpResult.status  === "fulfilled" ? serpResult.value  : [];
+    const scraped = liveResult.status === "fulfilled" ? liveResult.value : [];
 
-    const serp   = serpEvents.status === "fulfilled"  ? serpEvents.value  : [];
-    const scraped = liveScraped.status === "fulfilled" ? liveScraped.value : [];
-
-    // File cache first (richest data), then live serp, then live scrape
-    cachedEvents = dedup([...fileEvents, ...serp, ...scraped]);
+    // Merge: serp first (date-aware, has concrete dates), then file cache (undated
+    // but rich), then live scrape. Dedup by title so the serp version wins when
+    // the same event appears in both serp and file cache.
+    cachedEvents = dedup([...serp, ...scraped, ...fileEvents]);
     cacheTime = now;
     console.log(
-      `[events] refreshed: ${fileEvents.length} file + ${serp.length} serp + ${scraped.length} live = ${cachedEvents.length} deduped`
+      `[events] refreshed: ${serp.length} serp + ${scraped.length} live + ${fileEvents.length} file = ${cachedEvents.length} deduped`
     );
   }
 
   if (dateISO) {
     const d = new Date(dateISO + "T00:00:00");
     const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    const onDay = cachedEvents.filter((e) => (e.when ?? "").includes(md));
-    return (onDay.length >= 3 ? onDay : cachedEvents).slice(0, 12);
+    // Prefer events with an explicit date on the outing day; pad with undated
+    // file-cache events (good "upcoming events" suggestions even without a date).
+    const onDay   = cachedEvents.filter((e) => (e.when ?? "").includes(md));
+    const undated = cachedEvents.filter((e) => !e.when);
+    const combined = dedup([...onDay, ...undated]);
+    return combined.slice(0, 12);
   }
 
   return cachedEvents.slice(0, 12);
