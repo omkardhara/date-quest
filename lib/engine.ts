@@ -222,12 +222,26 @@ function pick(
     p.costPerPerson * 2 <= remainingBudget &&
     (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple"),
   );
-  if (!base.length) return undefined;
+
+  // mustInclude escape hatch: if none of the corridor-filtered candidates match a
+  // pending request, widen to the full pool so a requested place is never silently dropped.
+  let extendedBase = base;
+  if (pendingRequests.length > 0 && !base.some(p => matchesRequest(p, pendingRequests))) {
+    const wider = pool.filter(p =>
+      cats.includes(p.category) && !used.has(p.id) && !blocked(p, ans) &&
+      timeAllowed(p, atMin) && p.costPerPerson * 2 <= remainingBudget &&
+      matchesRequest(p, pendingRequests) &&
+      !base.some(b => b.id === p.id),
+    );
+    if (wider.length) extendedBase = [...base, ...wider];
+  }
+
+  if (!extendedBase.length) return undefined;
 
   // Cuisine is a soft preference: only narrow if it leaves something.
-  let cand = base;
+  let cand = extendedBase;
   if (cuisineFilter?.length) {
-    const filtered = base.filter(p => overlap(p.cuisines ?? [], cuisineFilter) > 0);
+    const filtered = extendedBase.filter(p => overlap(p.cuisines ?? [], cuisineFilter) > 0);
     if (filtered.length) cand = filtered;
   }
 

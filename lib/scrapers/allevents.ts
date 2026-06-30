@@ -11,12 +11,26 @@ const CATEGORY_URLS: { url: string; category: EventCategory }[] = [
   { url: `${BASE}/film`, category: "film" },
 ];
 
+const SCRAPER_KEY = process.env.SCRAPER_API_KEY;
+
 const HEADERS = {
   "User-Agent":
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
   Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
   "Accept-Language": "en-IN,en;q=0.9",
 };
+
+// Route through ScraperAPI (residential IPs) when key is available,
+// otherwise attempt a direct fetch (works locally, may 403 on Vercel DCs).
+function buildFetchUrl(targetUrl: string): { url: string; headers: Record<string, string> } {
+  if (SCRAPER_KEY) {
+    return {
+      url: `https://api.scraperapi.com?api_key=${SCRAPER_KEY}&url=${encodeURIComponent(targetUrl)}&country_code=in`,
+      headers: {},
+    };
+  }
+  return { url: targetUrl, headers: HEADERS };
+}
 
 // Tries to parse the JSON-LD array embedded in the listing-page HTML.
 // allevents.in injects one <script type="application/ld+json"> per page
@@ -96,8 +110,12 @@ async function fetchCategory(
   category: EventCategory
 ): Promise<PlanEvent[]> {
   try {
-    const res = await fetch(url, { headers: HEADERS, next: { revalidate: 3600 } });
-    if (!res.ok) return [];
+    const { url: fetchUrl, headers } = buildFetchUrl(url);
+    const res = await fetch(fetchUrl, { headers, next: { revalidate: 3600 } });
+    if (!res.ok) {
+      console.warn(`[allevents] ${res.status} for ${url}${SCRAPER_KEY ? " (via ScraperAPI)" : " (direct)"}`);
+      return [];
+    }
     const html = await res.text();
     const fromJsonLd = parseJsonLd(html, category);
     if (fromJsonLd.length > 0) return fromJsonLd;
