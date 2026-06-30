@@ -79,9 +79,9 @@ function parseHtmlFallback(html: string, category: EventCategory): PlanEvent[] {
   const results: PlanEvent[] = [];
   const seen = new Set<string>();
 
-  // Match event card anchors: href="https://allevents.in/mumbai/<slug>/<id>"
+  // Match event card anchors then nearby src/data-src image
   const cardRx =
-    /href="(https:\/\/allevents\.in\/mumbai\/[^/"\s]+\/\d+)"[^>]*>[\s\S]{0,800}?(?:src|data-src)="(https?:\/\/cdn[^"]+allevents\.in[^"]+)"/gi;
+    /href="(https:\/\/allevents\.in\/mumbai\/[^/"\s]+\/\d+)"[^>]*>[\s\S]{0,800}?(?:src|data-src)="(https?:\/\/cdn[^"]+allevents\.in[^"]+?\.(?:jpg|jpeg|png|webp|avif)[^"]*)"/gi;
   let m: RegExpExecArray | null;
   while ((m = cardRx.exec(html)) !== null) {
     const link = m[1];

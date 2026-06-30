@@ -1,0 +1,540 @@
+{
+  "fetchedAt": "2026-06-30T13:28:40.711Z",
+  "count": 80,
+  "events": [
+    {
+      "title": "Ajay Atul Live",
+      "link": "https://allevents.in/mumbai/ajay-atul-live/3900030184087256",
+      "thumbnail": "https://cdn2.allevents.in/transup/ab/ced64bf76d429aaa513418ff72f873/profile.png",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Lucky Ali Live In Concert",
+      "link": "https://allevents.in/mumbai/lucky-ali-live-in-concert/3900029889188727",
+      "thumbnail": "https://cdn2.allevents.in/transup/d3/eb547db33b41179fc9705d04b60ec7/Group-4-.png",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Foo Fighters India Tour 2027 Mumbai",
+      "link": "https://allevents.in/mumbai/foo-fighters-india-tour-2027-mumbai/3900030261471258",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTMyOGI0OThmN2RiLmpwZw.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Hema Malini Live In Concert",
+      "link": "https://allevents.in/mumbai/hema-malini-live-in-concert/3900030021829017",
+      "thumbnail": "https://cdn-az.allevents.in/events5/banners/b18cb6708c87ac605c22096534aed696228b2be479a5092d0ccc45d6f0e261dd-rimg-w200-h201-gmir.jpg?v=1707040206",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Shankar Mahadevan In Mumbai",
+      "link": "https://allevents.in/mumbai/shankar-mahadevan-in-mumbai/3300030220037453",
+      "thumbnail": "https://cdn2.allevents.in/thumbs/attendeethumb67b6cffedd51f.jpg",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Anyma ÆDen Tour Mumbai",
+      "link": "https://allevents.in/mumbai/anyma-Æden-tour-mumbai/4300029690715734",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czIvYmFubmVycy8yZDA2YTBlMC0zYWE1LTExZjEtYmQxZi1mMWUxMGYwM2JlNmYtcmltZy13MTIwMC1oNjc1LWRjYTVhN2E4LWdtaXIud2VicD92PTE3NzY0NjE2NTI.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Sunburn Festival 2026",
+      "link": "https://allevents.in/mumbai/sunburn-festival-2026/3900030066094725",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czMvYmFubmVycy81OGJlNzNkMC03M2Q5LTExZjEtYTg3Yy01NTJlMzIyMzA0ZTYtcmltZy13MTIwMC1oNjAwLWRjMzEyYjJkLWdtaXIuanBnP3Y9MTc4Mjc1MTI3Ng.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Papon In Mumbai",
+      "link": "https://allevents.in/mumbai/papon-in-mumbai/3300029961438413",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czUvYmFubmVycy81YmE2ODc2MC01YWE1LTExZjEtYWNjNi1iNzQ1YWQ0YzMwNGYtcmltZy13NjQwLWg2NDAtZGNkNWJkYTQtZ21pci5qcGc_dj0xNzc5OTgwMTY4.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Abhangawari By Rahul Deshpande Mumbai",
+      "link": "https://allevents.in/mumbai/abhangawari-by-rahul-deshpande-mumbai/3900029816773604",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czgvYmFubmVycy84OWNhZWE5MC01ZmYxLTExZjEtYWY2MC0wNTdmM2ZhYjllMDYtcmltZy13MTIwMC1oNjAwLWRjMWExMzBmLWdtaXIuanBnP3Y9MTc4MDU2MjY0Mw.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Master Saleem Richa Sharma In Mumbai",
+      "link": "https://allevents.in/mumbai/master-saleem-richa-sharma-in-mumbai/3300030148779608",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy8xOTYxZTYxMC03NDA5LTExZjEtYTZlZC01MTQ2YTg3MTNmN2ItcmltZy13MTIwMC1oNjAwLWRjOGIyOTA1LWdtaXIuanBnP3Y9MTc4Mjc3MTc4NQ.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Piyush Mishra Live In Concert",
+      "link": "https://allevents.in/mumbai/piyush-mishra-live-in-concert/3900030135075931",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czUvYmFubmVycy8wMjQ4NzQ0MC03MGNmLTExZjEtYmY0Ny0yYjY4ZTczYTljODEtcmltZy13MTIwMC1oNjAwLWRjZjVkY2E4LWdtaXIuanBnP3Y9MTc4MjQxNjk4Mg.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Charan Sparsh",
+      "link": "https://allevents.in/mumbai/charan-sparsh/3900030235380617",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czkvYmFubmVycy9jNjY1MDhiMC01ZmRjLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjZjY0NDQ0LWdtaXIuanBnP3Y9MTc4MDU1MzcyNQ.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Abhang Rang",
+      "link": "https://allevents.in/mumbai/abhang-rang/3900030235610154",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy8zZTQ5NzY2MC02NDI3LTExZjEtOWM4Ni1jM2QzMjcwZDQ5YTctcmltZy13MTIwMC1oNjAwLWRjMDIwMTAyLWdtaXIuanBnP3Y9MTc4MTAyNTUxMw.avif",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Gaurav Kapoor Live",
+      "link": "https://allevents.in/mumbai/gaurav-kapoor-live/3900030141980950",
+      "thumbnail": "https://cdn2.allevents.in/transup/66/82f585dc3f42e1895c5583dacfad27/subscribe_bell_icon.webp",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Usha Uthup Live In Concert Mumbai",
+      "link": "https://allevents.in/mumbai/usha-uthup-live-in-concert-mumbai/3900030057244357",
+      "thumbnail": "https://cdn2.allevents.in/transup/2f/baff36b05648ad85ed152fbd515657/app-download-qr-banner.webp",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Soundrise Darbaar Thurs 16th July At Blue Sea Worli Tickets",
+      "link": "https://allevents.in/mumbai/soundrise-darbaar-thurs-16th-july-at-blue-sea-worli-tickets/80003358019532",
+      "thumbnail": "https://cdn2.allevents.in/transup/8e/66139c70184242af8c31df6f9aa780/download-app-mobile-banner.webp",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Kabhi Khushi Kabhi Improv A Live Improv Comedy Show By The Andlings",
+      "link": "https://allevents.in/mumbai/kabhi-khushi-kabhi-improv-a-live-improv-comedy-show-by-the-andlings/4100030307856801",
+      "thumbnail": "https://cdn2.allevents.in/transup/74/d94c2046cb481280276c19ff0b7d1e/calendar_28_2x.png",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Risotto And Arancini The Italian Rice",
+      "link": "https://allevents.in/mumbai/risotto-and-arancini-the-italian-rice/3900030316857530",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Learn To Meditate Step 1 On The Path Of Kriya Yoga",
+      "link": "https://allevents.in/mumbai/learn-to-meditate-step-1-on-the-path-of-kriya-yoga/3900030324085725",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Women Leading Sustainable And Impactful Change A Storytelling Salon",
+      "link": "https://allevents.in/mumbai/women-leading-sustainable-and-impactful-change-a-storytelling-salon/100001992422365931",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Kavi Sammelan With Paritosh Tripathi",
+      "link": "https://allevents.in/mumbai/kavi-sammelan-with-paritosh-tripathi/3900030315688231",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Dil Diaries",
+      "link": "https://allevents.in/mumbai/dil-diaries/3900030324058847",
+      "category": "music",
+      "source": "allevents"
+    },
+    {
+      "title": "Daily Ka Kaam Hai By Aakash Gupta Mumbai Show",
+      "link": "https://allevents.in/mumbai/daily-ka-kaam-hai-by-aakash-gupta-mumbai-show/3900030213435746",
+      "thumbnail": "https://cdn2.allevents.in/transup/ab/ced64bf76d429aaa513418ff72f873/profile.png",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Dhandho Ft Munawar Faruqui",
+      "link": "https://allevents.in/mumbai/dhandho-ft-munawar-faruqui/3900030284887019",
+      "thumbnail": "https://cdn2.allevents.in/transup/d3/eb547db33b41179fc9705d04b60ec7/Group-4-.png",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Sumukhi Suresh Hoemonal The Taping",
+      "link": "https://allevents.in/mumbai/sumukhi-suresh-hoemonal-the-taping/3900030211186753",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czgvYmFubmVycy8wZWY0MTRiMC03NDBkLTExZjEtYTZlZC01MTQ2YTg3MTNmN2ItcmltZy13MTIwMC1oNjAwLWRjMDMwMzA2LWdtaXIuanBnP3Y9MTc4Mjc3MzQ4Ng.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Love Death And Ketchup By Varun Grover",
+      "link": "https://allevents.in/mumbai/love-death-and-ketchup-by-varun-grover/3900030183204406",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czUvYmFubmVycy9jZTg5MGYyMC03Mzc2LTExZjEtOGQyNy05MzIwZTc0OWQ3N2EtcmltZy13MTIwMC1oNjAwLWRjZDRlOGVkLWdtaXIuanBnP3Y9MTc4MjcwODk1Nw.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "The Nation Wants To Know By Anuvab Pal",
+      "link": "https://allevents.in/mumbai/the-nation-wants-to-know-by-anuvab-pal/200030082669453",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czgvYmFubmVycy8wZmFhYmY5MC02NDZjLTExZjEtOWM4Ni1jM2QzMjcwZDQ5YTctcmltZy13MTIwMC1oNjAwLWRjMDIwNDA1LWdtaXIuanBnP3Y9MTc4MTA1NTA3MQ.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "The Jamie Lever Show",
+      "link": "https://allevents.in/mumbai/the-jamie-lever-show/3900029794293807",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy9mZTBhNjdhMC03NDRiLTExZjEtYTg3Yy01NTJlMzIyMzA0ZTYtcmltZy13MTIwMC1oNjAwLWRjMTkxMzUxLWdtaXIuanBnP3Y9MTc4MjgwMDUxNg.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Aise Kaise By Amit Tandon",
+      "link": "https://allevents.in/mumbai/aise-kaise-by-amit-tandon/3900030235667247",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czIvYmFubmVycy8wNmE0NmE2MC03M2ZiLTExZjEtYTg3Yy01NTJlMzIyMzA0ZTYtcmltZy13MTIwMC1oNjAwLWRjMDA1MjYwLWdtaXIuanBnP3Y9MTc4Mjc2NTc0MQ.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Daily Ka Kaam Hai By Aakash Gupta Mumbai",
+      "link": "https://allevents.in/mumbai/daily-ka-kaam-hai-by-aakash-gupta-mumbai/3900030311924644",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy9jYjNmNDA3MC03NDI4LTExZjEtYjQ1Mi0wZjJlMGU1MTNmY2UtcmltZy13MTIwMC1oNjAwLWRjMjgyZDQ4LWdtaXIuanBnP3Y9MTc4Mjc4NTM5OA.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Aakash Mehtas Relapse A Stand Up Comedy Show",
+      "link": "https://allevents.in/mumbai/aakash-mehtas-relapse-a-stand-up-comedy-show/3900030214579411",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czEwL2Jhbm5lcnMvMmE5ZDhmNDAtNzNjMC0xMWYxLWE4N2MtNTUyZTMyMjMwNGU2LXJpbWctdzEyMDAtaDYwMC1kYzQ1MWUxMy1nbWlyLmpwZz92PTE3ODI3NDA0NjE.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Silly Papa By Angad Singh Ranyal",
+      "link": "https://allevents.in/mumbai/silly-papa-by-angad-singh-ranyal/3900029861665202",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy9mN2JlNzVlMC01YWI5LTExZjEtYWNjNi1iNzQ1YWQ0YzMwNGYtcmltZy13MTIwMC1oNjAwLWRjMmUxNjE4LWdtaXIuanBnP3Y9MTc3OTk4OTAyMA.avif",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Comics Without Borders Kcc",
+      "link": "https://allevents.in/mumbai/comics-without-borders-kcc/3900030221756447",
+      "thumbnail": "https://cdn2.allevents.in/transup/66/82f585dc3f42e1895c5583dacfad27/subscribe_bell_icon.webp",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Jamie Lever Nite",
+      "link": "https://allevents.in/mumbai/jamie-lever-nite/3900030235654810",
+      "thumbnail": "https://cdn2.allevents.in/transup/2f/baff36b05648ad85ed152fbd515657/app-download-qr-banner.webp",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Good Timing Ji",
+      "link": "https://allevents.in/mumbai/good-timing-ji/3900029947698311",
+      "thumbnail": "https://cdn2.allevents.in/transup/8e/66139c70184242af8c31df6f9aa780/download-app-mobile-banner.webp",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Marry Go Round Lets Blame It On Bollywood",
+      "link": "https://allevents.in/mumbai/marry-go-round-lets-blame-it-on-bollywood/3900030149528640",
+      "thumbnail": "https://cdn2.allevents.in/transup/74/d94c2046cb481280276c19ff0b7d1e/calendar_28_2x.png",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Bharatnext Business Growth Summit 150 Entrepreneurs Unlimited Possibilities Tickets",
+      "link": "https://allevents.in/mumbai/bharatnext-business-growth-summit-150-entrepreneurs-unlimited-possibilities-tickets/80004870036781",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Mad Hatters Improv Party By Small Tales Academy Tickets",
+      "link": "https://allevents.in/mumbai/mad-hatters-improv-party-by-small-tales-academy-tickets/80003212407663",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Mumbai Phalotsav 2026",
+      "link": "https://allevents.in/mumbai/mumbai-phalotsav-2026/200030323721226",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Textured Mirror Art",
+      "link": "https://allevents.in/mumbai/textured-mirror-art/3900030317444421",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Ganpati Bappa",
+      "link": "https://allevents.in/mumbai/ganpati-bappa/200030310388418",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Tik The Lost Supper A Long Form Improv Show Kcc",
+      "link": "https://allevents.in/mumbai/tik-the-lost-supper-a-long-form-improv-show-kcc/3900030323702710",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Tie Dye Workshop With Huecoast Creative Sunday",
+      "link": "https://allevents.in/mumbai/tie-dye-workshop-with-huecoast-creative-sunday/3900030324069745",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Folk Lalkar Gajar Lok Kalecha",
+      "link": "https://allevents.in/mumbai/folk-lalkar-gajar-lok-kalecha/3900030329380101",
+      "category": "comedy",
+      "source": "allevents"
+    },
+    {
+      "title": "Aawara Hoon",
+      "link": "https://allevents.in/mumbai/aawara-hoon/3900030216574018",
+      "thumbnail": "https://cdn2.allevents.in/thumbs/attendeethumb68e271ac24e78.jpg",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "External Affairs",
+      "link": "https://allevents.in/mumbai/external-affairs/200030287155423",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTJkMzhhZGE3MWYzLmpwZw.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Telling Lies A Standup Solo By Aashish Solanki",
+      "link": "https://allevents.in/mumbai/telling-lies-a-standup-solo-by-aashish-solanki/3900030134662551",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTMyOGI0OThmN2RiLmpwZw.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Rafi Sahab And Kishoreda",
+      "link": "https://allevents.in/mumbai/rafi-sahab-and-kishoreda/3900030304119507",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy83ODZkMGQyZDU5MWY0ZTkzNjRkODkwNWU5ZDZkNjE2OTg2NjJhODgyZTRhZDFiOTIwOWE2YTMwZjA4ZjVhMGNkLXJpbWctdzEyMDAtaDY3NS1kYzAwMDAwMC1nbWlyP3Y9MTc4MjU5ODkxNw.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Taras Trio",
+      "link": "https://allevents.in/mumbai/taras-trio/200030061528638",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czEvYmFubmVycy80M2RhZjA4ZjhhZmE0Y2NlNzdlY2UwYzIwNTkyMmEyYzk5YWFmMGJiNGFmODQwYjkyYjUyYmJmZmFmNDNlNDg3LXJpbWctdzEyMDAtaDY3NS1kYzAwMDAwMC1nbWlyP3Y9MTc4MjIzNzM3Mw.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Not Same Not Different",
+      "link": "https://allevents.in/mumbai/not-same-not-different/200030082681832",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy9iMzY3NmNkMC02NDVhLTExZjEtOWVhYi1iOTM1NDczMDQyYmEtcmltZy13MTIwMC1oNjAwLWRjMTQwNzAzLWdtaXIuanBnP3Y9MTc4MTA0NzYxNA.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Trouble At The Amusement Park",
+      "link": "https://allevents.in/mumbai/trouble-at-the-amusement-park/200030082668450",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czIvYmFubmVycy8wZThhNjUyMC03NDA3LTExZjEtYTg3Yy01NTJlMzIyMzA0ZTYtcmltZy13MTIwMC1oNjAwLWRjMDM2NDcwLWdtaXIuanBnP3Y9MTc4Mjc3MDkwOA.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Carvaan Live Sing With Kishore At Four Seasons",
+      "link": "https://allevents.in/mumbai/carvaan-live-sing-with-kishore-at-four-seasons/3900030213552555",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy8yNjNhMjE1N2IwZjQ4MTA1MGMzODIwYjVmNWY5YTVlZThjNDQ5MTVjYzNmNmRjNTM0ZDliM2QxMDQ0MWVjNGIyLXJpbWctdzEyMDAtaDY3NS1kYzA1MDYwOC1nbWlyP3Y9MTc4MjQ2NDYyOQ.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Rutu Hirawa",
+      "link": "https://allevents.in/mumbai/rutu-hirawa/3900030274871624",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czgvYmFubmVycy9lY2M1NWZhMC01YTY5LTExZjEtYWM2OS03YjBjNzg4OGZjZjItcmltZy13MTIwMC1oNjAwLWRjZmRlY2Y1LWdtaXIuanBnP3Y9MTc3OTk1NDY0MQ.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Tales Around The Bonfire",
+      "link": "https://allevents.in/mumbai/tales-around-the-bonfire/200030178333035",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czMvYmFubmVycy9lOGYzNDk2MC01YWIzLTExZjEtYjc1NS1hZDU0NWRkMTI5YzUtcmltZy13MTIwMC1oNjAwLWRjMDIwMjAxLWdtaXIuanBnP3Y9MTc3OTk4NjQxOA.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Soulful Melodies Of Laxmikant Pyarelal",
+      "link": "https://allevents.in/mumbai/soulful-melodies-of-laxmikant-pyarelal/3900030147737742",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czkvYmFubmVycy85YmEzZDRlMC01ZjRhLTExZjEtODNlOS03ZDZjMDAzMmMzNjgtcmltZy13MTIwMC1oNjAwLWRjMDUwNDAyLWdtaXIuanBnP3Y9MTc4MDQ5MDk0Nw.avif",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Phone Pe Ncpa",
+      "link": "https://allevents.in/mumbai/phone-pe-ncpa/3900030149045618",
+      "thumbnail": "https://cdn2.allevents.in/transup/66/82f585dc3f42e1895c5583dacfad27/subscribe_bell_icon.webp",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Dil Ne Phir Yaad Kiya",
+      "link": "https://allevents.in/mumbai/dil-ne-phir-yaad-kiya/3900030146946704",
+      "thumbnail": "https://cdn2.allevents.in/transup/2f/baff36b05648ad85ed152fbd515657/app-download-qr-banner.webp",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Out Of Control Ft Madmen At Mercii",
+      "link": "https://allevents.in/mumbai/out-of-control-ft-madmen-at-mercii/4100030324329223",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Wednesday 1st July 2026 | Latin Twist Social Antisocial Lower Parel",
+      "link": "https://allevents.in/mumbai/wednesday-1st-july-2026-|-latin-twist-social-antisocial-lower-parel/200030320143726",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Mumbai Open Mic 04th July 2026",
+      "link": "https://allevents.in/mumbai/mumbai-open-mic-04th-july-2026/80003008167612",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Thursday Comedy Festival",
+      "link": "https://allevents.in/mumbai/thursday-comedy-festival/3900030324049532",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Trivial A Trial Comedy Show By Akshat",
+      "link": "https://allevents.in/mumbai/trivial-a-trial-comedy-show-by-akshat/3900030324083540",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Rajkumari By Nayab Midha",
+      "link": "https://allevents.in/mumbai/rajkumari-by-nayab-midha/3900030137638716",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTMyOGI0OThmN2RiLmpwZw.avif",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Opeth In Mumbai",
+      "link": "https://allevents.in/mumbai/opeth-in-mumbai/3300030215598956",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czUvYmFubmVycy9kN2M1MWY3MC02NDk5LTExZjEtYjZlOC0zZGRkNGM4NWZhMzQtcmltZy13MTIwMC1oNjAwLWRjMzExOTEyLWdtaXIuanBnP3Y9MTc4MTA3NDczNA.avif",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Maharashtra Times Presents Abhangwari",
+      "link": "https://allevents.in/mumbai/maharashtra-times-presents-abhangwari/3900030271081525",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy9mN2JlNzVlMC01YWI5LTExZjEtYWNjNi1iNzQ1YWQ0YzMwNGYtcmltZy13MTIwMC1oNjAwLWRjMmUxNjE4LWdtaXIuanBnP3Y9MTc3OTk4OTAyMA.avif",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Dr Kumar Vishwas Live In Kavi Sammelan Concert",
+      "link": "https://allevents.in/mumbai/dr-kumar-vishwas-live-in-kavi-sammelan-concert/3900030135114527",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy80ZDExY2UyMC03NDBmLTExZjEtYTZlZC01MTQ2YTg3MTNmN2ItcmltZy13MTIwMC1oNjAwLWRjYTljMmQzLWdtaXIuanBnP3Y9MTc4Mjc3NDQ0OQ.avif",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Second Nature",
+      "link": "https://allevents.in/mumbai/second-nature/3900030267799214",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czUvYmFubmVycy80MDZhMzZjMC02ZDJiLTExZjEtOTgwZS0zOWU0NGU5NjkyYTgtcmltZy13NTM0LWg2NDAtZGM2MDQ4NDctZ21pci5qcGc_dj0xNzgyMDE2Nzk2.avif",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Kathakali By Kharikumar And Kathak By Neha Banerjee",
+      "link": "https://allevents.in/mumbai/kathakali-by-kharikumar-and-kathak-by-neha-banerjee/200030289363729",
+      "thumbnail": "https://cdn2.allevents.in/transup/66/82f585dc3f42e1895c5583dacfad27/subscribe_bell_icon.webp",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Manoj Muntashir In Mumbai",
+      "link": "https://allevents.in/mumbai/manoj-muntashir-in-mumbai/3300030277933656",
+      "thumbnail": "https://cdn2.allevents.in/transup/2f/baff36b05648ad85ed152fbd515657/app-download-qr-banner.webp",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Honest Portraits Of Character Guided Tour",
+      "link": "https://allevents.in/mumbai/honest-portraits-of-character-guided-tour/3900030234684038",
+      "thumbnail": "https://cdn2.allevents.in/transup/8e/66139c70184242af8c31df6f9aa780/download-app-mobile-banner.webp",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Swararjun",
+      "link": "https://allevents.in/mumbai/swararjun/3900030317071313",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Pichwai Painting Workshop",
+      "link": "https://allevents.in/mumbai/pichwai-painting-workshop/3900030317586822",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Tab Tum Kahan",
+      "link": "https://allevents.in/mumbai/tab-tum-kahan/3900030304530546",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Nishant Tanwars Let Your Stories Meet Mine",
+      "link": "https://allevents.in/mumbai/nishant-tanwars-let-your-stories-meet-mine/3900030324336013",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Mini Clay Planters Mumbai",
+      "link": "https://allevents.in/mumbai/mini-clay-planters-mumbai/3900030315274954",
+      "category": "art",
+      "source": "allevents"
+    },
+    {
+      "title": "Gamer Factory Presents Gateway Games Tickets",
+      "link": "https://allevents.in/mumbai/gamer-factory-presents-gateway-games-tickets/80001289202651",
+      "thumbnail": "https://cdn2.allevents.in/transup/ab/ced64bf76d429aaa513418ff72f873/profile.png",
+      "category": "food",
+      "source": "allevents"
+    },
+    {
+      "title": "Poetry Unfiltered Open Mic And Live Discussion",
+      "link": "https://allevents.in/mumbai/poetry-unfiltered-open-mic-and-live-discussion/3900030311633823",
+      "thumbnail": "https://cdn2.allevents.in/transup/74/d94c2046cb481280276c19ff0b7d1e/calendar_28_2x.png",
+      "category": "food",
+      "source": "allevents"
+    },
+    {
+      "title": "Monsoon Special Stand Up Show",
+      "link": "https://allevents.in/mumbai/monsoon-special-stand-up-show/3900030311211013",
+      "category": "food",
+      "source": "allevents"
+    },
+    {
+      "title": "Nautiverse Movie Screening",
+      "link": "https://allevents.in/mumbai/nautiverse-movie-screening/3900030317150813",
+      "category": "food",
+      "source": "allevents"
+    },
+    {
+      "title": "Confidence Lab Improv 101",
+      "link": "https://allevents.in/mumbai/confidence-lab-improv-101/3900030305313535",
+      "category": "food",
+      "source": "allevents"
+    }
+  ]
+}

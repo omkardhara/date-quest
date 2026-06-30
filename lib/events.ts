@@ -1,5 +1,6 @@
 import { EventCategory, PlanEvent } from "./types";
 import { scrapeAllEvents } from "./scrapers/allevents";
+import eventsCache from "@/data/events-cache.json";
 
 const KEY = process.env.SERP_API_KEY;
 
@@ -94,33 +95,52 @@ let cachedEvents: PlanEvent[] | null = null;
 let cacheTime = 0;
 const CACHE_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours
 
+// GitHub Actions commits data/events-cache.json daily with fresh scraped data.
+// We prefer that as the primary source (rich allevents data with prices).
+// SerpAPI is the fallback/supplement (always live, good for the outing date).
+function loadFileCache(): PlanEvent[] {
+  try {
+    const cache = eventsCache as { fetchedAt: string; events: PlanEvent[] };
+    const age = Date.now() - new Date(cache.fetchedAt).getTime();
+    const stale = age > 48 * 60 * 60 * 1000; // >48h old = consider stale
+    if (!stale && cache.events?.length) {
+      console.log(`[events] file cache: ${cache.events.length} events (${Math.round(age / 3600000)}h old)`);
+      return cache.events as PlanEvent[];
+    }
+  } catch {
+    // malformed or missing cache — fall through
+  }
+  return [];
+}
+
 export async function searchEvents(
   _q: string,
   dateISO?: string
 ): Promise<PlanEvent[]> {
   const now = Date.now();
 
-  // Warm module cache (no date filter — we'll filter after)
   if (!cachedEvents || now - cacheTime > CACHE_TTL_MS) {
-    const [serpEvents, allEvents] = await Promise.allSettled([
+    // 1. Load GitHub-Actions-scraped file cache (allevents.in data with prices)
+    const fileEvents = loadFileCache();
+
+    // 2. Run SerpAPI multi-category queries (live, date-aware)
+    // 3. Try allevents live scrape (only works if not on Vercel datacenter IPs)
+    const [serpEvents, liveScraped] = await Promise.allSettled([
       searchSerpAll(dateISO),
       scrapeAllEvents(),
     ]);
 
-    const serp =
-      serpEvents.status === "fulfilled" ? serpEvents.value : [];
-    const scraped =
-      allEvents.status === "fulfilled" ? allEvents.value : [];
+    const serp   = serpEvents.status === "fulfilled"  ? serpEvents.value  : [];
+    const scraped = liveScraped.status === "fulfilled" ? liveScraped.value : [];
 
-    // SerpAPI first (date-filtered), then allevents enrichment
-    cachedEvents = dedup([...serp, ...scraped]);
+    // File cache first (richest data), then live serp, then live scrape
+    cachedEvents = dedup([...fileEvents, ...serp, ...scraped]);
     cacheTime = now;
     console.log(
-      `[events] refreshed: ${serp.length} serp + ${scraped.length} allevents = ${cachedEvents.length} deduped`
+      `[events] refreshed: ${fileEvents.length} file + ${serp.length} serp + ${scraped.length} live = ${cachedEvents.length} deduped`
     );
   }
 
-  // If a specific date was requested, prefer events matching that date
   if (dateISO) {
     const d = new Date(dateISO + "T00:00:00");
     const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
