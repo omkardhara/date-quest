@@ -1,6 +1,7 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import { EventCategory, PlanEvent } from "./types";
 import { scrapeAllEvents } from "./scrapers/allevents";
-import eventsCache from "@/data/events-cache.json";
 
 const KEY = process.env.SERP_API_KEY;
 
@@ -100,15 +101,18 @@ const CACHE_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours
 // SerpAPI is the fallback/supplement (always live, good for the outing date).
 function loadFileCache(): PlanEvent[] {
   try {
-    const cache = eventsCache as { fetchedAt: string; events: PlanEvent[] };
+    const cachePath = join(process.cwd(), "data", "events-cache.json");
+    const raw = readFileSync(cachePath, "utf-8");
+    const cache = JSON.parse(raw) as { fetchedAt: string; events: PlanEvent[] };
     const age = Date.now() - new Date(cache.fetchedAt).getTime();
-    const stale = age > 48 * 60 * 60 * 1000; // >48h old = consider stale
-    if (!stale && cache.events?.length) {
+    const stale = age > 48 * 60 * 60 * 1000; // >48h old
+    if (!stale && Array.isArray(cache.events) && cache.events.length > 0) {
       console.log(`[events] file cache: ${cache.events.length} events (${Math.round(age / 3600000)}h old)`);
-      return cache.events as PlanEvent[];
+      return cache.events;
     }
-  } catch {
-    // malformed or missing cache — fall through
+    console.log(`[events] file cache stale or empty (age=${Math.round(age / 3600000)}h, count=${cache.events?.length ?? 0})`);
+  } catch (e) {
+    console.warn("[events] file cache read failed:", (e as Error).message);
   }
   return [];
 }
