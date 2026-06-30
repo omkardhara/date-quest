@@ -21,7 +21,7 @@ export function restroomFor(zone?: string): string | undefined {
 }
 
 // One practical outfit line synthesised from the day's venues + the season.
-export function outfitFor(places: Place[], isMonsoon: boolean): string {
+export function outfitFor(places: Place[], isMonsoon: boolean, month?: number): string {
   const hasTemple   = places.some(p => (p.tags ?? []).includes("temple"));
   const hasFancy    = places.some(p => p.budgetLevel >= 4 || (p.mustBook && p.category === "food"));
   const hasSpa      = places.some(p => (p.tags ?? []).includes("spa"));
@@ -44,7 +44,12 @@ export function outfitFor(places: Place[], isMonsoon: boolean): string {
   if (lotsWalking || hasOutdoor) parts.push("block heels or ballet flats she can walk in for hours — not the ones that look great but hurt by noon");
   if (hasTemple) parts.push("covered shoulders and knees for the temple stop — a dupatta or light jacket in the bag works fine");
   if (isMonsoon) parts.push("quick-dry fabrics only, nothing silk or suede; a compact fold-up umbrella tucked in her bag");
-  else parts.push("sunscreen, and something breathable — July in Mumbai is warm even without rain");
+  else {
+    const m = month ?? 10;
+    if (m === 11 || m <= 1) parts.push("light layers — evenings can get pleasantly cool this time of year");
+    else if (m >= 3 && m <= 5) parts.push("sunscreen and something light — it'll be hot; carry water");
+    else parts.push("sunscreen and something breathable for the day");
+  }
 
   return parts.join("; ") + ".";
 }

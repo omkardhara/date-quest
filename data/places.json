@@ -2155,7 +2155,7 @@
     "name": "Powai Lake sunrise walk",
     "category": "activity",
     "area": "Powai, Mumbai",
-    "zone": "thane",
+    "zone": "andheri_w",
     "moods": [
       "birthday",
       "chill",
@@ -2189,7 +2189,7 @@
     ]
   },
   {
-    "id": "yeoor-hills",
+    "id": "yeoor-hills-trek",
     "name": "Yeoor Hills light trek",
     "category": "activity",
     "area": "Thane East",

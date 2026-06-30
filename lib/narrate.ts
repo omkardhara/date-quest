@@ -94,8 +94,9 @@ export function narrate(p: Place, ans: Answers): string {
 
 export function greeting(ans: Answers): string {
   const who = ans.who || PROFILE.name;
-  const today = new Date();
-  const isBirthday = today.getMonth() === 6 && today.getDate() === 8; // July 8
+  const refDate = ans.outingDate ? new Date(ans.outingDate + "T00:00:00") : new Date();
+  const [, bm, bd] = PROFILE.birthday.split("-").map(Number);
+  const isBirthday = refDate.getMonth() === bm - 1 && refDate.getDate() === bd;
   if (isBirthday) return `Happy birthday, ${who}. Here is your whole day, start to finish.`;
 
   const allMoods = ans.moodList ?? [ans.mood];

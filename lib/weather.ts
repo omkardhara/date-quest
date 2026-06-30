@@ -57,7 +57,8 @@ export async function getWeather(lat: number, lng: number, dateISO: string): Pro
     if (precip == null && tMax == null) { cache.set(key, miss); return miss; }
 
     const wet = (precip ?? 0) >= 5 || (code != null && RAIN_CODES.includes(code));
-    const summary = `${codeText(code)}, ${Math.round(tMin)}–${Math.round(tMax)}°C` +
+    const tempStr = tMin != null && tMax != null ? `, ${Math.round(tMin)}–${Math.round(tMax)}°C` : "";
+    const summary = `${codeText(code)}${tempStr}` +
       (precip != null ? `, ~${Math.round(precip)}mm rain` : "");
     const w: Weather = { date: dateISO, tMax, tMin, precipMm: precip, summary, wet, available: true };
     cache.set(key, w);

@@ -47,6 +47,7 @@ export interface Answers {
   weatherSummary?: string;// live forecast summary for display
   dislikes?: string[];    // ingredients to avoid
   mustInclude?: string[]; // specific activities the user already wants in the day
+  outingDate?: string;    // ISO "YYYY-MM-DD" — used in greeting/outfit so they reflect the planned day
 }
 
 export interface TravelFromPrev {

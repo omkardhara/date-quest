@@ -459,7 +459,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     fullDayMapUrl,
     requests:    requests.length ? requests : undefined,
     flags:       buildFlags(blocks, ans, monsoon, vegDay),
-    outfit:      placesInPlan.length ? outfitFor(placesInPlan, monsoon) : undefined,
+    outfit:      placesInPlan.length ? outfitFor(placesInPlan, monsoon, ans.month) : undefined,
     weatherNote: ans.weatherSummary
       ? `Forecast for the day: ${ans.weatherSummary}.`
       : (monsoon ? "Planned for monsoon: indoor-leaning, with rain backups." : undefined),

@@ -46,6 +46,7 @@ export default function Page() {
   const [endMin, setEndMin] = useState(0);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [building, setBuilding] = useState(false);
+  const [buildError, setBuildError] = useState(false);
   const [lastAns, setLastAns] = useState<Answers | null>(null);
   const [dest, setDest] = useState("");
   const [nights, setNights] = useState(1);
@@ -83,6 +84,7 @@ export default function Page() {
       dayOfWeek: d.getDay(),
       month: d.getMonth(),
       dislikes: PROFILE.dislikes,
+      outingDate,
     };
     setBuilding(true);
 
@@ -129,22 +131,24 @@ export default function Page() {
 
     const [extra, evts, wx] = await Promise.all([discover, events, weather]);
     if (wx?.available) { ans.wetDay = !!wx.wet; ans.weatherSummary = wx.summary; }
-    const p = buildPlan(ans, extra);
-    p.outingDate = outingDate;
-    // When user picked "Free 🌊" (budget=0 in UI), reset display budget to 0 so PlanView
-    // shows "free day" rather than the engine's internal ₹400 street-food allowance.
-    if (budget === 0) p.budget = 0;
-    if (evts.length) p.events = evts;
-    setLastAns(ans);
-    setPlan(p);
-    setBuilding(false);
-    setStep("plan");
-    upgradeNarration(p, ans);
+    try {
+      const p = buildPlan(ans, extra);
+      p.outingDate = outingDate;
+      if (budget === 0) p.budget = 0;
+      if (evts.length) p.events = evts;
+      setLastAns(ans);
+      setPlan(p);
+      setStep("plan");
+      upgradeNarration(p, ans);
+    } finally {
+      setBuilding(false);
+    }
   }
 
   async function generateGetaway() {
     if (!dest) return;
     setBuilding(true);
+    setBuildError(false);
     try {
       const res = await fetch("/api/getaway", {
         method: "POST",
@@ -153,10 +157,12 @@ export default function Page() {
       });
       const d = await res.json();
       if (d.plan) { setGetaway(d.plan); setStep("getaway-plan"); }
+      else setBuildError(true);
     } catch {
-      /* ignore */
+      setBuildError(true);
+    } finally {
+      setBuilding(false);
     }
-    setBuilding(false);
   }
 
   async function regenerate() {
@@ -177,13 +183,17 @@ export default function Page() {
       } catch { return []; }
     })();
     const extra = await discover;
-    const p = buildPlan(lastAns, extra);
-    if (plan?.events?.length) p.events = plan.events; // reuse cached events
-    if (budget === 0) p.budget = 0;
-    setPlan(p);
-    setBuilding(false);
-    setStep("plan");
-    upgradeNarration(p, lastAns);
+    try {
+      const p = buildPlan(lastAns, extra);
+      p.outingDate = outingDate;
+      if (plan?.events?.length) p.events = plan.events;
+      if (budget === 0) p.budget = 0;
+      setPlan(p);
+      setStep("plan");
+      upgradeNarration(p, lastAns);
+    } finally {
+      setBuilding(false);
+    }
   }
 
   async function upgradeNarration(p: Plan, ans: Answers) {
@@ -272,6 +282,7 @@ export default function Page() {
               <Chips options={GETAWAYS.map((g) => g.name)} selected={dest ? [GETAWAYS.find((g) => g.id === dest)!.name] : []} onTap={(v) => setDest(GETAWAYS.find((g) => g.name === v)!.id)} />
               <p className="mt-4 text-sm text-white/50">How long?</p>
               <Chips options={NIGHTS.map((n) => n[0])} selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])} onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])} />
+              {buildError && <p className="mt-3 text-sm text-rose-400">Couldn't build the trip — check your connection and try again.</p>}
               <Nav onBack={() => setStep("intro")} onNext={generateGetaway} canNext={!!dest} nextLabel="Plan the trip" />
             </Screen>
           )}
