@@ -50,7 +50,7 @@ function block(startMin: number, durMin: number, kind: Category | "buffer", titl
   return { startMin, endMin: startMin + durMin, title, place, why, cost: place?.costPerPerson ? place.costPerPerson * 2 : 0, kind, backup };
 }
 
-export async function buildGetaway(destId: string, nights: number, monsoon: boolean, weatherSummary?: string): Promise<GetawayPlan | null> {
+export async function buildGetaway(destId: string, nights: number, monsoon: boolean, weatherSummary?: string, month?: number): Promise<GetawayPlan | null> {
   const d = DESTS.find(x => x.id === destId);
   if (!d) return null;
 
@@ -61,7 +61,9 @@ export async function buildGetaway(destId: string, nights: number, monsoon: bool
     searchPlaces(`resorts and stays in ${d.name}`, 5),
   ]);
 
-  const eats = liveEats.length ? liveEats.map(e => liveToPlace(e, d.name, "food")) : d.eat.map(n => syntheticPlace(n, d.name, "food", { costPerPerson: 600 }));
+  const eatsRaw = liveEats.length ? liveEats.map(e => liveToPlace(e, d.name, "food")) : d.eat.map(n => syntheticPlace(n, d.name, "food", { costPerPerson: 600 }));
+  // Shuffle so meal assignments vary across regenerations and wrap-around varies order.
+  const eats = [...eatsRaw].sort(() => Math.random() - 0.5);
   let eatIdx = 0;
   const nextEat = (mealMins: number, label: string): PlanBlock => {
     const p = eats[eatIdx % eats.length]; eatIdx++;
@@ -103,7 +105,7 @@ export async function buildGetaway(destId: string, nights: number, monsoon: bool
     cur += d.driveFromMumbaiMins;
     blocks.push(nextEat(cur, "Lunch on arrival")); cur += 75 + 15;
     const h1 = nextHi(cur); if (h1) { blocks.push(h1); cur = h1.endMin + 15; }
-    blocks.push(block(cur, 60, "rest", `Check in & freshen up — ${stayName}`, "Settle in, breathe, change for the evening.", syntheticPlace(stayName, d.name, "rest"))); cur += 60 + 10;
+    if (nights >= 1) { blocks.push(block(cur, 60, "rest", `Check in & freshen up — ${stayName}`, "Settle in, breathe, change for the evening.", syntheticPlace(stayName, d.name, "rest"))); cur += 60 + 10; }
     const h2 = nextHi(cur, 90); if (h2) { blocks.push(h2); cur = h2.endMin + 15; }
     blocks.push(nextEat(Math.max(cur, 1170), "Dinner"));
     days.push({ label: "Day 1", subtitle: "Getting there & settling in", blocks });
@@ -155,7 +157,7 @@ export async function buildGetaway(destId: string, nights: number, monsoon: bool
     driveNote: `~${hrs(d.driveFromMumbaiMins)} from Mumbai · ~${hrs(d.driveFromPuneMins)} from your Pune house`,
     monsoonNote: monsoon ? `Monsoon trip. ${d.name} in the rains: ${d.monsoon === "great" ? "lush and at its best, with care." : "manageable, but not its prettiest season."}` : undefined,
     bestMonths: d.bestMonths,
-    outfit: allPlaces.length ? outfitFor(allPlaces, monsoon) : undefined,
+    outfit: allPlaces.length ? outfitFor(allPlaces, monsoon, month) : undefined,
     flags,
     days,
     stays,

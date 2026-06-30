@@ -70,7 +70,7 @@ function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, 
     zone,
     category,
     moods: [mood],
-    vibes: [...new Set([...(VIBES[category] ?? []), ...extraVibes])],
+    vibes: Array.from(new Set([...(VIBES[category] ?? []), ...extraVibes])),
     cuisines: cuisine ? [cuisine] : [],
     budgetLevel: budgetLevelFrom(cost),
     costPerPerson: cost,
@@ -120,7 +120,7 @@ function restaurantQuery(personality: string[], area: string): string {
 
 // Pull live, real places for the day's zones + tastes and normalise them for the engine.
 export async function discoverPlaces(ans: Answers): Promise<Place[]> {
-  const zones = zonesForAnswers(ans).filter(z => ZONE_AREA[z]).slice(0, 2);
+  const zones = zonesForAnswers(ans).filter(z => ZONE_AREA[z]).slice(0, 3);
   if (!zones.length) return [];
   const vegDay = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
   const mood = ans.mood;

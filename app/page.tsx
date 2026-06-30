@@ -146,7 +146,7 @@ export default function Page() {
   }
 
   async function generateGetaway() {
-    if (!dest) return;
+    if (!dest || building) return;
     setBuilding(true);
     setBuildError(false);
     try {
@@ -282,6 +282,16 @@ export default function Page() {
               <Chips options={GETAWAYS.map((g) => g.name)} selected={dest ? [GETAWAYS.find((g) => g.id === dest)!.name] : []} onTap={(v) => setDest(GETAWAYS.find((g) => g.name === v)!.id)} />
               <p className="mt-4 text-sm text-white/50">How long?</p>
               <Chips options={NIGHTS.map((n) => n[0])} selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])} onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])} />
+              <p className="mt-4 text-sm text-white/50">When?</p>
+              <div className="mt-2">
+                <input
+                  type="date"
+                  value={outingDate}
+                  onChange={(e) => setOutingDate(e.target.value || PROFILE.birthday)}
+                  style={{ colorScheme: "dark" }}
+                  className="w-full rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm text-white outline-none focus:border-glow"
+                />
+              </div>
               {buildError && <p className="mt-3 text-sm text-rose-400">Couldn't build the trip — check your connection and try again.</p>}
               <Nav onBack={() => setStep("intro")} onNext={generateGetaway} canNext={!!dest} nextLabel="Plan the trip" />
             </Screen>

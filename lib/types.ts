@@ -86,6 +86,8 @@ export interface Flag {
   text: string;
 }
 
+export type EventCategory = "music" | "comedy" | "theatre" | "art" | "food" | "film" | "fitness" | "other";
+
 export interface PlanEvent {
   title: string;
   when?: string;
@@ -93,6 +95,11 @@ export interface PlanEvent {
   address?: string;
   link?: string;
   thumbnail?: string;
+  // enriched fields
+  price?: number;          // minimum ticket price in INR (0 = free)
+  priceLabel?: string;     // human-readable e.g. "₹499 onwards"
+  category?: EventCategory;
+  source?: "serp" | "allevents";
 }
 
 export interface GetawayDay {

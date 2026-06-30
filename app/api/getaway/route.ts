@@ -21,7 +21,8 @@ export async function POST(req: NextRequest) {
       if (wx.available) { wet = wx.wet; weatherSummary = wx.summary; }
     }
 
-    const plan = await buildGetaway(destId, nights, wet, weatherSummary);
+    const month = body.date ? new Date(body.date + "T00:00:00").getMonth() : undefined;
+    const plan = await buildGetaway(destId, nights, wet, weatherSummary, month);
     if (!plan) return NextResponse.json({ error: "unknown destination" }, { status: 404 });
 
     // Events in the destination around the date (best-effort).

@@ -156,6 +156,12 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
         </div>
       )}
 
+      {plan.blocks.length === 0 && (
+        <p className="mt-10 text-center text-sm text-white/50">
+          The window is too short or the budget too tight for this combination.<br />Try a wider time range or bump the budget slightly.
+        </p>
+      )}
+
       <div className="relative mt-8 pl-6">
         <div className="timeline-line absolute left-1.5 top-2 bottom-2 w-0.5 rounded-full" />
         {plan.blocks.map((b, i) => (

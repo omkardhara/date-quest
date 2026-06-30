@@ -260,7 +260,7 @@ function weightedPick<T>(arr: T[]): T {
   const sum = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * sum;
   for (let i = 0; i < arr.length; i++) { r -= weights[i]; if (r <= 0) return arr[i]; }
-  return arr[0];
+  return arr[arr.length - 1];
 }
 
 function backupFor(p: Place): string | undefined {
@@ -348,7 +348,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     if (zone !== "multiple") currentZone = zone;
     else if (FAR_RETURN[currentZone]) currentZone = "home"; // we've driven back to the city
     // Track environment for consecutive-diversity penalty (food slots vary naturally, skip them)
-    if (!FULL_MEALS.includes(p.category)) {
+    if (!FULL_MEALS.includes(p.category) && p.category !== "rest") {
       recentEnvs.push(environment(p));
       if (recentEnvs.length > 2) recentEnvs.shift();
     }
@@ -427,7 +427,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   }
 
   // Dessert
-  if (end - cursor > 15) {
+  if (end - cursor > 35) {
     add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs), "dessert");
   }
 

@@ -1,4 +1,5 @@
-import { PlanEvent } from "./types";
+import { EventCategory, PlanEvent } from "./types";
+import { scrapeAllEvents } from "./scrapers/allevents";
 
 const KEY = process.env.SERP_API_KEY;
 
@@ -6,49 +7,126 @@ export function hasEventsKey(): boolean {
   return !!KEY;
 }
 
-const cache = new Map<string, PlanEvent[]>();
+// Deduplicate events by normalized title prefix
+function dedup(events: PlanEvent[]): PlanEvent[] {
+  const seen = new Set<string>();
+  return events.filter((e) => {
+    const k = e.title.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 30);
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
 
-// Live, structured events in Mumbai via SerpAPI's Google Events engine, narrowed
-// to the outing date when possible. Returns [] gracefully if key missing/invalid.
-export async function searchEvents(q: string, dateISO?: string): Promise<PlanEvent[]> {
+// ── SerpAPI google_events (multiple category queries in parallel) ──────────
+
+const SERP_CATEGORIES: { q: string; category: EventCategory }[] = [
+  { q: "music concerts live shows Mumbai", category: "music" },
+  { q: "comedy standup shows Mumbai", category: "comedy" },
+  { q: "theatre drama plays Mumbai", category: "theatre" },
+  { q: "art exhibitions workshops Mumbai", category: "art" },
+  { q: "food festivals dining events Mumbai", category: "food" },
+  { q: "film screenings cinema events Mumbai", category: "film" },
+];
+
+async function fetchSerpCategory(
+  q: string,
+  category: EventCategory,
+  dateISO?: string
+): Promise<PlanEvent[]> {
   if (!KEY) return [];
-  const cacheKey = `${q}|${dateISO ?? ""}`;
-  const hit = cache.get(cacheKey);
-  if (hit) return hit;
-
   try {
     const url = `https://serpapi.com/search.json?engine=google_events&q=${encodeURIComponent(q)}&hl=en&gl=in&api_key=${KEY}`;
     const r = await fetch(url);
+    if (!r.ok) return [];
     const data = await r.json().catch(() => ({} as any));
-    if (!r.ok || data?.error) {
-      console.warn("[events] SerpAPI", r.status, data?.error ?? "");
-      cache.set(cacheKey, []);
-      return [];
-    }
+    if (data?.error) return [];
 
-    let items: (PlanEvent & { startDate?: string })[] = (data?.events_results ?? []).map((e: any) => ({
-      title: e.title,
-      when: e.date?.when ?? e.date?.start_date,
-      startDate: e.date?.start_date,
-      venue: e.venue?.name ?? (Array.isArray(e.address) ? e.address[0] : undefined),
-      address: Array.isArray(e.address) ? e.address.join(", ") : e.address,
-      link: e.link,
-      thumbnail: e.thumbnail,
-    })).filter((e: PlanEvent) => e.title);
+    let items = (data?.events_results ?? []).map((e: any): PlanEvent => {
+      const priceMatch = (e.description ?? "").match(/₹\s*(\d[\d,]*)/);
+      const price = priceMatch ? parseInt(priceMatch[1].replace(/,/g, ""), 10) : undefined;
+      return {
+        title: e.title,
+        when: e.date?.when ?? e.date?.start_date,
+        venue: e.venue?.name ?? (Array.isArray(e.address) ? e.address[0] : undefined),
+        address: Array.isArray(e.address) ? e.address.join(", ") : e.address,
+        link: e.link,
+        thumbnail: e.thumbnail,
+        price,
+        priceLabel: price != null ? (price === 0 ? "Free" : `₹${price} onwards`) : undefined,
+        category,
+        source: "serp",
+      };
+    }).filter((e: PlanEvent) => e.title);
 
-    // Narrow to the outing date (e.g. "Jul 8") if any match; otherwise keep all upcoming.
+    // Narrow to the outing date if any match
     if (dateISO) {
       const d = new Date(dateISO + "T00:00:00");
-      const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); // "Jul 8"
-      const onDay = items.filter(it => (it.when ?? "").includes(md) || (it.startDate ?? "").includes(md));
+      const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const onDay = items.filter((it: PlanEvent) =>
+        (it.when ?? "").includes(md)
+      );
       if (onDay.length) items = onDay;
     }
 
-    const out: PlanEvent[] = items.slice(0, 6).map(({ startDate, ...rest }) => rest);
-    cache.set(cacheKey, out);
-    return out;
+    return items.slice(0, 5);
   } catch (e) {
-    console.warn("[events] SerpAPI error", e);
+    console.warn("[events] SerpAPI error:", e);
     return [];
   }
+}
+
+async function searchSerpAll(dateISO?: string): Promise<PlanEvent[]> {
+  const results = await Promise.allSettled(
+    SERP_CATEGORIES.map(({ q, category }) =>
+      fetchSerpCategory(q, category, dateISO)
+    )
+  );
+  return results
+    .filter((r): r is PromiseFulfilledResult<PlanEvent[]> => r.status === "fulfilled")
+    .flatMap((r) => r.value);
+}
+
+// ── Public API ────────────────────────────────────────────────────────────────
+
+// Module-level cache (warm across requests within the same serverless instance)
+let cachedEvents: PlanEvent[] | null = null;
+let cacheTime = 0;
+const CACHE_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours
+
+export async function searchEvents(
+  _q: string,
+  dateISO?: string
+): Promise<PlanEvent[]> {
+  const now = Date.now();
+
+  // Warm module cache (no date filter — we'll filter after)
+  if (!cachedEvents || now - cacheTime > CACHE_TTL_MS) {
+    const [serpEvents, allEvents] = await Promise.allSettled([
+      searchSerpAll(dateISO),
+      scrapeAllEvents(),
+    ]);
+
+    const serp =
+      serpEvents.status === "fulfilled" ? serpEvents.value : [];
+    const scraped =
+      allEvents.status === "fulfilled" ? allEvents.value : [];
+
+    // SerpAPI first (date-filtered), then allevents enrichment
+    cachedEvents = dedup([...serp, ...scraped]);
+    cacheTime = now;
+    console.log(
+      `[events] refreshed: ${serp.length} serp + ${scraped.length} allevents = ${cachedEvents.length} deduped`
+    );
+  }
+
+  // If a specific date was requested, prefer events matching that date
+  if (dateISO) {
+    const d = new Date(dateISO + "T00:00:00");
+    const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const onDay = cachedEvents.filter((e) => (e.when ?? "").includes(md));
+    return (onDay.length >= 3 ? onDay : cachedEvents).slice(0, 12);
+  }
+
+  return cachedEvents.slice(0, 12);
 }
