@@ -140,7 +140,7 @@ function matchesRequest(p: Place, requests: string[]): boolean {
     .toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).map(stem);
   return requests.some(term =>
     term.toLowerCase().split(/\s+/).map(stem).filter(w => w.length >= 3).some(w =>
-      tokens.some(t => t.length >= 3 && (t.startsWith(w) || w.startsWith(t))),
+      tokens.some(t => t === w),
     ),
   );
 }

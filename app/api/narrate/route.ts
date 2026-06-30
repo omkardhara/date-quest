@@ -30,8 +30,11 @@ export async function POST(req: NextRequest) {
       stops: blocks.map((b) => ({ id: b.id, name: b.title, summary: b.summary, category: b.category, tags: b.tags })),
     });
 
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 10000);
     const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
+      signal: ctrl.signal,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
@@ -44,6 +47,7 @@ export async function POST(req: NextRequest) {
       }),
     });
 
+    clearTimeout(t);
     if (!r.ok) return NextResponse.json({ ok: false, reason: `groq-${r.status}` });
     const data = await r.json();
     const text = data?.choices?.[0]?.message?.content ?? "{}";

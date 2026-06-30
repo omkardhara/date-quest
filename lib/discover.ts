@@ -11,6 +11,10 @@ const ZONE_AREA: Record<string, string> = {
   andheri_w: "Andheri West, Mumbai",
   borivali:  "Borivali, Mumbai",
   thane:     "Thane West",
+  vasai:     "Vasai, Maharashtra",
+  karjat:    "Karjat, Maharashtra",
+  kolad:     "Kolad, Raigad, Maharashtra",
+  gorai:     "Gorai, Borivali West, Mumbai",
 };
 
 const PRICE: Record<string, number> = {
