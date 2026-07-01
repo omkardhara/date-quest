@@ -380,7 +380,7 @@ export default function Page() {
                   className="w-full rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm text-white outline-none focus:border-glow"
                 />
                 {outingDate === PROFILE.birthday && (
-                  <p className="mt-1.5 text-xs text-amber-200/60">🎂 Her birthday</p>
+                  <p className="mt-1.5 text-xs text-amber-200/60">🎂 Your birthday</p>
                 )}
               </div>
               <p className="mt-5 text-sm text-white/50">Start</p>
