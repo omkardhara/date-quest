@@ -48,7 +48,7 @@ function catFromTypes(types: string[] = []): Category {
 // Pick a realistic bestTime for a live place so the time-band gate works properly.
 function bestTimeFor(category: Category): import("./types").TimeBand {
   if (category === "cafe") return "morning";
-  if (category === "food") return "any";
+  if (category === "food") return "afternoon"; // prevents live restaurants showing up at 8am
   if (category === "dessert") return "afternoon";
   if (category === "activity") return "afternoon"; // prevents dawn suggestions (water parks at 6am etc.)
   return "afternoon"; // experience, shopping

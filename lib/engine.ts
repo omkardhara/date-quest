@@ -267,7 +267,11 @@ function pick(
   const top = ranked[0].v;
   const contenders = ranked.filter(r => r.v >= top - 6).slice(0, 6).map(r => r.p);
   const best = weightedPick(contenders);
-  const alts = ranked.map(r => r.p).filter(p => p.id !== best.id).slice(0, 3);
+  // Prefer same-zone alternatives so swapping a card doesn't break route geography.
+  const bestZone = best.zone ?? "multiple";
+  const allAlts  = ranked.map(r => r.p).filter(p => p.id !== best.id);
+  const sameZone = allAlts.filter(p => (p.zone ?? "multiple") === bestZone).slice(0, 3);
+  const alts = sameZone.length >= 1 ? sameZone : allAlts.slice(0, 3);
   return { place: best, zone: (best.zone ?? "multiple") as Zone, alts };
 }
 

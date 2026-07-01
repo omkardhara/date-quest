@@ -31,10 +31,23 @@ const SERP_CATEGORIES: { q: string; category: EventCategory }[] = [
   { q: "film screenings cinema events Mumbai", category: "film" },
 ];
 
+// Best-effort parse of SerpAPI "when" strings like "Thursday, Jul 10, 8:30 PM"
+// into an ISO date string so the ±1 day filter works without guessing format.
+function parseWhenIso(when?: string): string | undefined {
+  if (!when) return undefined;
+  const m = when.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\.?\s+(\d{1,2})/i);
+  if (!m) return undefined;
+  const year = new Date().getFullYear();
+  const d = new Date(`${m[1]} ${m[2]} ${year}`);
+  if (isNaN(d.getTime())) return undefined;
+  // If the date is more than 60 days in the past, assume next year.
+  if (d.getTime() < Date.now() - 60 * 24 * 3600 * 1000) d.setFullYear(year + 1);
+  return d.toISOString();
+}
+
 async function fetchSerpCategory(
   q: string,
   category: EventCategory,
-  dateISO?: string
 ): Promise<PlanEvent[]> {
   if (!KEY) return [];
   try {
@@ -44,16 +57,19 @@ async function fetchSerpCategory(
     const data = await r.json().catch(() => ({} as any));
     if (data?.error) return [];
 
-    let items = (data?.events_results ?? []).map((e: any): PlanEvent => {
+    const items: PlanEvent[] = (data?.events_results ?? []).map((e: any): PlanEvent => {
       const priceMatch = (e.description ?? "").match(/₹\s*(\d[\d,]*)/);
       const price = priceMatch ? parseInt(priceMatch[1].replace(/,/g, ""), 10) : undefined;
+      const when = e.date?.when ?? e.date?.start_date;
       return {
         title: e.title,
-        when: e.date?.when ?? e.date?.start_date,
+        when,
+        startIso: parseWhenIso(when),
         venue: e.venue?.name ?? (Array.isArray(e.address) ? e.address[0] : undefined),
         address: Array.isArray(e.address) ? e.address.join(", ") : e.address,
         link: e.link,
-        thumbnail: e.thumbnail,
+        // Strip attendee-profile thumbnails (allevents CDN pattern for attendee photos).
+        thumbnail: e.thumbnail && !String(e.thumbnail).includes("attendeethumb") ? e.thumbnail : undefined,
         price,
         priceLabel: price != null ? (price === 0 ? "Free" : `₹${price} onwards`) : undefined,
         category,
@@ -61,30 +77,17 @@ async function fetchSerpCategory(
       };
     }).filter((e: PlanEvent) => e.title);
 
-    // When a date is given, only return events that match — never fall back to all events.
-    if (dateISO) {
-      const d = new Date(dateISO + "T00:00:00");
-      const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      items = items.filter((it: PlanEvent) => (it.when ?? "").includes(md));
-    }
-
-    // Strip attendee-profile thumbnails (allevents CDN pattern for attendee photos).
-    items = items.map((it: PlanEvent) => ({
-      ...it,
-      thumbnail: it.thumbnail && !it.thumbnail.includes("attendeethumb") ? it.thumbnail : undefined,
-    }));
-
-    return items.slice(0, 5);
+    return items.slice(0, 8);
   } catch (e) {
     console.warn("[events] SerpAPI error:", e);
     return [];
   }
 }
 
-async function searchSerpAll(dateISO?: string): Promise<PlanEvent[]> {
+async function searchSerpAll(): Promise<PlanEvent[]> {
   const results = await Promise.allSettled(
     SERP_CATEGORIES.map(({ q, category }) =>
-      fetchSerpCategory(q, category, dateISO)
+      fetchSerpCategory(q, category)
     )
   );
   return results
@@ -107,13 +110,11 @@ function loadFileCache(): PlanEvent[] {
     const cachePath = join(process.cwd(), "data", "events-cache.json");
     const raw = readFileSync(cachePath, "utf-8");
     const cache = JSON.parse(raw) as { fetchedAt: string; events: PlanEvent[] };
-    const age = Date.now() - new Date(cache.fetchedAt).getTime();
-    const stale = age > 48 * 60 * 60 * 1000; // >48h old
-    if (!stale && Array.isArray(cache.events) && cache.events.length > 0) {
+    if (Array.isArray(cache.events) && cache.events.length > 0) {
+      const age = Date.now() - new Date(cache.fetchedAt).getTime();
       console.log(`[events] file cache: ${cache.events.length} events (${Math.round(age / 3600000)}h old)`);
       return cache.events;
     }
-    console.log(`[events] file cache stale or empty (age=${Math.round(age / 3600000)}h, count=${cache.events?.length ?? 0})`);
   } catch (e) {
     console.warn("[events] file cache read failed:", (e as Error).message);
   }
@@ -129,15 +130,14 @@ export async function searchEvents(
   if (!cachedEvents || now - cacheTime > CACHE_TTL_MS) {
     const fileEvents = loadFileCache();
     const [serpResult, liveResult] = await Promise.allSettled([
-      searchSerpAll(dateISO),
+      searchSerpAll(),
       scrapeAllEvents(),
     ]);
-    const serp   = serpResult.status  === "fulfilled" ? serpResult.value  : [];
+    const serp    = serpResult.status  === "fulfilled" ? serpResult.value  : [];
     const scraped = liveResult.status === "fulfilled" ? liveResult.value : [];
 
-    // Merge: serp first (date-aware, has concrete dates), then file cache (undated
-    // but rich), then live scrape. Dedup by title so the serp version wins when
-    // the same event appears in both serp and file cache.
+    // Merge: serp first (date-parsed, most reliable), then live scrape, then file cache.
+    // Dedup by title so the serp version wins when the same event appears in multiple sources.
     cachedEvents = dedup([...serp, ...scraped, ...fileEvents]);
     cacheTime = now;
     console.log(
@@ -150,19 +150,26 @@ export async function searchEvents(
     const dayMs    = 24 * 60 * 60 * 1000;
     const md       = new Date(dateISO + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
-    // Events that are explicitly on or within ±1 day of the outing date.
+    // Events explicitly on or within ±1 day of the outing date.
     const onDay = cachedEvents.filter((e) => {
       if (e.startIso) {
         const evMs = new Date(e.startIso).getTime();
         return Math.abs(evMs - outingMs) <= dayMs;
       }
-      // Fall back to string match on 'when' field — only match the exact date string.
       return (e.when ?? "").includes(md);
     });
 
-    // Never show undated events — they may be months away and would appear misleading.
-    const combined = dedup([...onDay]);
-    return combined.slice(0, 12);
+    if (onDay.length >= 2) return dedup(onDay).slice(0, 12);
+
+    // Fallback: show upcoming events within 30 days so the section isn't blank
+    // when no events land exactly on the outing date.
+    const upcoming = cachedEvents.filter((e) => {
+      if (!e.startIso) return false;
+      const evMs = new Date(e.startIso).getTime();
+      return evMs >= outingMs - dayMs && evMs <= outingMs + 30 * dayMs;
+    });
+
+    return dedup([...onDay, ...upcoming]).slice(0, 12);
   }
 
   return cachedEvents.slice(0, 12);

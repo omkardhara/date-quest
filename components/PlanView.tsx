@@ -219,9 +219,12 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
           const homeUrl   = lastShown
             ? buildDirectionsUrl(lastShown.title, homeArea, "Home", "Marol, Andheri East")
             : plan.returnTravel.directionsUrl;
+          const homeMins  = lastShown?.zone
+            ? approxTravelMins(lastShown.zone, "home")
+            : plan.returnTravel.mins;
           return (
             <>
-              <TravelSegment mins={plan.returnTravel.mins} fromLabel={homeLabel} directionsUrl={homeUrl} />
+              <TravelSegment mins={homeMins} fromLabel={homeLabel} directionsUrl={homeUrl} />
               <div className="mb-2 flex items-center gap-2 pl-1 text-sm text-white/50">
                 <div className="absolute -left-[18px] h-3 w-3 rounded-full border-2 border-white/30" />
                 🏠 Home · Marol, Andheri East
