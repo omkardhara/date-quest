@@ -306,6 +306,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   let runningCost    = 0;
   let lastMealEnd    = 0; // end time of the last full meal (food/cafe), for spacing
   const usedCuisines = new Set<string>(); // avoid repeating a cuisine across the day
+  const mealCuisines = new Set<string>(); // cuisines from food picks only (lunch / dinner dedup)
   const monsoon      = wet(ans);
   const end          = ans.endMin;
   const dayMins      = end - ans.startMin;
@@ -364,6 +365,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     cursor       = arrivalMin + dur;
     if (isFullMeal) lastMealEnd = cursor;
     (p.cuisines ?? []).forEach(c => usedCuisines.add(c));
+    if (kind === "food") (p.cuisines ?? []).forEach(c => mealCuisines.add(c));
     // Mark any request this place satisfies as done — won't boost further picks.
     for (let i = pendingRequests.length - 1; i >= 0; i--) {
       if (matchesRequest(p, [pendingRequests[i]])) pendingRequests.splice(i, 1);
@@ -384,6 +386,14 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   const b                = () => bandFor(cursor);
   const pendingRequests  = [...(ans.mustInclude ?? [])];
 
+  // Cuisine filter for food picks: strip cuisines already served at a meal today
+  // so lunch and dinner never repeat the same type (sizzler at lunch → dinner gets something else).
+  const freshFoodFilter = (base?: string[]) => {
+    if (!base?.length || !mealCuisines.size) return base;
+    const f = base.filter(c => !mealCuisines.has(c));
+    return f.length > 0 ? f : base; // if every preference was already served, allow repeats
+  };
+
   // Morning activity + café (early starts only).
   // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
   if (ans.startMin < 660) {
@@ -397,7 +407,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   if (cursor < 960 && end > 780) {
     const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
     const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.35));
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, ans.foods, recentEnvs), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs), "food");
   }
 
   // Afternoon / first-half experience or shopping.
@@ -446,7 +456,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
 
   // Dinner
   if (end > 1140) {
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs), "food");
   }
 
   // Dessert

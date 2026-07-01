@@ -815,7 +815,7 @@
     "budgetLevel": 2,
     "costPerPerson": 900,
     "durationMins": 80,
-    "bestTime": "night",
+    "bestTime": "evening",
     "indoor": true,
     "outdoor": false,
     "monsoonRisk": "ok",
