@@ -120,7 +120,7 @@ function timeAllowed(p: Place, atMin: number): boolean {
     case "morning":   return atMin < 780;                  // before 1 pm
     case "afternoon": return atMin >= 660 && atMin < 1140; // 11 am – 7 pm
     case "evening":   return atMin >= 900;                 // after 3 pm
-    case "night":     return atMin >= 1080;                // after 6 pm
+    case "night":     return atMin >= 1020;                // after 5 pm (dinner window)
     default:          return true;
   }
 }
