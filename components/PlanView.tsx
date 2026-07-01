@@ -7,6 +7,12 @@ import { Memories } from "./Memories";
 
 interface Media { photo?: string | null; map?: string | null; rating?: number; userRatings?: number; address?: string; }
 
+function buildDirectionsUrl(fromName: string, fromArea: string, toName: string, toArea: string): string {
+  const origin = encodeURIComponent(`${fromName}, ${fromArea}, Mumbai`);
+  const dest   = encodeURIComponent(`${toName}, ${toArea}, Mumbai`);
+  return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=driving`;
+}
+
 // Fetches a real venue photo + mini-map, via our key-safe API proxy.
 function useMedia(name: string | null, area: string | null): Media | null {
   const [media, setMedia] = useState<Media | null>(null);
@@ -125,7 +131,7 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
       {/* Live events happening around the day */}
       {plan.events && plan.events.length > 0 && (
         <div className="mt-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <p className="text-xs font-medium text-glow">🎉 Happening around her day</p>
+          <p className="text-xs font-medium text-glow">🎉 Happening around your day</p>
           <p className="mt-0.5 mb-2 text-xs text-white/40">Real events on or near the date. Tap to check, and slot one in if it fits.</p>
           <div className="space-y-2">
             {plan.events.map((e, i) => (
@@ -164,14 +170,43 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
 
       <div className="relative mt-8 pl-6">
         <div className="timeline-line absolute left-1.5 top-2 bottom-2 w-0.5 rounded-full" />
-        {plan.blocks.map((b, i) => (
-          <div key={i}>
-            {b.travelFromPrev && (
-              <TravelSegment mins={b.travelFromPrev.mins} fromLabel={b.travelFromPrev.fromLabel} directionsUrl={b.travelFromPrev.directionsUrl} />
-            )}
-            <Block b={b} i={i} shown={shownFor(b, i)} swapped={(swaps[i] ?? 0) > 0} onSwap={() => cycle(i, b.alternatives)} />
-          </div>
-        ))}
+        {plan.blocks.map((b, i) => {
+          const currentShown = shownFor(b, i);
+          const prevShown = i > 0 ? shownFor(plan.blocks[i - 1], i - 1) : null;
+          // Recalculate from-label and directions URL live so swaps update them.
+          const fromLabel = prevShown ? prevShown.title : b.travelFromPrev?.fromLabel ?? "";
+          const fromArea  = prevShown?.area ?? "";
+          const dirUrl    = b.travelFromPrev
+            ? buildDirectionsUrl(fromLabel, fromArea, currentShown.title, currentShown.area ?? "")
+            : "";
+          return (
+            <div key={i}>
+              {b.travelFromPrev && (
+                <TravelSegment mins={b.travelFromPrev.mins} fromLabel={fromLabel} directionsUrl={dirUrl} />
+              )}
+              <Block b={b} i={i} shown={currentShown} swapped={(swaps[i] ?? 0) > 0} onSwap={() => cycle(i, b.alternatives)} />
+            </div>
+          );
+        })}
+        {/* Return home */}
+        {plan.returnTravel && (() => {
+          const lastBlock = plan.blocks[plan.blocks.length - 1];
+          const lastShown = lastBlock ? shownFor(lastBlock, plan.blocks.length - 1) : null;
+          const homeLabel = lastShown ? lastShown.title : plan.returnTravel.fromLabel;
+          const homeArea  = lastShown?.area ?? "";
+          const homeUrl   = lastShown
+            ? buildDirectionsUrl(lastShown.title, homeArea, "Home", "Marol, Andheri East")
+            : plan.returnTravel.directionsUrl;
+          return (
+            <>
+              <TravelSegment mins={plan.returnTravel.mins} fromLabel={homeLabel} directionsUrl={homeUrl} />
+              <div className="mb-2 flex items-center gap-2 pl-1 text-sm text-white/50">
+                <div className="absolute -left-[18px] h-3 w-3 rounded-full border-2 border-white/30" />
+                🏠 Home · Marol, Andheri East
+              </div>
+            </>
+          );
+        })()}
       </div>
 
       <div className="mt-10">

@@ -143,12 +143,23 @@ export async function searchEvents(
   }
 
   if (dateISO) {
-    const d = new Date(dateISO + "T00:00:00");
-    const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    // Prefer events with an explicit date on the outing day; pad with undated
-    // file-cache events (good "upcoming events" suggestions even without a date).
-    const onDay   = cachedEvents.filter((e) => (e.when ?? "").includes(md));
-    const undated = cachedEvents.filter((e) => !e.when);
+    const outingMs = new Date(dateISO + "T00:00:00").getTime();
+    const dayMs    = 24 * 60 * 60 * 1000;
+    const md       = new Date(dateISO + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+    // Events that are explicitly on or within ±1 day of the outing date.
+    const onDay = cachedEvents.filter((e) => {
+      if (e.startIso) {
+        const evMs = new Date(e.startIso).getTime();
+        return Math.abs(evMs - outingMs) <= dayMs;
+      }
+      // Fall back to string match on 'when' field — only match the exact date string.
+      return (e.when ?? "").includes(md);
+    });
+
+    // Events with no date info at all — safe to show as "upcoming" context.
+    const undated = cachedEvents.filter((e) => !e.when && !e.startIso);
+
     const combined = dedup([...onDay, ...undated]);
     return combined.slice(0, 12);
   }

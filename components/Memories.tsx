@@ -34,7 +34,7 @@ export function Memories({ items = DEFAULT, title }: { items?: Memory[]; title?:
   return (
     <div>
       {title && <p className="mb-2 text-center text-xs uppercase tracking-wider text-white/40">{title}</p>}
-      <div className="flex gap-3 overflow-x-auto pb-2 px-1 justify-start sm:justify-center">
+      <div className="flex gap-3 overflow-x-auto pb-2 px-4 justify-start sm:justify-center">
         {items.map((m, i) => <Polaroid key={i} m={m} tilt={TILT[i % TILT.length]} />)}
       </div>
     </div>

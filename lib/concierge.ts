@@ -32,18 +32,18 @@ export function outfitFor(places: Place[], isMonsoon: boolean, month?: number): 
 
   if (hasFancy) {
     parts.push(isMonsoon
-      ? "a breezy co-ord or flowy dress in a print she loves — something that handles July humidity with grace and still looks great in a candlelit room"
-      : "smart-casual she genuinely feels like the queen in — something that photographs naturally, not forced");
+      ? "a breezy co-ord or flowy dress in a print you love — something that handles July humidity with grace and still looks great in a candlelit room"
+      : "smart-casual you genuinely feel like the queen in — something that photographs naturally, not forced");
   } else {
     parts.push(isMonsoon
-      ? "comfortable separates she can move in — a light kurta or a casual dress she isn't precious about getting slightly damp"
-      : "something effortless she'd pick herself on a free day");
+      ? "comfortable separates you can move in — a light kurta or a casual dress you aren't precious about getting slightly damp"
+      : "something effortless you'd pick yourself on a free day");
   }
 
-  if (hasSpa) parts.push("she'll change at the spa, so comfortable separates that are easy to slip off and back on");
-  if (lotsWalking || hasOutdoor) parts.push("block heels or ballet flats she can walk in for hours — not the ones that look great but hurt by noon");
-  if (hasTemple) parts.push("covered shoulders and knees for the temple stop — a dupatta or light jacket in the bag works fine");
-  if (isMonsoon) parts.push("quick-dry fabrics only, nothing silk or suede; a compact fold-up umbrella tucked in her bag");
+  if (hasSpa) parts.push("you'll change at the spa, so comfortable separates that are easy to slip off and back on");
+  if (lotsWalking || hasOutdoor) parts.push("block heels or ballet flats you can walk in for hours — not the ones that look great but hurt by noon");
+  if (hasTemple) parts.push("covered shoulders and knees for the temple stop — a dupatta or light jacket in your bag works fine");
+  if (isMonsoon) parts.push("quick-dry fabrics only, nothing silk or suede; a compact fold-up umbrella tucked in your bag");
   else {
     const m = month ?? 10;
     if (m === 11 || m <= 1) parts.push("light layers — evenings can get pleasantly cool this time of year");
@@ -79,7 +79,7 @@ export function buildFlags(blocks: PlanBlock[], ans: Answers, isWet: boolean, ve
   const toBook = blocks.filter(b => b.place?.mustBook).map(b => b.title);
   if (toBook.length) flags.push({ icon: "📅", text: `Book a day ahead: ${toBook.join(", ")}.` });
 
-  if (vegDay) flags.push({ icon: "🥬", text: "It's one of her veg days (Mon/Thu/Sat), so every food stop here is vegetarian." });
+  if (vegDay) flags.push({ icon: "🥬", text: "It's one of your veg days (Mon/Thu/Sat), so every food stop here is vegetarian." });
 
   if (blocks.some(b => (b.place?.tags ?? []).includes("temple")))
     flags.push({ icon: "🛕", text: "There's a temple stop: dress modestly and carry socks (shoes come off)." });

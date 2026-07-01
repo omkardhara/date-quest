@@ -91,6 +91,7 @@ export type EventCategory = "music" | "comedy" | "theatre" | "art" | "food" | "f
 export interface PlanEvent {
   title: string;
   when?: string;
+  startIso?: string;       // ISO date string from scraper — used for ±1 day date filtering
   venue?: string;
   address?: string;
   link?: string;
@@ -137,4 +138,5 @@ export interface Plan {
   weatherNote?: string;   // season/weather framing
   events?: PlanEvent[];   // live events happening around the outing date
   outingDate?: string;    // ISO "YYYY-MM-DD" for the planned day
+  returnTravel?: TravelFromPrev; // travel segment back home after last stop
 }

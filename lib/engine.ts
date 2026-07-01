@@ -247,7 +247,11 @@ function pick(
 
   const rank = (p: Place) => {
     const z = (p.zone ?? "multiple") as Zone;
-    let v = score(p, ans, band, remainingBudget) - travelMins(currentZone, z, atMin) / 15;
+    const tripCost = travelMins(currentZone, z, atMin);
+    // Strong geographic penalty: /8 makes long trips (55+ min) very costly vs short ones (10-20 min).
+    let v = score(p, ans, band, remainingBudget) - tripCost / 8;
+    // Same-zone bonus: actively reward staying nearby.
+    if (z !== "multiple" && z === currentZone) v += 6;
     if (overlap(p.cuisines ?? [], Array.from(usedCuisines)) > 0) v -= 6; // don't repeat a cuisine
     if (pendingRequests.length && matchesRequest(p, pendingRequests)) v += 25; // boost only until satisfied
     // Soft diversity: penalise repeating the same environment in consecutive picks.
@@ -346,7 +350,8 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
       cost:           blockCost,
       travelFromPrev: blocks.length === 0 && tripMins <= 10 ? undefined : travel,
       backup:         backupFor(p),
-      restroom:       restroomFor(zone),
+      // Only suggest a restroom for outdoor/open-air stops — restaurants and indoor venues have their own.
+      restroom:       (p.indoor || ["food", "cafe", "dessert"].includes(p.category)) ? undefined : restroomFor(zone),
       alternatives:   (result.alts ?? []).map(toAlt),
       kind,
     });
@@ -461,6 +466,17 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
 
   const requests = (ans.mustInclude ?? []).map(s => s.trim()).filter(Boolean);
 
+  // Return-home travel segment — always show how long it takes to get back.
+  let returnTravel: Plan["returnTravel"];
+  if (blocks.length > 0) {
+    const homeMins = travelMins(currentZone, "home", cursor);
+    returnTravel = {
+      mins: homeMins,
+      fromLabel: prevName,
+      directionsUrl: directionsUrl(prevName, prevArea, `Home (${PROFILE.homeArea})`, PROFILE.homeArea),
+    };
+  }
+
   const placesInPlan = blocks.filter(x => x.place).map(x => x.place!);
   const totalCost = blocks.reduce((s, x) => s + x.cost, 0);
   const plan: Plan = {
@@ -477,6 +493,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     weatherNote: ans.weatherSummary
       ? `Forecast for the day: ${ans.weatherSummary}.`
       : (monsoon ? "Planned for monsoon: indoor-leaning, with rain backups." : undefined),
+    returnTravel,
   };
 
   return plan;
