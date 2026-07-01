@@ -185,6 +185,15 @@ function blocked(p: Place, ans: Answers): boolean {
   return false;
 }
 
+// Detect religious/spiritual places (temples, ashrams, mosques, churches etc.)
+// so we can hard-block a second one after the first is picked.
+function isSpiritual(p: Place): boolean {
+  const name = p.name.toLowerCase();
+  const tags = p.tags ?? [];
+  return tags.includes("spiritual") ||
+    ["temple","mandir","ashram","mosque","church","gurudwara","dargah","iskcon","vitthal","sadbhakti"].some(w => name.includes(w));
+}
+
 // Classify a place into a broad environment bucket for diversity scoring.
 function environment(p: Place): string {
   const name = p.name.toLowerCase();
@@ -195,8 +204,8 @@ function environment(p: Place): string {
   if (tags.some(t => ["garden","park","forest","nature","trek"].includes(t)) ||
       ["garden","park","colony","forest","hill","trail","nature"].some(w => name.includes(w)))
     return "park";
-  if (tags.some(t => ["heritage","architecture","walk","historic","fort"].includes(t)) ||
-      ["heritage","walk","fort","temple","basilica","dargah","tank"].some(w => name.includes(w)))
+  if (tags.some(t => ["heritage","architecture","walk","historic","fort","spiritual"].includes(t)) ||
+      ["heritage","walk","fort","temple","basilica","dargah","tank","mandir","ashram","mosque","church","gurudwara"].some(w => name.includes(w)))
     return "heritage";
   if (tags.some(t => ["shopping","browse","market","fashion","bazaar","street food"].includes(t)) ||
       p.category === "shopping")
@@ -213,6 +222,7 @@ function pick(
   pendingRequests: string[] = [],
   cuisineFilter?: string[],
   recentEnvs: string[] = [],
+  spiritualUsed = false,
 ): { place: Place; zone: Zone; alts: Place[] } | undefined {
   const base = pool.filter(p =>
     cats.includes(p.category) &&
@@ -220,7 +230,8 @@ function pick(
     !blocked(p, ans) &&
     timeAllowed(p, atMin) &&
     p.costPerPerson * 2 <= remainingBudget &&
-    (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple"),
+    (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple") &&
+    !(spiritualUsed && isSpiritual(p)),
   );
 
   // mustInclude escape hatch: if none of the corridor-filtered candidates match a
@@ -254,10 +265,14 @@ function pick(
     if (z !== "multiple" && z === currentZone) v += 6;
     if (overlap(p.cuisines ?? [], Array.from(usedCuisines)) > 0) v -= 6; // don't repeat a cuisine
     if (pendingRequests.length && matchesRequest(p, pendingRequests)) v += 25; // boost only until satisfied
-    // Soft diversity: penalise repeating the same environment in consecutive picks.
+    // Diversity: penalise repeating the same environment type across the whole day,
+    // not just consecutive picks. This prevents two temples, two parks, two beaches etc.
     const env = environment(p);
-    if (env !== "food" && recentEnvs.length > 0 && recentEnvs[recentEnvs.length - 1] === env) v -= 5;
-    if (env !== "food" && recentEnvs.length > 1 && recentEnvs[recentEnvs.length - 2] === env) v -= 3;
+    if (env !== "food" && recentEnvs.includes(env)) {
+      const lastIdx = recentEnvs.lastIndexOf(env);
+      const distFromEnd = recentEnvs.length - 1 - lastIdx;
+      v -= Math.max(4, 14 - distFromEnd * 2); // -14 recent, sliding to -4 for old picks
+    }
     return v;
   };
 
@@ -265,7 +280,7 @@ function pick(
   // Pick from the close contenders, not always #1, so re-runs vary and the live
   // pool actually surfaces. A clear winner (e.g. a requested stop) still wins.
   const top = ranked[0].v;
-  const contenders = ranked.filter(r => r.v >= top - 6).slice(0, 6).map(r => r.p);
+  const contenders = ranked.filter(r => r.v >= top - 4).slice(0, 4).map(r => r.p);
   const best = weightedPick(contenders);
   // Prefer same-zone alternatives so swapping a card doesn't break route geography.
   const bestZone = best.zone ?? "multiple";
@@ -305,9 +320,10 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   let prevArea       = PROFILE.homeArea;
   let runningCost    = 0;
   let lastMealEnd    = 0; // end time of the last full meal (food/cafe), for spacing
-  const usedCuisines = new Set<string>(); // avoid repeating a cuisine across the day
-  const mealCuisines = new Set<string>(); // cuisines from food picks only (lunch / dinner dedup)
-  const monsoon      = wet(ans);
+  const usedCuisines  = new Set<string>(); // avoid repeating a cuisine across the day
+  const mealCuisines  = new Set<string>(); // cuisines from food picks only (lunch / dinner dedup)
+  let   spiritualUsed = false;             // hard-block second temple/ashram/mosque in same plan
+  const monsoon       = wet(ans);
   const end          = ans.endMin;
   const dayMins      = end - ans.startMin;
   const vegDay       = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
@@ -366,6 +382,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     if (isFullMeal) lastMealEnd = cursor;
     (p.cuisines ?? []).forEach(c => usedCuisines.add(c));
     if (kind === "food") (p.cuisines ?? []).forEach(c => mealCuisines.add(c));
+    if (isSpiritual(p)) spiritualUsed = true;
     // Mark any request this place satisfies as done — won't boost further picks.
     for (let i = pendingRequests.length - 1; i >= 0; i--) {
       if (matchesRequest(p, [pendingRequests[i]])) pendingRequests.splice(i, 1);
@@ -375,7 +392,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     // Track environment for consecutive-diversity penalty (food slots vary naturally, skip them)
     if (!FULL_MEALS.includes(p.category) && p.category !== "rest") {
       recentEnvs.push(environment(p));
-      if (recentEnvs.length > 2) recentEnvs.shift();
+      if (recentEnvs.length > 8) recentEnvs.shift(); // keep a full-day history for diversity scoring
     }
     prevName = p.name;
     prevArea = p.area;
@@ -397,9 +414,9 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   // Morning activity + café (early starts only).
   // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
   if (ans.startMin < 660) {
-    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
     const cafeBudget = Math.min(remaining(), Math.max(800, Math.round(ans.budget * 0.20)));
-    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "cafe");
+    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "cafe");
   }
 
   // Lunch — reserve 35% of budget for post-lunch slots on the first food stop of the day,
@@ -407,7 +424,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   if (cursor < 960 && end > 780) {
     const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
     const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.35));
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
   }
 
   // Afternoon / first-half experience or shopping.
@@ -418,13 +435,13 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     const afternoonBudget = firstStop
       ? Math.max(0, remaining() - Math.floor(ans.budget * 0.35))
       : remaining();
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, afternoonBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, afternoonBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Second afternoon slot: fills the pre-evening gap on long days (noon–midnight, 4pm–midnight).
   // No "cafe" here — morning cafés score high but fail meal spacing and cascade-block the slot.
   if (end - ans.startMin >= 360 && cursor < 1080 && end > 960) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs), "activity");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
   }
 
   // Extra afternoon slot for very long days (6am–midnight etc.) — bridges the gap between
@@ -435,7 +452,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     const extraBudget = end > 1140
       ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
       : remaining();
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, extraBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, extraBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Mid-day rest — only if near home, long day, meaningful budget still left, and plan has content.
@@ -446,22 +463,23 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   }
 
   // Evening activity / shopping — no cafe here (morning cafés always fail meal spacing at this hour)
-  if (end > 1080) {
+  // Skip if dinner will fire and there's not enough room for both (~180 min: activity + travel + dinner).
+  if (end > 1080 && !(end > 1140 && (end - cursor) < 180)) {
     // Hold back dinner budget so an expensive evening activity can't crowd out food.
     const eveningBudget = end > 1140
       ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
       : remaining();
-    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, eveningBudget, usedCuisines, pendingRequests, undefined, recentEnvs), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, eveningBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
   }
 
   // Dinner
   if (end > 1140) {
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
   }
 
   // Dessert
   if (end - cursor > 35) {
-    add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs), "dessert");
+    add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs, spiritualUsed), "dessert");
   }
 
   // Strip alternatives that ended up as the main block elsewhere in the plan.

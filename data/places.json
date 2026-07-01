@@ -457,7 +457,7 @@
     "budgetLevel": 1,
     "costPerPerson": 0,
     "durationMins": 60,
-    "bestTime": "any",
+    "bestTime": "afternoon",
     "indoor": false,
     "outdoor": true,
     "monsoonRisk": "caution",
@@ -1878,7 +1878,7 @@
     "budgetLevel": 1,
     "costPerPerson": 0,
     "durationMins": 60,
-    "bestTime": "any",
+    "bestTime": "afternoon",
     "indoor": false,
     "outdoor": true,
     "monsoonRisk": "caution",
@@ -1918,7 +1918,7 @@
     "budgetLevel": 1,
     "costPerPerson": 0,
     "durationMins": 45,
-    "bestTime": "any",
+    "bestTime": "afternoon",
     "indoor": false,
     "outdoor": true,
     "monsoonRisk": "caution",
@@ -2214,7 +2214,7 @@
     "budgetLevel": 1,
     "costPerPerson": 0,
     "durationMins": 45,
-    "bestTime": "any",
+    "bestTime": "afternoon",
     "indoor": false,
     "outdoor": true,
     "monsoonRisk": "caution",
@@ -2343,7 +2343,6 @@
     "summary": "Mumbai's most beloved beach: street food, the wide bay, and the city receding behind you.",
     "veg": true,
     "tags": [
-      "sunset",
       "instagrammable",
       "picnic"
     ],
@@ -2466,7 +2465,6 @@
     "tags": [
       "nature",
       "lowcrowd",
-      "sunset",
       "picnic"
     ]
   },
@@ -4976,7 +4974,7 @@
     "budgetLevel": 1,
     "costPerPerson": 0,
     "durationMins": 45,
-    "bestTime": "any",
+    "bestTime": "afternoon",
     "indoor": false,
     "outdoor": true,
     "monsoonRisk": "caution",
