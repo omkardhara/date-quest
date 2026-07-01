@@ -411,48 +411,43 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     return f.length > 0 ? f : base; // if every preference was already served, allow repeats
   };
 
+  // How much to hold back from every non-food slot so dinner + dessert can land.
+  // 40% of budget covers a mid-range restaurant (₹2000 for 2); slides down on tight budgets.
+  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.40) : 0;
+  const actBudget = () => Math.max(0, remaining() - dinnerRes());
+
   // Morning activity + café (early starts only).
   // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
   if (ans.startMin < 660) {
-    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
     const cafeBudget = Math.min(remaining(), Math.max(800, Math.round(ans.budget * 0.20)));
     add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "cafe");
   }
 
-  // Lunch — reserve 35% of budget for post-lunch slots on the first food stop of the day,
+  // Lunch — reserve 40% of budget for post-lunch slots on the first food stop of the day,
   // so one expensive pick can't starve the rest of the plan.
   if (cursor < 960 && end > 780) {
     const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
-    const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.35));
+    const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.40));
     add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
   }
 
   // Afternoon / first-half experience or shopping.
-  // If this is the very first stop of the day (late starts skip opener + lunch), reserve 35%
-  // so one expensive activity can't exhaust the budget and starve dessert/dinner.
+  // Always reserve dinner budget so afternoon picks can't starve dinner.
   if (end > 840) {
-    const firstStop = blocks.length === 0;
-    const afternoonBudget = firstStop
-      ? Math.max(0, remaining() - Math.floor(ans.budget * 0.35))
-      : remaining();
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, afternoonBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Second afternoon slot: fills the pre-evening gap on long days (noon–midnight, 4pm–midnight).
   // No "cafe" here — morning cafés score high but fail meal spacing and cascade-block the slot.
   if (end - ans.startMin >= 360 && cursor < 1080 && end > 960) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
   }
 
   // Extra afternoon slot for very long days (6am–midnight etc.) — bridges the gap between
   // morning stops and the 6pm evening window, especially on tight budgets with free places.
   if (end - ans.startMin >= 720 && cursor < 1020 && end > 1080) {
-    // If dinner will still fire (end>1140), hold back enough to cover it so shopping/experience
-    // doesn't consume the entire remaining budget and leave nothing for food.
-    const extraBudget = end > 1140
-      ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
-      : remaining();
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, extraBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Mid-day rest — only if near home, long day, meaningful budget still left, and plan has content.
@@ -465,11 +460,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   // Evening activity / shopping — no cafe here (morning cafés always fail meal spacing at this hour)
   // Skip if dinner will fire and there's not enough room for both (~180 min: activity + travel + dinner).
   if (end > 1080 && !(end > 1140 && (end - cursor) < 180)) {
-    // Hold back dinner budget so an expensive evening activity can't crowd out food.
-    const eveningBudget = end > 1140
-      ? Math.max(0, remaining() - Math.max(600, Math.floor(ans.budget * 0.20)))
-      : remaining();
-    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, eveningBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
   }
 
   // Dinner
@@ -477,8 +468,8 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
   }
 
-  // Dessert
-  if (end - cursor > 35) {
+  // Dessert (20-min minimum to avoid a 5-minute dessert block)
+  if (end - cursor > 20) {
     add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs, spiritualUsed), "dessert");
   }
 

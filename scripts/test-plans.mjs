@@ -57,13 +57,13 @@ function dataChecks() {
   if (badZone.length) fail("zone:multiple + vague area", badZone.map(p => p.id).join(", "));
   else pass("no zone:multiple with vague area");
 
-  // 2. Sunset-tagged places must not be morning/any (afternoon, evening or night ok)
+  // 2. Sunset-tagged places must be evening or night only (afternoon = 11am is still too early)
   const badSunset = places.filter(p =>
     (p.name.toLowerCase().includes("sunset") || (p.tags ?? []).includes("sunset")) &&
-    ["morning", "any"].includes(p.bestTime)
+    !["evening", "night"].includes(p.bestTime)
   );
-  if (badSunset.length) fail("sunset place morning/any (will show at 7am)", badSunset.map(p => `${p.id}(${p.bestTime})`).join(", "));
-  else pass("all sunset places gated to afternoon or later");
+  if (badSunset.length) fail("sunset place not gated to evening/night (could show at 11am)", badSunset.map(p => `${p.id}(${p.bestTime})`).join(", "));
+  else pass("all sunset places gated to evening or night");
 
   // 3. Sunrise/morning-walk named places must be morning-only
   const badMorning = places.filter(p =>
