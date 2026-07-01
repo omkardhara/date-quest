@@ -13,6 +13,21 @@ function buildDirectionsUrl(fromName: string, fromArea: string, toName: string, 
   return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=driving`;
 }
 
+// Mirrors engine.ts TRAVEL_BASE for client-side swap recalculation.
+const TRAVEL_BASE_CLIENT: Record<string, number> = {
+  "andheri_w-bandra":   20, "andheri_w-borivali": 35, "andheri_w-central":  40,
+  "andheri_w-home":     20, "andheri_w-south":    55, "andheri_w-thane":    55,
+  "bandra-central":     30, "bandra-home":         35, "bandra-south":       35,
+  "bandra-thane":       65, "borivali-home":       60, "central-home":       40,
+  "central-south":      20, "central-thane":       50, "home-south":         60,
+  "home-thane":         45, "gorai-home":          75,
+};
+function approxTravelMins(fromZone: string, toZone: string): number {
+  if (fromZone === toZone) return 10;
+  const key = [fromZone, toZone].sort().join("-");
+  return TRAVEL_BASE_CLIENT[key] ?? 45;
+}
+
 // Fetches a real venue photo + mini-map, via our key-safe API proxy.
 function useMedia(name: string | null, area: string | null): Media | null {
   const [media, setMedia] = useState<Media | null>(null);
@@ -47,11 +62,11 @@ const CAT: Record<string, { label: string; cls: string }> = {
 };
 
 // What a card actually shows, after any swap is applied.
-export interface Shown { title: string; area?: string; blurb: string; cost: number; mapsUrl?: string; topDishes?: string[]; mustBook?: boolean; }
+export interface Shown { title: string; area?: string; zone?: string; blurb: string; cost: number; mapsUrl?: string; topDishes?: string[]; mustBook?: boolean; }
 
 // Non-swapped view of a block (used by the getaway view, which has no swapping).
 export function shownFromBlock(b: PlanBlock): Shown {
-  return { title: b.title, area: b.place?.area, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
+  return { title: b.title, area: b.place?.area, zone: b.place?.zone, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
 }
 
 export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; name: string; onRestart: () => void; onRegenerate?: () => void }) {
@@ -62,9 +77,9 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
     const idx = swaps[i] ?? 0;
     if (idx > 0 && b.alternatives?.[idx - 1]) {
       const a = b.alternatives[idx - 1];
-      return { title: a.name, area: a.area, blurb: a.summary, cost: a.cost, mapsUrl: a.mapsUrl, topDishes: a.topDishes, mustBook: a.mustBook };
+      return { title: a.name, area: a.area, zone: a.zone, blurb: a.summary, cost: a.cost, mapsUrl: a.mapsUrl, topDishes: a.topDishes, mustBook: a.mustBook };
     }
-    return { title: b.title, area: b.place?.area, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
+    return { title: b.title, area: b.place?.area, zone: b.place?.zone, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
   };
 
   const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
@@ -173,16 +188,23 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
         {plan.blocks.map((b, i) => {
           const currentShown = shownFor(b, i);
           const prevShown = i > 0 ? shownFor(plan.blocks[i - 1], i - 1) : null;
-          // Recalculate from-label and directions URL live so swaps update them.
           const fromLabel = prevShown ? prevShown.title : b.travelFromPrev?.fromLabel ?? "";
           const fromArea  = prevShown?.area ?? "";
           const dirUrl    = b.travelFromPrev
             ? buildDirectionsUrl(fromLabel, fromArea, currentShown.title, currentShown.area ?? "")
             : "";
+          // Recalculate travel mins when zones change due to a swap.
+          const travelMinsVal = (() => {
+            if (!b.travelFromPrev) return 0;
+            const prevZone = prevShown?.zone;
+            const curZone  = currentShown?.zone;
+            if (prevZone && curZone) return approxTravelMins(prevZone, curZone);
+            return b.travelFromPrev.mins;
+          })();
           return (
             <div key={i}>
               {b.travelFromPrev && (
-                <TravelSegment mins={b.travelFromPrev.mins} fromLabel={fromLabel} directionsUrl={dirUrl} />
+                <TravelSegment mins={travelMinsVal} fromLabel={fromLabel} directionsUrl={dirUrl} />
               )}
               <Block b={b} i={i} shown={currentShown} swapped={(swaps[i] ?? 0) > 0} onSwap={() => cycle(i, b.alternatives)} />
             </div>

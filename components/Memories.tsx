@@ -6,12 +6,12 @@ export interface Memory { src: string; cap: string; }
 const DEFAULT: Memory[] = [
   { src: "/memories/1.jpeg", cap: "Gili Islands 🤿" },
   { src: "/memories/2.jpeg", cap: "Sikkim ✨" },
-  { src: "/memories/3.jpeg", cap: "waterfall day 💚" },
+  { src: "/memories/3.jpeg", cap: "Bir waterfall 💚" },
   { src: "/memories/4.jpeg", cap: "Alibag fort ☀️" },
   { src: "/memories/5.jpeg", cap: "Muscat 🕌" },
 ];
 
-const TILT = [-3, 2, -2, 3, -1, 2];
+const TILT = [3, 2, -2, 3, -1, 2];
 
 function Polaroid({ m, tilt }: { m: Memory; tilt: number }) {
   const [broken, setBroken] = useState(false);

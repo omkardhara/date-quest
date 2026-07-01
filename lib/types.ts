@@ -74,6 +74,7 @@ export interface AltPlace {
   id: string;
   name: string;
   area: string;
+  zone?: string;
   summary: string;
   cost: number;
   mapsUrl: string;

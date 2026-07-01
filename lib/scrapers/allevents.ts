@@ -53,13 +53,15 @@ function parseJsonLd(html: string, category: EventCategory): PlanEvent[] {
         const start = ev.startDate ?? ev.startTime ?? "";
         const priceSpec = ev.offers?.lowPrice ?? ev.offers?.price;
         const price = priceSpec ? parseFloat(String(priceSpec)) : undefined;
+        const thumbnail = Array.isArray(ev.image) ? ev.image[0] : ev.image;
         results.push({
           title: ev.name,
           when: start ? formatDate(start) : undefined,
+          startIso: start ? new Date(start).toISOString() : undefined,
           venue: ev.location?.name,
           address: ev.location?.address?.streetAddress,
           link: ev.url,
-          thumbnail: Array.isArray(ev.image) ? ev.image[0] : ev.image,
+          thumbnail: thumbnail && !String(thumbnail).includes("attendeethumb") ? thumbnail : undefined,
           price: isNaN(price!) ? undefined : price,
           priceLabel: buildPriceLabel(ev.offers),
           category,

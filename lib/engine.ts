@@ -312,7 +312,7 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
   const recentEnvs:   string[] = []; // last 2 non-food environments for diversity scoring
 
   const toAlt = (p: Place): AltPlace => ({
-    id: p.id, name: p.name, area: p.area, summary: p.summary,
+    id: p.id, name: p.name, area: p.area, zone: p.zone, summary: p.summary,
     cost: p.costPerPerson * 2, mapsUrl: p.mapsUrl, topDishes: p.topDishes, mustBook: p.mustBook,
   });
 
@@ -328,9 +328,9 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
     const isFullMeal = FULL_MEALS.includes(p.category);
     if (isFullMeal && lastMealEnd > 0 && arrivalMin - lastMealEnd < 150) return;
 
-    // Budget: never exceed it (except the very first stop, so the plan is never empty).
+    // Budget: never add paid stops that exceed budget. Free stops (costPerPerson 0) always fit.
     const blockCost = p.costPerPerson * 2;
-    if (blocks.length > 0 && runningCost + blockCost > ans.budget) return;
+    if (blocks.length > 0 && blockCost > 0 && runningCost + blockCost > ans.budget) return;
 
     const dur = Math.min(p.durationMins, end - arrivalMin);
 

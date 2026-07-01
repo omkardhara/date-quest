@@ -30,7 +30,11 @@ const VIBES: Record<string, string[]> = {
   experience: ["culture"], activity: ["adventure"], shopping: ["shopper"],
 };
 
-function costFrom(pl?: string): number { return pl ? PRICE[pl] ?? 600 : 600; }
+const FREE_PLACE_TYPES = new Set(["place_of_worship","hindu_temple","mosque","church","buddhist_temple","jain_temple","synagogue","cemetery","park","national_park","nature_reserve"]);
+function costFrom(pl?: string, types: string[] = []): number {
+  if (types.some(t => FREE_PLACE_TYPES.has(t))) return 0;
+  return pl ? PRICE[pl] ?? 600 : 600;
+}
 function budgetLevelFrom(cost: number): 1 | 2 | 3 | 4 { return cost <= 300 ? 1 : cost <= 800 ? 2 : cost <= 1500 ? 3 : 4; }
 
 function catFromTypes(types: string[] = []): Category {
@@ -62,7 +66,7 @@ function fallbackSummary(lp: LivePlace, category: Category): string {
 }
 
 function toPlace(lp: LivePlace, zone: string, category: Category, mood: string, cuisine?: string, outdoor = false, extraVibes: string[] = []): Place {
-  const cost = costFrom(lp.priceLevel);
+  const cost = costFrom(lp.priceLevel, lp.types ?? []);
   return {
     id: "live:" + lp.id,
     name: lp.name,

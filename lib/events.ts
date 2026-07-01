@@ -61,15 +61,18 @@ async function fetchSerpCategory(
       };
     }).filter((e: PlanEvent) => e.title);
 
-    // Narrow to the outing date if any match
+    // When a date is given, only return events that match — never fall back to all events.
     if (dateISO) {
       const d = new Date(dateISO + "T00:00:00");
       const md = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      const onDay = items.filter((it: PlanEvent) =>
-        (it.when ?? "").includes(md)
-      );
-      if (onDay.length) items = onDay;
+      items = items.filter((it: PlanEvent) => (it.when ?? "").includes(md));
     }
+
+    // Strip attendee-profile thumbnails (allevents CDN pattern for attendee photos).
+    items = items.map((it: PlanEvent) => ({
+      ...it,
+      thumbnail: it.thumbnail && !it.thumbnail.includes("attendeethumb") ? it.thumbnail : undefined,
+    }));
 
     return items.slice(0, 5);
   } catch (e) {
@@ -157,10 +160,8 @@ export async function searchEvents(
       return (e.when ?? "").includes(md);
     });
 
-    // Events with no date info at all — safe to show as "upcoming" context.
-    const undated = cachedEvents.filter((e) => !e.when && !e.startIso);
-
-    const combined = dedup([...onDay, ...undated]);
+    // Never show undated events — they may be months away and would appear misleading.
+    const combined = dedup([...onDay]);
     return combined.slice(0, 12);
   }
 
