@@ -161,10 +161,10 @@ export async function searchEvents(
 
     if (onDay.length >= 2) return dedup(onDay).slice(0, 12);
 
-    // Fallback: show upcoming events within 30 days so the section isn't blank
-    // when no events land exactly on the outing date.
+    // Fallback: show upcoming events within 30 days (or undated events when
+    // the cache has no date info yet) so the section is never blank.
     const upcoming = cachedEvents.filter((e) => {
-      if (!e.startIso) return false;
+      if (!e.startIso) return true; // undated → always show in fallback
       const evMs = new Date(e.startIso).getTime();
       return evMs >= outingMs - dayMs && evMs <= outingMs + 30 * dayMs;
     });
