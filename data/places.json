@@ -836,51 +836,6 @@
     "mustBook": true
   },
   {
-    "id": "naturals-icecream",
-    "name": "Naturals Ice Cream (nearest outlet)",
-    "category": "dessert",
-    "area": "Pick the outlet closest to your last stop",
-    "zone": "multiple",
-    "moods": [
-      "birthday",
-      "chill",
-      "celebrate",
-      "romantic",
-      "group outing",
-      "reunion",
-      "just because"
-    ],
-    "vibes": [
-      "playful",
-      "foodie",
-      "cozy"
-    ],
-    "cuisines": [
-      "icecream",
-      "dessert"
-    ],
-    "budgetLevel": 1,
-    "costPerPerson": 150,
-    "durationMins": 25,
-    "bestTime": "any",
-    "indoor": true,
-    "outdoor": false,
-    "monsoonRisk": "ok",
-    "adventureLevel": 0,
-    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Naturals+Ice+Cream+near+me",
-    "summary": "Real-fruit ice cream, a Mumbai institution. Search 'Naturals near me' and go to the outlet on your route — every one is identical in quality.",
-    "veg": true,
-    "tags": [
-      "dessert",
-      "exoticfruit"
-    ],
-    "topDishes": [
-      "Tender coconut",
-      "Alphonso mango",
-      "Sitaphal (custard apple)"
-    ]
-  },
-  {
     "id": "k-rustom",
     "name": "K. Rustom ice cream sandwich",
     "category": "dessert",
@@ -1001,47 +956,6 @@
       "artsy"
     ],
     "safety": "Most galleries (incl. Jehangir) shut on Mondays. Good rainy-day pick otherwise."
-  },
-  {
-    "id": "movie-premium",
-    "name": "Movie at a recliner screen (nearest cinema)",
-    "category": "experience",
-    "area": "Pick PVR/INOX closest to your next stop",
-    "zone": "multiple",
-    "moods": [
-      "birthday",
-      "chill",
-      "celebrate",
-      "group outing",
-      "reunion",
-      "just because"
-    ],
-    "vibes": [
-      "queen",
-      "playful",
-      "culture",
-      "nightlife"
-    ],
-    "cuisines": [],
-    "budgetLevel": 2,
-    "costPerPerson": 500,
-    "durationMins": 180,
-    "bestTime": "afternoon",
-    "indoor": true,
-    "outdoor": false,
-    "monsoonRisk": "ok",
-    "adventureLevel": 0,
-    "mustBook": true,
-    "bookingUrl": "https://in.bookmyshow.com/explore/movies-mumbai",
-    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=PVR+INOX+recliner+Mumbai",
-    "summary": "Check BookMyShow for showtimes at a recliner screen near your route. Book a day ahead.",
-    "veg": true,
-    "tags": [
-      "nightlife",
-      "cozy",
-      "date"
-    ],
-    "safety": "Confirm the showtime on BookMyShow before building the day around it."
   },
   {
     "id": "colaba-causeway",
@@ -2263,7 +2177,7 @@
     "budgetLevel": 1,
     "costPerPerson": 0,
     "durationMins": 60,
-    "bestTime": "any",
+    "bestTime": "morning",
     "indoor": false,
     "outdoor": true,
     "monsoonRisk": "ok",
@@ -2314,9 +2228,9 @@
   },
   {
     "id": "hiranandani-cafe",
-    "name": "Café in Hiranandani Gardens",
+    "name": "Theobroma, Powai",
     "category": "cafe",
-    "area": "Powai, Mumbai",
+    "area": "Hiranandani Gardens, Powai",
     "zone": "andheri_w",
     "moods": [
       "birthday",
@@ -2337,24 +2251,25 @@
       "coffee"
     ],
     "budgetLevel": 2,
-    "costPerPerson": 500,
-    "durationMins": 60,
-    "bestTime": "any",
+    "costPerPerson": 450,
+    "durationMins": 50,
+    "bestTime": "morning",
     "indoor": true,
     "outdoor": false,
     "monsoonRisk": "ok",
     "adventureLevel": 0,
-    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=cafes+in+Hiranandani+Powai+Mumbai",
-    "summary": "Hiranandani has a surprisingly good café strip — think Theobroma, Moshe's or similar. Good coffee, pastries, and a much calmer vibe than Bandra.",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Theobroma+Powai+Mumbai",
+    "summary": "The Powai outlet of Mumbai's favourite patisserie — croissants, brownies, and cold coffee in the calm of Hiranandani Gardens. A good start before a Powai walk.",
     "veg": true,
     "tags": [
-      "cafe",
-      "instagrammable"
+      "brunch",
+      "instagrammable",
+      "cozy"
     ],
     "topDishes": [
-      "Croissant",
-      "Iced coffee",
-      "Cheesecake slice"
+      "Chocolate brownie",
+      "Pain au chocolat",
+      "Cold coffee"
     ]
   },
   {
