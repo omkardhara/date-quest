@@ -150,4 +150,5 @@ export interface Plan {
   events?: PlanEvent[];   // live events happening around the outing date
   outingDate?: string;    // ISO "YYYY-MM-DD" for the planned day
   returnTravel?: TravelFromPrev; // travel segment back home after last stop
+  bonusSuggestions?: AltPlace[]; // cheap extras to fill budget freed by swapping
 }

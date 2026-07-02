@@ -16,8 +16,7 @@
     ],
     "vibes": [
       "adventure",
-      "peaceful",
-      "queen"
+      "peaceful"
     ],
     "cuisines": [],
     "budgetLevel": 1,
@@ -1155,7 +1154,8 @@
       "thrift",
       "vintage"
     ],
-    "safety": "Really only worth it on Fridays. Bargain hard and watch your bag in the crowd."
+    "safety": "Really only worth it on Fridays. Bargain hard and watch your bag in the crowd.",
+    "restroom": "Cleanest nearby: a café near Crawford Market or the Starbucks at CSMT."
   },
   {
     "id": "bombay-closet-cleanse",
@@ -1231,7 +1231,8 @@
       "nature",
       "peaceful",
       "city-view"
-    ]
+    ],
+    "restroom": "Cleanest nearby: the café at Hanging Gardens next door, or head to a Kemps Corner café."
   },
   {
     "id": "jehangir-art-gallery",
@@ -1524,7 +1525,8 @@
       "browse",
       "heritage",
       "market"
-    ]
+    ],
+    "restroom": "Cleanest nearby: a café near Crawford Market or the Starbucks at CSMT."
   },
   {
     "id": "hanging-gardens",
@@ -1565,7 +1567,8 @@
       "free",
       "nature",
       "peaceful"
-    ]
+    ],
+    "restroom": "Cleanest nearby: a café at Kemps Corner (5 min away) — the park itself has basic public toilets only."
   },
   {
     "id": "gateway-of-india",
@@ -2347,7 +2350,8 @@
       "instagrammable",
       "picnic"
     ],
-    "safety": "Rough surf in peak monsoon, no swimming. Fine for the golden-hour stroll and beach snacks."
+    "safety": "Rough surf in peak monsoon, no swimming. Fine for the golden-hour stroll and beach snacks.",
+    "restroom": "Cleanest nearby: JW Marriott lobby right on the beachfront, or a café on Juhu Tara Road."
   },
   {
     "id": "kitab-khana",
@@ -2430,7 +2434,8 @@
       "instagrammable",
       "lowcrowd"
     ],
-    "safety": "Ferry service gets rough in heavy monsoon, sometimes suspended. Check MTDC schedule the morning before."
+    "safety": "Ferry service gets rough in heavy monsoon, sometimes suspended. Check MTDC schedule the morning before.",
+    "restroom": "Use the Taj lobby or a Colaba café before boarding at Gateway of India — facilities on Elephanta Island are very basic."
   },
   {
     "id": "upvan-lake-thane",
@@ -5075,7 +5080,8 @@
       "peaceful",
       "nature",
       "free"
-    ]
+    ],
+    "restroom": "Cleanest nearby: a café at Kemps Corner or the Hanging Gardens area (both within 5 min)."
   },
   {
     "id": "madh-island-beach",
@@ -5116,7 +5122,8 @@
       "lowcrowd",
       "instagrammable"
     ],
-    "safety": "No swimming in monsoon — surf is rough. Great for walks and photography."
+    "safety": "No swimming in monsoon — surf is rough. Great for walks and photography.",
+    "restroom": "Facilities are very basic at Madh Island — use a beachside shack or the resort restroom when you arrive."
   },
   {
     "id": "gorai-beach-walk",
@@ -5198,7 +5205,8 @@
       "lowcrowd",
       "free"
     ],
-    "safety": "No swimming in monsoon. Good for morning walks year-round."
+    "safety": "No swimming in monsoon. Good for morning walks year-round.",
+    "restroom": "Basic facilities at the beach; stop at a café near Aksa Road or Marve Road before heading to the sand."
   },
   {
     "id": "iit-powai-walk",
@@ -5603,8 +5611,7 @@
       "spiritual",
       "peaceful",
       "culture",
-      "cozy",
-      "queen"
+      "cozy"
     ],
     "cuisines": [],
     "budgetLevel": 1,

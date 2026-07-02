@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plan, PlanBlock, AltPlace, MovieInfo } from "@/lib/types";
 import { Chibi } from "./Chibi";
 import { Memories } from "./Memories";
@@ -85,6 +85,14 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
   const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
   const isFreeDay = plan.budget === 0;
   const over = !isFreeDay && liveTotal > plan.budget;
+  const budgetFreed = !isFreeDay ? plan.budget - liveTotal : 0;
+  const hasSwapped = Object.values(swaps).some(v => v > 0);
+
+  // Pick the bonus suggestion whose cost fits within the freed budget.
+  const bonusToShow = useMemo(() => {
+    if (!plan.bonusSuggestions?.length || budgetFreed < 400) return null;
+    return plan.bonusSuggestions.find(s => s.cost <= budgetFreed) ?? null;
+  }, [plan.bonusSuggestions, budgetFreed]);
   const isBirthday = (plan.greeting ?? "").toLowerCase().includes("happy birthday");
 
   const cycle = (i: number, alts?: AltPlace[]) => {
@@ -233,6 +241,44 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
           );
         })()}
       </div>
+
+      {/* Budget gap banner — appears when a swap saves meaningful budget */}
+      <AnimatePresence>
+        {hasSwapped && bonusToShow && (
+          <motion.div
+            key="bonus"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            className="mt-6 rounded-2xl border border-emerald-400/25 bg-emerald-500/8 p-4"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-emerald-400 text-sm font-semibold">
+                ✦ ₹{budgetFreed.toLocaleString("en-IN")} freed up
+              </span>
+              <span className="text-xs text-white/40">— want to squeeze in one more?</span>
+            </div>
+            <a
+              href={bonusToShow.mapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-start gap-3 rounded-xl bg-white/5 hover:bg-white/10 p-3 transition-colors"
+            >
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white/90 leading-snug">{bonusToShow.name}</p>
+                {bonusToShow.area && <p className="text-xs text-white/45 mt-0.5">📍 {bonusToShow.area}</p>}
+                <p className="text-xs text-white/60 mt-1 line-clamp-2">{bonusToShow.summary}</p>
+              </div>
+              <div className="shrink-0 text-right">
+                <span className="text-xs text-emerald-300/80 font-medium">
+                  {bonusToShow.cost === 0 ? "Free" : `₹${bonusToShow.cost.toLocaleString("en-IN")}`}
+                </span>
+                <p className="text-[10px] text-white/30 mt-0.5">↗ Maps</p>
+              </div>
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="mt-10">
         <Memories title="and today, we add one more" />

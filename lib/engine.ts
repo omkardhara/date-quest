@@ -256,13 +256,27 @@ function pick(
     if (filtered.length) cand = filtered;
   }
 
+  // Zones far enough from home that the travel penalty would otherwise keep the engine
+  // near Andheri all day, even for corridors explicitly meant to go there.
+  const FAR_ZONES = new Set<Zone>(["borivali", "thane", "south", "vasai", "karjat", "kolad", "gorai"]);
+  const primaryFarZone = corridorZones.find(z => FAR_ZONES.has(z as Zone)) as Zone | undefined;
+
   const rank = (p: Place) => {
     const z = (p.zone ?? "multiple") as Zone;
     const tripCost = travelMins(currentZone, z, atMin);
     // Strong geographic penalty: /8 makes long trips (55+ min) very costly vs short ones (10-20 min).
     let v = score(p, ans, band, remainingBudget) - tripCost / 8;
-    // Same-zone bonus: actively reward staying nearby.
-    if (z !== "multiple" && z === currentZone) v += 6;
+    // Same-zone bonus only rewards places that actually match the personality — otherwise a
+    // nearby spiritual place beats a perfectly-matched shop across town.
+    if (z !== "multiple" && z === currentZone) {
+      v += overlap(p.vibes ?? [], ans.personality) > 0 ? 4 : 1;
+    }
+    // "Go to your destination" nudge: for corridors that intentionally target a far zone
+    // (Borivali, Thane, South), compensate for the home→destination travel penalty so
+    // SGNP/Yeoor Hills/Colaba actually win their slots instead of always losing to nearby Aarey.
+    if (primaryFarZone && z === primaryFarZone && currentZone !== primaryFarZone) {
+      v += 6;
+    }
     if (overlap(p.cuisines ?? [], Array.from(usedCuisines)) > 0) v -= 6; // don't repeat a cuisine
     if (pendingRequests.length && matchesRequest(p, pendingRequests)) v += 25; // boost only until satisfied
     // Diversity: penalise repeating the same environment type across the whole day,
@@ -496,6 +510,21 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs, spiritualUsed), "dessert");
   }
 
+  // Bonus suggestions: cheap activities/experiences not in the plan, ranked by score.
+  // These surface in the UI when a swap frees up meaningful budget.
+  const bonusSuggestions: AltPlace[] = pool
+    .filter(p =>
+      !used.has(p.id) &&
+      !blocked(p, ans) &&
+      p.costPerPerson * 2 <= Math.min(ans.budget * 0.25, 1200) &&
+      (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple") &&
+      ["activity", "experience", "dessert", "cafe"].includes(p.category)
+    )
+    .map(p => ({ p, v: score(p, ans, "afternoon", ans.budget) + overlap(p.vibes, ans.personality) }))
+    .sort((a, b) => b.v - a.v)
+    .slice(0, 5)
+    .map(x => toAlt(x.p));
+
   // Strip alternatives that ended up as the main block elsewhere in the plan.
   const usedIds = new Set(blocks.map(b => b.place?.id).filter(Boolean) as string[]);
   for (const b of blocks) {
@@ -540,6 +569,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
       ? `Forecast for the day: ${ans.weatherSummary}.`
       : (monsoon ? "Planned for monsoon: indoor-leaning, with rain backups." : undefined),
     returnTravel,
+    bonusSuggestions: bonusSuggestions.length ? bonusSuggestions : undefined,
   };
 
   return plan;
