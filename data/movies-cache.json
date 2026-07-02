@@ -1,41 +1,5 @@
 {
-  "fetchedAt": "2026-07-02T00:00:00.000Z",
-  "count": 5,
-  "movies": [
-    {
-      "title": "Sitaare Zameen Par",
-      "genre": "Drama, Family",
-      "language": "Hindi",
-      "poster": "https://assets-in.bmscdn.com/discovery-catalog/movies/et00430827-ugkvawojyk-portrait.jpg",
-      "link": "https://in.bookmyshow.com/movies/mumbai/sitaare-zameen-par"
-    },
-    {
-      "title": "Housefull 5",
-      "genre": "Comedy",
-      "language": "Hindi",
-      "poster": "https://assets-in.bmscdn.com/discovery-catalog/movies/et00434071-portrait.jpg",
-      "link": "https://in.bookmyshow.com/movies/mumbai/housefull-5"
-    },
-    {
-      "title": "Mission: Impossible – The Final Reckoning",
-      "genre": "Action, Thriller",
-      "language": "English",
-      "poster": "https://assets-in.bmscdn.com/discovery-catalog/movies/et00386506-portrait.jpg",
-      "link": "https://in.bookmyshow.com/movies/mumbai/mission-impossible-the-final-reckoning"
-    },
-    {
-      "title": "Kesari Chapter 2",
-      "genre": "Action, Drama",
-      "language": "Hindi",
-      "poster": "https://assets-in.bmscdn.com/discovery-catalog/movies/et00434072-portrait.jpg",
-      "link": "https://in.bookmyshow.com/movies/mumbai/kesari-chapter-2"
-    },
-    {
-      "title": "Karate Kid: Legends",
-      "genre": "Action, Family",
-      "language": "English",
-      "poster": "https://assets-in.bmscdn.com/discovery-catalog/movies/et00432001-portrait.jpg",
-      "link": "https://in.bookmyshow.com/movies/mumbai/karate-kid-legends"
-    }
-  ]
+  "fetchedAt": "2026-07-02T03:23:59.728Z",
+  "count": 0,
+  "movies": []
 }

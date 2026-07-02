@@ -1,18 +1,18 @@
 {
-  "fetchedAt": "2026-07-02T02:45:36.225Z",
+  "fetchedAt": "2026-07-02T03:23:59.727Z",
   "count": 100,
   "events": [
-    {
-      "title": "Emotions Lab",
-      "link": "https://in.bookmyshow.com/events/emotions-lab-synopsis/ET00501997",
-      "thumbnail": "https://assets-in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC,e-usm-2-2-0.5-0.008:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:l-text,ie-VGh1LCAyIEp1bCBvbndhcmRz,fs-29,co-FFFFFF,ly-612,lx-24,pa-8_0_0_0,l-end:l-image,i-discovery-catalog@@icons@@pt-v1.png,t-false,lfo-top_right,lx-N5,ly-0,w-160,l-end/et00501997-pzytvbnaww-portrait.jpg",
-      "category": "other",
-      "source": "bms"
-    },
     {
       "title": "Harsh'O'Ullas ft. Harsh Gujral",
       "link": "https://in.bookmyshow.com/events/harsh-gujral-live/ET00461660",
       "thumbnail": "https://assets-in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC,e-usm-2-2-0.5-0.008:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:l-text,ie-U3VuLCA1IEp1bCBvbndhcmRz,fs-29,co-FFFFFF,ly-612,lx-24,pa-8_0_0_0,l-end:l-image,i-discovery-catalog@@icons@@pt-v1.png,t-false,lfo-top_right,lx-N5,ly-0,w-160,l-end/et00461660-uvqtcnxynv-portrait.jpg",
+      "category": "other",
+      "source": "bms"
+    },
+    {
+      "title": "Sumukhi Suresh: Hoemonal: The Taping",
+      "link": "https://in.bookmyshow.com/events/sumukhi-suresh-presents-hoemonal-the-taping/ET00147081",
+      "thumbnail": "https://assets-in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC,e-usm-2-2-0.5-0.008:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:l-text,ie-U2F0LCA0IEp1bA%3D%3D,fs-29,co-FFFFFF,ly-612,lx-24,pa-8_0_0_0,l-end:l-image,i-discovery-catalog@@icons@@pt-v1.png,t-false,lfo-top_right,lx-N5,ly-0,w-160,l-end/et00147081-halxcjnnug-portrait.jpg",
       "category": "other",
       "source": "bms"
     },
@@ -52,15 +52,9 @@
       "source": "bms"
     },
     {
-      "title": "Sumukhi Suresh: Hoemonal: The Taping",
-      "link": "https://in.bookmyshow.com/events/sumukhi-suresh-presents-hoemonal-the-taping/ET00147081",
-      "thumbnail": "https://assets-in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC,e-usm-2-2-0.5-0.008:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:l-text,ie-U2F0LCA0IEp1bA%3D%3D,fs-29,co-FFFFFF,ly-612,lx-24,pa-8_0_0_0,l-end/et00147081-halxcjnnug-portrait.jpg",
-      "category": "other",
-      "source": "bms"
-    },
-    {
       "title": "Backstage Siblings: Bhajan Jamming",
       "link": "https://in.bookmyshow.com/events/backstage-siblings-bhajan-jamming/ET00146781",
+      "thumbnail": "https://assets-in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC,e-usm-2-2-0.5-0.008:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:l-text,ie-U2F0LCAxOCBKdWw%3D,fs-29,co-FFFFFF,ly-612,lx-24,pa-8_0_0_0,l-end/et00146781-haecahdqkx-portrait.jpg",
       "category": "other",
       "source": "bms"
     },
@@ -101,6 +95,12 @@
       "source": "bms"
     },
     {
+      "title": "Gaurav Kapoor LIVE",
+      "link": "https://in.bookmyshow.com/events/gaurav-kapoor-live-bengaluru/ET00331714",
+      "category": "other",
+      "source": "bms"
+    },
+    {
       "title": "Amit Kumar Live in Concert",
       "link": "https://in.bookmyshow.com/events/amit-kumar-live-in-concert/ET00504676",
       "category": "music",
@@ -113,12 +113,6 @@
       "source": "bms"
     },
     {
-      "title": "Gaurav Kapoor LIVE",
-      "link": "https://in.bookmyshow.com/events/gaurav-kapoor-live-bengaluru/ET00331714",
-      "category": "other",
-      "source": "bms"
-    },
-    {
       "title": "AAWARA HOON",
       "link": "https://in.bookmyshow.com/events/aawara-hoon/ET00421569",
       "category": "other",
@@ -127,6 +121,12 @@
     {
       "title": "The Yellow Diary Experience & ABC",
       "link": "https://in.bookmyshow.com/events/the-yellow-diary-experience/ET00146895",
+      "category": "other",
+      "source": "bms"
+    },
+    {
+      "title": "Carvaan Live: Best Love Songs at Four Seasons",
+      "link": "https://in.bookmyshow.com/events/carvaan-live-best-love-songs-at-four-seasons/ET00146981",
       "category": "other",
       "source": "bms"
     },
@@ -225,77 +225,67 @@
       "address": "Jio World Centre, G Block, Bandra Kurla Complex, Bandra East, Mumbai, Maharashtra 400051, India"
     },
     {
-      "title": "Fire Licensed Agency Conference 2026 Tickets",
-      "link": "https://allevents.in/mumbai/fire-licensed-agency-conference-2026-tickets/80001022078196",
+      "title": "Singles Board Game Night | Slow Dating Mixer At Starbucks Lower Parel Tickets",
+      "link": "https://allevents.in/mumbai/singles-board-game-night-|-slow-dating-mixer-at-starbucks-lower-parel-tickets/80002613051145",
       "thumbnail": "https://cdn2.allevents.in/transup/2f/baff36b05648ad85ed152fbd515657/app-download-qr-banner.webp",
       "category": "music",
       "source": "allevents",
-      "startIso": "2026-07-11T03:30:00.000Z",
-      "when": "Sat, 11 Jul, 09:00 am",
-      "price": 3500,
-      "priceLabel": "₹3500–₹23000",
-      "venue": "The Leela Mumbai - Resort Style Business Hotel",
-      "address": "Sahar Airport Road, Andheri - Kurla Rd, near Mumbai International Airport, Mariyyman Nagar, Greater Indra Nagar, Andheri East, Mumbai, Maharashtra 400059, India"
+      "startIso": "2026-07-10T14:00:00.000Z",
+      "when": "Fri, 10 Jul, 07:30 pm",
+      "price": 1499,
+      "priceLabel": "₹1499–₹1799",
+      "venue": "Starbucks",
+      "address": "Ground Floor, Gate No.04, Kamala Mills, Pandurang Budhkar Marg, near Smaash, Lower Parel, Mumbai, Maharashtra 400013, India"
     },
     {
-      "title": "Soundrise Darbaar Thurs 16th July At Blue Sea Worli Tickets",
-      "link": "https://allevents.in/mumbai/soundrise-darbaar-thurs-16th-july-at-blue-sea-worli-tickets/80003358019532",
+      "title": "Circle Of Strength",
+      "link": "https://allevents.in/mumbai/circle-of-strength/3900030329426510",
       "thumbnail": "https://cdn2.allevents.in/transup/8e/66139c70184242af8c31df6f9aa780/download-app-mobile-banner.webp",
       "category": "music",
       "source": "allevents",
-      "startIso": "2026-07-16T13:00:00.000Z",
-      "when": "Thu, 16 Jul, 06:30 pm",
-      "price": 3399,
-      "priceLabel": "₹3399–₹4999",
-      "venue": "Blue Sea Mumbai",
-      "address": "11, Khan Abdul Gaffar Khan Road, Worli Sea Face, Worli, Mumbai, Maharashtra 400030, India"
+      "startIso": "2026-07-18T12:30:00.000Z",
+      "when": "Sat, 18 Jul, 06:00 pm",
+      "price": 943,
+      "priceLabel": "₹943 onwards",
+      "venue": "Byou New Studio: Mumbai",
+      "address": "1st floor, A wing, Laxmi Industrial Estate, Suresh Nagar, Andheri West, Andheri, Mumbai, Maharashtra 400053, India"
     },
     {
-      "title": "Shell Mirror",
-      "link": "https://allevents.in/mumbai/shell-mirror/3900030334012951",
+      "title": "Let It Flow",
+      "link": "https://allevents.in/mumbai/let-it-flow/3900030330965300",
       "thumbnail": "https://cdn2.allevents.in/transup/74/d94c2046cb481280276c19ff0b7d1e/calendar_28_2x.png",
       "category": "music",
       "source": "allevents",
-      "startIso": "2026-07-02T09:30:00.000Z",
-      "when": "Thu, 2 Jul, 03:00 pm",
-      "price": 799,
-      "priceLabel": "₹799 onwards",
+      "startIso": "2026-07-02T09:01:00.000Z",
+      "when": "Thu, 2 Jul, 02:31 pm",
+      "price": 749,
+      "priceLabel": "₹749 onwards",
       "venue": "Kissa - Stories Over Food: Mumbai",
       "address": "461, off Lokhandwala road, Adarsh nagar, Oshiwara, Mumbai, Maharashtra 400102, India"
     },
     {
-      "title": "Glass Painting",
-      "link": "https://allevents.in/mumbai/glass-painting/3900030330834401",
+      "title": "Clay Murals",
+      "link": "https://allevents.in/mumbai/clay-murals/3900030332006723",
       "category": "music",
       "source": "allevents",
       "startIso": "2026-07-03T09:30:00.000Z",
       "when": "Fri, 3 Jul, 03:00 pm",
-      "price": 699,
-      "priceLabel": "₹699 onwards",
+      "price": 749,
+      "priceLabel": "₹749 onwards",
       "venue": "Brew Haus Cafe: Mumbai.",
       "address": "Shop no.2, Bhavani Shankar Road, opposite JaiGopal Industries, Near Kabutar khana, Dadar West, Dadar, Mumbai, Maharashtra 400028, India"
     },
     {
-      "title": "Make Your Own Tote Bag",
-      "link": "https://allevents.in/mumbai/make-your-own-tote-bag/3900030330851556",
+      "title": "All Girls Improv Fight Night",
+      "link": "https://allevents.in/mumbai/all-girls-improv-fight-night/4100030332028308",
       "category": "music",
       "source": "allevents",
-      "startIso": "2026-07-05T09:01:00.000Z",
-      "when": "Sun, 5 Jul, 02:31 pm",
-      "price": 799,
-      "priceLabel": "₹799 onwards",
-      "venue": "Kissa - Stories Over Food: Mumbai",
-      "address": "461, off Lokhandwala road, Adarsh nagar, Oshiwara, Mumbai, Maharashtra 400102, India"
-    },
-    {
-      "title": "Zoho B2b Marketing Bootcamp 2026",
-      "link": "https://allevents.in/mumbai/zoho-b2b-marketing-bootcamp-2026/80002104075142",
-      "category": "music",
-      "source": "allevents",
-      "startIso": "2026-07-11T03:30:00.000Z",
-      "when": "Sat, 11 Jul, 09:00 am",
-      "venue": "Tunga International Hotel, Banquet Hall Andheri",
-      "address": "Tunga International Hotel, B-11, MIDC Central Rd, opp. Marol Bus Depot, MIDC, Andheri East, Mumbai, Maharashtra 400093, India"
+      "startIso": "2026-07-05T14:30:00.000Z",
+      "when": "Sun, 5 Jul, 08:00 pm",
+      "price": 300,
+      "priceLabel": "₹300 onwards",
+      "venue": "indifferent @ Gharaonda, Bandra",
+      "address": "2nd Floor, Gharaonda, National College Lane, 32nd Rd, opp. Tata Motors, behind Fictionary, TPS III, Bandra West, Mumbai, Maharashtra 400050, India"
     },
     {
       "title": "Saturday Scenes Ft Dj Vcky At Tap Andheri",
@@ -308,18 +298,6 @@
       "priceLabel": "₹499 onwards",
       "venue": "TAP Resto Bar, Andheri West: Mumbai",
       "address": "Cluster, Mumbai Suburban, 692 Royal Plaza, 504, New Link Road, Next to City Mall, Phase D, Shastri Nagar, Andheri West, Mumbai, Maharashtra 400053, India"
-    },
-    {
-      "title": "Talking To The Moon",
-      "link": "https://allevents.in/mumbai/talking-to-the-moon/3900030332970336",
-      "category": "music",
-      "source": "allevents",
-      "startIso": "2026-07-05T09:00:00.000Z",
-      "when": "Sun, 5 Jul, 02:30 pm",
-      "price": 849,
-      "priceLabel": "₹849 onwards",
-      "venue": "Kissa - Stories Over Food: Mumbai",
-      "address": "461, off Lokhandwala road, Adarsh nagar, Oshiwara, Mumbai, Maharashtra 400102, India"
     },
     {
       "title": "Dhandho Ft Munawar Faruqui",
@@ -450,69 +428,81 @@
       "address": "2nd floor, Platinum Avenue, S4, Linking Rd, Khar, Khar West, Mumbai, Maharashtra 400052, India"
     },
     {
-      "title": "Clay Murals",
-      "link": "https://allevents.in/mumbai/clay-murals/3900030332006723",
+      "title": "Soundrise Darbaar Thurs 16th July At Blue Sea Worli Tickets",
+      "link": "https://allevents.in/mumbai/soundrise-darbaar-thurs-16th-july-at-blue-sea-worli-tickets/80003358019532",
       "category": "comedy",
       "source": "allevents",
-      "startIso": "2026-07-03T09:30:00.000Z",
-      "when": "Fri, 3 Jul, 03:00 pm",
-      "price": 749,
-      "priceLabel": "₹749 onwards",
+      "startIso": "2026-07-16T13:00:00.000Z",
+      "when": "Thu, 16 Jul, 06:30 pm",
+      "price": 3399,
+      "priceLabel": "₹3399–₹4999",
+      "venue": "Blue Sea Mumbai",
+      "address": "11, Khan Abdul Gaffar Khan Road, Worli Sea Face, Worli, Mumbai, Maharashtra 400030, India"
+    },
+    {
+      "title": "Mad Hatters Improv Party By Small Tales Academy Tickets",
+      "link": "https://allevents.in/mumbai/mad-hatters-improv-party-by-small-tales-academy-tickets/80003212407663",
+      "category": "comedy",
+      "source": "allevents",
+      "startIso": "2026-07-05T05:30:00.000Z",
+      "when": "Sun, 5 Jul, 11:00 am",
+      "price": 1250,
+      "priceLabel": "₹1250–₹2400",
+      "venue": "Mumbai",
+      "address": "Mumbai, Maharashtra, India"
+    },
+    {
+      "title": "Bottle Painting",
+      "link": "https://allevents.in/mumbai/bottle-painting/3900030330686135",
+      "category": "comedy",
+      "source": "allevents",
+      "startIso": "2026-07-03T21:00:00.000Z",
+      "when": "Sat, 4 Jul, 02:30 am",
+      "price": 699,
+      "priceLabel": "₹699 onwards",
       "venue": "Brew Haus Cafe: Mumbai.",
       "address": "Shop no.2, Bhavani Shankar Road, opposite JaiGopal Industries, Near Kabutar khana, Dadar West, Dadar, Mumbai, Maharashtra 400028, India"
     },
     {
-      "title": "Namaste Trump",
-      "link": "https://allevents.in/mumbai/namaste-trump/4100030332981313",
+      "title": "Clay Sculpting Mumbai",
+      "link": "https://allevents.in/mumbai/clay-sculpting-mumbai/3900030333257027",
       "category": "comedy",
       "source": "allevents",
-      "startIso": "2026-07-10T13:30:00.000Z",
-      "when": "Fri, 10 Jul, 07:00 pm",
-      "price": 799,
-      "priceLabel": "₹799 onwards",
-      "venue": "The Habitat",
-      "address": "1st Floor, Hotel Unicontinental, 3rd Road, Station, next to Khar, Khar, Ram Krishna Nagar, Khar West, Mumbai, Maharashtra 400052, India"
+      "startIso": "2026-07-12T11:31:00.000Z",
+      "when": "Sun, 12 Jul, 05:01 pm",
+      "price": 1499,
+      "priceLabel": "₹1499 onwards",
+      "venue": "Hitchki, Bandra East: Mumbai",
+      "address": "FIFC Building, G-block, Bandra-Kurla Complex, Plot No. C- 54 and 55, Bandra East, Mumbai, Maharashtra 400051, India"
     },
     {
-      "title": "Coffee Painting",
-      "link": "https://allevents.in/mumbai/coffee-painting/3900030330711116",
+      "title": "Clay Crafting",
+      "link": "https://allevents.in/mumbai/clay-crafting/3900030332223447",
       "category": "comedy",
       "source": "allevents",
-      "startIso": "2026-07-05T09:00:00.000Z",
-      "when": "Sun, 5 Jul, 02:30 pm",
+      "startIso": "2026-07-01T09:45:00.000Z",
+      "when": "Wed, 1 Jul, 03:15 pm",
       "price": 699,
       "priceLabel": "₹699 onwards",
-      "venue": "Kissa - Stories Over Food: Mumbai",
-      "address": "461, off Lokhandwala road, Adarsh nagar, Oshiwara, Mumbai, Maharashtra 400102, India"
-    },
-    {
-      "title": "Repair Therapy",
-      "link": "https://allevents.in/mumbai/repair-therapy/3900030333885523",
-      "category": "comedy",
-      "source": "allevents",
-      "startIso": "2026-07-05T10:00:00.000Z",
-      "when": "Sun, 5 Jul, 03:30 pm",
-      "price": 799,
-      "priceLabel": "₹799 onwards",
       "venue": "Brew Haus Cafe: Mumbai.",
       "address": "Shop no.2, Bhavani Shankar Road, opposite JaiGopal Industries, Near Kabutar khana, Dadar West, Dadar, Mumbai, Maharashtra 400028, India"
     },
     {
-      "title": "Clay Date",
-      "link": "https://allevents.in/mumbai/clay-date/3900030331353629",
+      "title": "Bean Mosaic Art",
+      "link": "https://allevents.in/mumbai/bean-mosaic-art/3900030331359650",
       "category": "comedy",
       "source": "allevents",
-      "startIso": "2026-07-01T09:30:00.000Z",
-      "when": "Wed, 1 Jul, 03:00 pm",
-      "price": 699,
-      "priceLabel": "₹699 onwards",
+      "startIso": "2026-07-02T09:00:00.000Z",
+      "when": "Thu, 2 Jul, 02:30 pm",
+      "price": 799,
+      "priceLabel": "₹799 onwards",
       "venue": "Kissa - Stories Over Food: Mumbai",
       "address": "461, off Lokhandwala road, Adarsh nagar, Oshiwara, Mumbai, Maharashtra 400102, India"
     },
     {
       "title": "External Affairs",
       "link": "https://allevents.in/mumbai/external-affairs/200030287155423",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTJkMzhhZGE3MWYzLmpwZw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTMyOGI0OThmN2RiLmpwZw.avif",
       "category": "theatre",
       "source": "allevents",
       "startIso": "2026-07-04T14:30:00.000Z",
@@ -523,7 +513,7 @@
     {
       "title": "Telling Lies A Standup Solo By Aashish Solanki",
       "link": "https://allevents.in/mumbai/telling-lies-a-standup-solo-by-aashish-solanki/3900030134662551",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTMyOGI0OThmN2RiLmpwZw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTJkMzhhZGE3MWYzLmpwZw.avif",
       "category": "theatre",
       "source": "allevents",
       "startIso": "2026-08-16T11:00:00.000Z",
@@ -573,7 +563,13 @@
       "link": "https://allevents.in/mumbai/carvaan-live-sing-with-kishore-at-four-seasons/3900030213552555",
       "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy8yNjNhMjE1N2IwZjQ4MTA1MGMzODIwYjVmNWY5YTVlZThjNDQ5MTVjYzNmNmRjNTM0ZDliM2QxMDQ0MWVjNGIyLXJpbWctdzEyMDAtaDY3NS1kYzA1MDYwOC1nbWlyP3Y9MTc4MjQ2NDYyOQ.avif",
       "category": "theatre",
-      "source": "allevents"
+      "source": "allevents",
+      "startIso": "2026-07-05T09:30:00.000Z",
+      "when": "Sun, 5 Jul, 03:00 pm",
+      "price": 1599,
+      "priceLabel": "₹1599 onwards",
+      "venue": "Four Seasons Hotel, Worli: Mumbai",
+      "address": "1/136, Dr Elijah Moses Rd, Gandhi Nagar, Upper Worli, Worli, Mumbai, Maharashtra 400018, India"
     },
     {
       "title": "Rutu Hirawa",
@@ -618,39 +614,9 @@
       "source": "allevents"
     },
     {
-      "title": "Singles Board Game Night | Slow Dating Mixer At Starbucks Lower Parel Tickets",
-      "link": "https://allevents.in/mumbai/singles-board-game-night-|-slow-dating-mixer-at-starbucks-lower-parel-tickets/80002613051145",
+      "title": "Fire Licensed Agency Conference 2026 Tickets",
+      "link": "https://allevents.in/mumbai/fire-licensed-agency-conference-2026-tickets/80001022078196",
       "thumbnail": "https://cdn2.allevents.in/transup/8e/66139c70184242af8c31df6f9aa780/download-app-mobile-banner.webp",
-      "category": "theatre",
-      "source": "allevents"
-    },
-    {
-      "title": "The Founders X Investors Pitch | 19th July | Mumbai Tickets",
-      "link": "https://allevents.in/mumbai/the-founders-x-investors-pitch-|-19th-july-|-mumbai-tickets/80001533792300",
-      "category": "theatre",
-      "source": "allevents"
-    },
-    {
-      "title": "Singles Meetup Mumbai",
-      "link": "https://allevents.in/mumbai/singles-meetup-mumbai/4100030334038155",
-      "category": "theatre",
-      "source": "allevents"
-    },
-    {
-      "title": "Mumbai Monsoon Marathon",
-      "link": "https://allevents.in/mumbai/mumbai-monsoon-marathon/4100030333343537",
-      "category": "theatre",
-      "source": "allevents"
-    },
-    {
-      "title": "Clay Calendar",
-      "link": "https://allevents.in/mumbai/clay-calendar/3900030332203931",
-      "category": "theatre",
-      "source": "allevents"
-    },
-    {
-      "title": "Diy Glasses Holder",
-      "link": "https://allevents.in/mumbai/diy-glasses-holder/3900030333047935",
       "category": "theatre",
       "source": "allevents"
     },
@@ -661,9 +627,33 @@
       "source": "allevents"
     },
     {
+      "title": "Suman Sugandh",
+      "link": "https://allevents.in/mumbai/suman-sugandh/3900030333995500",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Art Workshop",
+      "link": "https://allevents.in/mumbai/art-workshop/3900030334036200",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Singles Meetup Mumbai",
+      "link": "https://allevents.in/mumbai/singles-meetup-mumbai/4100030334038155",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
+      "title": "Zoho B2b Marketing Bootcamp 2026",
+      "link": "https://allevents.in/mumbai/zoho-b2b-marketing-bootcamp-2026/80002104075142",
+      "category": "theatre",
+      "source": "allevents"
+    },
+    {
       "title": "Rajkumari By Nayab Midha",
       "link": "https://allevents.in/mumbai/rajkumari-by-nayab-midha/3900030137638716",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTMyOGI0OThmN2RiLmpwZw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTJkMzhhZGE3MWYzLmpwZw.avif",
       "category": "art",
       "source": "allevents"
     },
@@ -724,26 +714,27 @@
       "source": "allevents"
     },
     {
-      "title": "Mad Hatters Improv Party By Small Tales Academy Tickets",
-      "link": "https://allevents.in/mumbai/mad-hatters-improv-party-by-small-tales-academy-tickets/80003212407663",
+      "title": "The Founders X Investors Pitch | 19th July | Mumbai Tickets",
+      "link": "https://allevents.in/mumbai/the-founders-x-investors-pitch-|-19th-july-|-mumbai-tickets/80001533792300",
+      "thumbnail": "https://cdn2.allevents.in/transup/74/d94c2046cb481280276c19ff0b7d1e/calendar_28_2x.png",
       "category": "art",
       "source": "allevents"
     },
     {
-      "title": "Suman Sugandh",
-      "link": "https://allevents.in/mumbai/suman-sugandh/3900030333995500",
+      "title": "Mumbai Monsoon Marathon",
+      "link": "https://allevents.in/mumbai/mumbai-monsoon-marathon/4100030333343537",
       "category": "art",
       "source": "allevents"
     },
     {
-      "title": "Going Nowhere Ft Sahil Shah Kcc",
-      "link": "https://allevents.in/mumbai/going-nowhere-ft-sahil-shah-kcc/3900030333839942",
+      "title": "Chembur Comedy Nights",
+      "link": "https://allevents.in/mumbai/chembur-comedy-nights/4100030333645926",
       "category": "art",
       "source": "allevents"
     },
     {
-      "title": "Fluid Art Workshop",
-      "link": "https://allevents.in/mumbai/fluid-art-workshop/3900030330626002",
+      "title": "Shell Mirror",
+      "link": "https://allevents.in/mumbai/shell-mirror/3900030334012951",
       "category": "art",
       "source": "allevents"
     },
@@ -755,8 +746,9 @@
       "source": "allevents"
     },
     {
-      "title": "Diy Shell Mirror",
-      "link": "https://allevents.in/mumbai/diy-shell-mirror/3900030332233807",
+      "title": "Folk Lalkar Gajar Lok Kalecha",
+      "link": "https://allevents.in/mumbai/folk-lalkar-gajar-lok-kalecha/3900030329380101",
+      "thumbnail": "https://cdn2.allevents.in/transup/8e/66139c70184242af8c31df6f9aa780/download-app-mobile-banner.webp",
       "category": "food",
       "source": "allevents"
     },
@@ -770,48 +762,41 @@
     {
       "title": "Is There Room On The Broom A Twisted Tale",
       "link": "https://allevents.in/mumbai/is-there-room-on-the-broom-a-twisted-tale/3900030186917242",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czQvYmFubmVycy85NDI3ZDc5MC01ZmUzLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjMDIwMjAxLWdtaXIuanBnP3Y9MTc4MDU1NjY0Nw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy8wMTI0MTdjMC03NTFkLTExZjEtYTg3Yy01NTJlMzIyMzA0ZTYtcmltZy13MTIwMC1oNjAwLWRjZmZmZmZmLWdtaXIuanBnP3Y9MTc4Mjg5MDI4Ng.avif",
       "category": "film",
       "source": "allevents"
     },
     {
       "title": "This Is Me",
       "link": "https://allevents.in/mumbai/this-is-me/200030082666142",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czYvYmFubmVycy8wMTI0MTdjMC03NTFkLTExZjEtYTg3Yy01NTJlMzIyMzA0ZTYtcmltZy13MTIwMC1oNjAwLWRjZmZmZmZmLWdtaXIuanBnP3Y9MTc4Mjg5MDI4Ng.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy82MmVhY2ZkMC01ZmQzLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjMTExMDFjLWdtaXIuanBnP3Y9MTc4MDU0OTY5Mw.avif",
       "category": "film",
       "source": "allevents"
     },
     {
       "title": "Raja Nanga Dhadanga Hai",
       "link": "https://allevents.in/mumbai/raja-nanga-dhadanga-hai/200029857092116",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTNlYWUyODEyNjA2LmpwZw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czEvYmFubmVycy85MjdmN2VjMC01ZmUzLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjMDIwMjAxLWdtaXIuanBnP3Y9MTc4MDU1NjY0NA.avif",
       "category": "film",
       "source": "allevents"
     },
     {
       "title": "Dramatic Playdate",
       "link": "https://allevents.in/mumbai/dramatic-playdate/200030082666845",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czcvYmFubmVycy82MmVhY2ZkMC01ZmQzLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjMTExMDFjLWdtaXIuanBnP3Y9MTc4MDU0OTY5Mw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czkvYmFubmVycy9lMWFkYWZlMC01ZmUyLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjMDEwMzYxLWdtaXIuanBnP3Y9MTc4MDU1NjM0OA.avif",
       "category": "film",
       "source": "allevents"
     },
     {
       "title": "Improv Imagination Unleashed",
       "link": "https://allevents.in/mumbai/improv-imagination-unleashed/3900029794848538",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:500:250/g:sm/sh:100/aHR0cHM6Ly9jZG4tYXouYWxsZXZlbnRzLmluL2V2ZW50czkvYmFubmVycy9lMWFkYWZlMC01ZmUyLTExZjEtYjE2Zi0wZjlmNDY5NWIwYzQtcmltZy13MTIwMC1oNjAwLWRjMDEwMzYxLWdtaXIuanBnP3Y9MTc4MDU1NjM0OA.avif",
+      "thumbnail": "https://cdn2.allevents.in/transup/66/82f585dc3f42e1895c5583dacfad27/subscribe_bell_icon.webp",
       "category": "film",
       "source": "allevents"
     },
     {
       "title": "Acting Classes",
       "link": "https://allevents.in/mumbai/acting-classes/200030301065039",
-      "thumbnail": "https://cdn2.allevents.in/transup/66/82f585dc3f42e1895c5583dacfad27/subscribe_bell_icon.webp",
-      "category": "film",
-      "source": "allevents"
-    },
-    {
-      "title": "Raell Padamsees Act On Stage Ramayan",
-      "link": "https://allevents.in/mumbai/raell-padamsees-act-on-stage-ramayan/3900030052123855",
       "thumbnail": "https://cdn2.allevents.in/transup/2f/baff36b05648ad85ed152fbd515657/app-download-qr-banner.webp",
       "category": "film",
       "source": "allevents"
@@ -819,6 +804,13 @@
     {
       "title": "Movies Under The Stars Holiday Inn 1942",
       "link": "https://allevents.in/mumbai/movies-under-the-stars-holiday-inn-1942/3900030183003408",
+      "thumbnail": "https://cdn2.allevents.in/transup/74/d94c2046cb481280276c19ff0b7d1e/calendar_28_2x.png",
+      "category": "film",
+      "source": "allevents"
+    },
+    {
+      "title": "Raell Padamsees Act On Stage Ramayan",
+      "link": "https://allevents.in/mumbai/raell-padamsees-act-on-stage-ramayan/3900030052123957",
       "category": "film",
       "source": "allevents"
     },
@@ -829,15 +821,27 @@
       "source": "allevents"
     },
     {
-      "title": "Bean Mosaic Art",
-      "link": "https://allevents.in/mumbai/bean-mosaic-art/3900030331359650",
+      "title": "Saturday Comedy Night",
+      "link": "https://allevents.in/mumbai/saturday-comedy-night/3900030329460145",
+      "category": "film",
+      "source": "allevents"
+    },
+    {
+      "title": "Clay Calendar",
+      "link": "https://allevents.in/mumbai/clay-calendar/3900030332204736",
+      "category": "film",
+      "source": "allevents"
+    },
+    {
+      "title": "Diy Glasses Holder",
+      "link": "https://allevents.in/mumbai/diy-glasses-holder/3900030333047935",
       "category": "film",
       "source": "allevents"
     },
     {
       "title": "Sunburn Festival 2026 Mumbai",
       "link": "https://allevents.in/mumbai/sunburn-festival-2026-mumbai/3900029391519143",
-      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTQ0YjY2ZjgxNjIzLmpwZw.avif",
+      "thumbnail": "https://cdn-ip.allevents.in/s/rs:fill:600:300/g:sm/sh:100/aHR0cHM6Ly9jZG4yLmFsbGV2ZW50cy5pbi90aHVtYnMvdGh1bWI2YTJkMzhhZGE3MWYzLmpwZw.avif",
       "category": "other",
       "source": "allevents"
     },
