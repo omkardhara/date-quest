@@ -119,8 +119,8 @@ function timeAllowed(p: Place, atMin: number): boolean {
   switch (p.bestTime) {
     case "morning":   return atMin < 780;                  // before 1 pm
     case "afternoon": return atMin >= 660 && atMin < 1140; // 11 am – 7 pm
-    case "evening":   return atMin >= 900;                 // after 3 pm
-    case "night":     return atMin >= 1020;                // after 5 pm (dinner window)
+    case "evening":   return atMin >= 1020;                // after 5 pm (sunset/evening proper)
+    case "night":     return atMin >= 1080;                // after 6 pm (dinner window)
     default:          return true;
   }
 }
@@ -166,6 +166,11 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   const cost = p.costPerPerson * 2;
   if (cost <= remainingBudget)            s += 2;
   else if (cost > remainingBudget * 1.3)  s -= 5;
+  // Budget pressure: nudge toward paid experiences when plenty of budget is left,
+  // so a ₹5k plan doesn't end up costing ₹2k because free parks always win.
+  if (cost > 0 && remainingBudget > ans.budget * 0.5) {
+    s += Math.min(2, p.costPerPerson / 250);
+  }
   if (ans.personality.includes("adventure")) s += p.adventureLevel;
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
   // Wet day: demote exposed outdoor stops that only get a "caution" in heavy rain.
@@ -277,7 +282,8 @@ function pick(
     if (primaryFarZone && z === primaryFarZone && currentZone !== primaryFarZone) {
       v += 6;
     }
-    if (overlap(p.cuisines ?? [], Array.from(usedCuisines)) > 0) v -= 6; // don't repeat a cuisine
+    const cuisineRepeat = overlap(p.cuisines ?? [], Array.from(usedCuisines));
+    if (cuisineRepeat > 0) v -= 8 * cuisineRepeat; // penalise each repeated cuisine heavily
     if (pendingRequests.length && matchesRequest(p, pendingRequests)) v += 25; // boost only until satisfied
     // Diversity: penalise repeating the same environment type across the whole day,
     // not just consecutive picks. This prevents two temples, two parks, two beaches etc.
@@ -287,7 +293,7 @@ function pick(
       const distFromEnd = recentEnvs.length - 1 - lastIdx;
       v -= Math.max(4, 14 - distFromEnd * 2); // -14 recent, sliding to -4 for old picks
     }
-    v += (Math.random() - 0.5) * 2; // ±1 noise so the same place doesn't always win
+    v += (Math.random() - 0.5) * 5; // ±2.5 noise — keeps top-ranked varied without tanking quality
     return v;
   };
 
@@ -295,7 +301,7 @@ function pick(
   // Pick from the close contenders, not always #1, so re-runs vary and the live
   // pool actually surfaces. A clear winner (e.g. a requested stop) still wins.
   const top = ranked[0].v;
-  const contenders = ranked.filter(r => r.v >= top - 8).slice(0, 6).map(r => r.p);
+  const contenders = ranked.filter(r => r.v >= top - 10).slice(0, 8).map(r => r.p);
   const best = weightedPick(contenders);
   // Alternatives: same category first (so swapping a shopping card shows more shops),
   // then same zone, then anything. Keeps swap results relevant.
@@ -314,7 +320,7 @@ function pick(
 // Weighted random favouring the front of the list (geometric falloff).
 function weightedPick<T>(arr: T[]): T {
   if (arr.length <= 1) return arr[0];
-  const weights = arr.map((_, i) => Math.pow(0.65, i));
+  const weights = arr.map((_, i) => Math.pow(0.75, i));
   const sum = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * sum;
   for (let i = 0; i < arr.length; i++) { r -= weights[i]; if (r <= 0) return arr[i]; }
@@ -445,12 +451,12 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   const freshFoodFilter = (base?: string[]) => {
     if (!base?.length || !mealCuisines.size) return base;
     const f = base.filter(c => !mealCuisines.has(c));
-    return f.length > 0 ? f : base; // if every preference was already served, allow repeats
+    return f.length > 0 ? f : undefined; // all prefs served → pick freely; never loop back to same cuisine
   };
 
-  // How much to hold back from every non-food slot so dinner + dessert can land.
-  // 40% of budget covers a mid-range restaurant (₹2000 for 2); slides down on tight budgets.
-  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.40) : 0;
+  // Hold back 25% for dinner so activities don't starve it, but leave more room
+  // than 40% so the plan actually spends closer to the stated budget.
+  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.25) : 0;
   const actBudget = () => Math.max(0, remaining() - dinnerRes());
 
   // Morning activity + café (early starts only).
@@ -487,8 +493,11 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
-  // Mid-day rest — only if near home, long day, meaningful budget still left, and plan has content.
-  if (longDay && cursor < 1140 && remaining() >= 1500 && blocks.length >= 2 &&
+  // Mid-day rest — only near home, genuinely long day (12 h+), good budget left,
+  // several stops already done, still before 4 pm, AND the corridor keeps evening stops
+  // close to home (south_loop = no: would send back to Colaba after an Andheri nap).
+  const homeRestOk = corridor === "bandra_hub" || corridor === "thane_east" || corridor === "north_adventure";
+  if (homeRestOk && dayMins >= 720 && cursor < 960 && remaining() >= 2500 && blocks.length >= 4 &&
       (currentZone === "home" || currentZone === "andheri_w" || currentZone === "bandra")) {
     const restPlace = PLACES.find(p => p.category === "rest");
     if (restPlace) add({ place: restPlace, zone: "home" }, "rest");

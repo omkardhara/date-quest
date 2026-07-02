@@ -60,8 +60,8 @@ function timeAllowed(p, atMin) {
   switch (p.bestTime) {
     case "morning":   return atMin < 780;
     case "afternoon": return atMin >= 660 && atMin < 1140;
-    case "evening":   return atMin >= 900;
-    case "night":     return atMin >= 1020;
+    case "evening":   return atMin >= 1020; // 5 pm+ (sunset-proper, not 3 pm)
+    case "night":     return atMin >= 1080; // 6 pm+ (dinner window)
     default:          return true;
   }
 }
@@ -91,7 +91,7 @@ function baseScore(p, ans, band, remainingBudget) {
 
 function weightedPick(arr) {
   if (arr.length <= 1) return arr[0];
-  const w = arr.map((_, i) => Math.pow(0.65, i));
+  const w = arr.map((_, i) => Math.pow(0.75, i)); // flatter falloff → more variety
   const sum = w.reduce((a,b) => a+b, 0);
   let r = Math.random() * sum;
   for (let i = 0; i < arr.length; i++) { r -= w[i]; if (r <= 0) return arr[i]; }
@@ -100,13 +100,18 @@ function weightedPick(arr) {
 
 const FAR_ZONES = new Set(["borivali","thane","south","vasai","karjat","kolad","gorai"]);
 
-function pick(pool, ans, band, cats, used, currentZone, corridorZones, atMin, remainingBudget) {
-  const base = pool.filter(p =>
+function pick(pool, ans, band, cats, used, currentZone, corridorZones, atMin, remainingBudget, usedCuisines = new Set(), cuisineFilter) {
+  let base = pool.filter(p =>
     cats.includes(p.category) && !used.has(p.id) && !blocked(p, ans) &&
     timeAllowed(p, atMin) && p.costPerPerson * 2 <= remainingBudget &&
     (corridorZones.includes(p.zone ?? "multiple") || (p.zone ?? "multiple") === "multiple")
   );
   if (!base.length) return undefined;
+  // Apply cuisine filter (soft preference — only narrow if it leaves candidates)
+  if (cuisineFilter?.length) {
+    const filtered = base.filter(p => overlap(p.cuisines ?? [], cuisineFilter) > 0);
+    if (filtered.length) base = filtered;
+  }
   const primaryFarZone = corridorZones.find(z => FAR_ZONES.has(z));
   const ranked = base.map(p => {
     const z = p.zone ?? "multiple";
@@ -119,16 +124,21 @@ function pick(pool, ans, band, cats, used, currentZone, corridorZones, atMin, re
     if (primaryFarZone && z === primaryFarZone && currentZone !== primaryFarZone) {
       v += 6;
     }
-    v += (Math.random() - 0.5) * 2; // same noise as engine
+    // Cuisine repeat penalty (mirrors engine.ts): -8 per overlapping cuisine
+    const cuisineRepeat = overlap(p.cuisines ?? [], Array.from(usedCuisines));
+    if (cuisineRepeat > 0) v -= 8 * cuisineRepeat;
+    v += (Math.random() - 0.5) * 5; // ±2.5 noise, matching engine
     return { p, v };
   }).sort((a,b) => b.v - a.v);
   const top = ranked[0].v;
-  const contenders = ranked.filter(r => r.v >= top - 8).slice(0, 6).map(r => r.p);
+  const contenders = ranked.filter(r => r.v >= top - 10).slice(0, 8).map(r => r.p);
   return weightedPick(contenders);
 }
 
 function sim(ans) {
   const used = new Set();
+  const usedCuisines = new Set();
+  const mealCuisines = new Set();
   const picked = [];
   let cursor = ans.startMin, currentZone = "home", runningCost = 0, lastMealEnd = 0;
   const corridor = detectCorridor(ans);
@@ -137,7 +147,7 @@ function sim(ans) {
   const dayMins = end - ans.startMin;
   const FULL_MEALS = ["food","cafe"];
 
-  const add = (place) => {
+  const add = (place, kind) => {
     if (!place || cursor >= end) return;
     const z = place.zone ?? "multiple";
     const arrival = cursor + travelMin(currentZone, z);
@@ -151,33 +161,53 @@ function sim(ans) {
     runningCost += blockCost;
     cursor = arrival + Math.min(place.durationMins, end - arrival);
     if (isFullMeal) lastMealEnd = cursor;
+    (place.cuisines ?? []).forEach(c => usedCuisines.add(c));
+    if (kind === "food") (place.cuisines ?? []).forEach(c => mealCuisines.add(c));
     if (z !== "multiple") currentZone = z;
   };
 
   const b = () => bandFor(cursor);
   const remaining = () => ans.budget - runningCost;
-  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.40) : 0;
+  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.25) : 0; // reduced from 40%
   const actBudget = () => Math.max(0, remaining() - dinnerRes());
 
+  const freshFoodFilter = (base) => {
+    if (!base?.length || !mealCuisines.size) return base;
+    const f = base.filter(c => !mealCuisines.has(c));
+    return f.length > 0 ? f : undefined; // pick freely when all prefs used, don't repeat
+  };
+
+  const p = (cats, budget, cf) => pick(PLACES, ans, b(), cats, used, currentZone, corridorZones, cursor, budget, usedCuisines, cf);
+
   if (ans.startMin < 660) {
-    add(pick(PLACES, ans, b(), ["activity","experience"], used, currentZone, corridorZones, cursor, actBudget()));
+    add(p(["activity","experience"], actBudget()), "activity");
     const cafeBudget = Math.min(remaining(), Math.max(800, Math.round(ans.budget * 0.20)));
-    add(pick(PLACES, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget));
+    add(p(["cafe"], cafeBudget), "cafe");
   }
   if (cursor < 960 && end > 780) {
     const lb = Math.max(0, remaining() - Math.floor(ans.budget * 0.40));
-    add(pick(PLACES, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lb));
+    add(p(["food"], lb, freshFoodFilter(ans.foods)), "food");
   }
   if (end > 840)
-    add(pick(PLACES, ans, b(), ["experience","activity","shopping"], used, currentZone, corridorZones, cursor, actBudget()));
+    add(p(["experience","activity","shopping"], actBudget()), "experience");
   if (dayMins >= 360 && cursor < 1080 && end > 960)
-    add(pick(PLACES, ans, b(), ["experience","activity","shopping"], used, currentZone, corridorZones, cursor, actBudget()));
+    add(p(["experience","activity","shopping"], actBudget()), "activity");
   if (dayMins >= 720 && cursor < 1020 && end > 1080)
-    add(pick(PLACES, ans, b(), ["experience","activity","shopping"], used, currentZone, corridorZones, cursor, actBudget()));
+    add(p(["experience","activity","shopping"], actBudget()), "experience");
+
+  // Home rest: only for near-home corridors, 12-hour+ days, 4+ stops already done,
+  // still before 4 pm, and meaningful budget left. Mirrors tightened engine conditions.
+  const homeRestOk = ["bandra_hub","thane_east","north_adventure"].includes(corridor);
+  if (homeRestOk && dayMins >= 720 && cursor < 960 && remaining() >= 2500 && picked.length >= 4 &&
+      ["home","andheri_w","bandra"].includes(currentZone)) {
+    const rest = PLACES.find(p => p.category === "rest");
+    if (rest) add(rest, "rest");
+  }
+
   if (end > 1140)
-    add(pick(PLACES, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining()));
+    add(p(["food"], remaining(), freshFoodFilter(ans.foods)), "food");
   if (end - cursor > 20)
-    add(pick(PLACES, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining()));
+    add(p(["dessert"], remaining(), ans.foods), "dessert");
 
   return picked;
 }
