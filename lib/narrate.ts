@@ -66,8 +66,8 @@ export function narrate(p: Place, ans: Answers): string {
   }
   if (p.category === "cafe") {
     return pick([
-      `Slow start, pretty plate. ${p.summary}`,
-      `The morning deserves a good table${n}. ${p.summary}`,
+      `Slow down, good plate. ${p.summary}`,
+      `A table worth sitting at${n}. ${p.summary}`,
       `Coffee, a good plate, no rush. ${p.summary}`,
     ]);
   }
