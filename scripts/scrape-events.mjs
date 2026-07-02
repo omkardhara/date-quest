@@ -102,6 +102,7 @@ async function scrapeBMS() {
 
   const events = [];
   const movies = [];
+  let moviesDebug = null;
 
   try {
     await page.goto("https://in.bookmyshow.com/explore/events-mumbai", {
@@ -289,6 +290,20 @@ async function scrapeBMS() {
     // ── Movies listing ────────────────────────────────────────────────────────
     // Reset captured movies array so we only get responses from the movies page
     capturedMovies.length = 0;
+    // Also capture ALL json response keys from movies page for diagnostics
+    const allMoviesPageResponses = [];
+    const moviesPageHandler = async (resp) => {
+      if (!resp.url().includes("bookmyshow.com")) return;
+      if (!(resp.headers()["content-type"] ?? "").includes("json")) return;
+      try {
+        const j = await resp.json();
+        allMoviesPageResponses.push({ url: resp.url().slice(0, 120), keys: Object.keys(j ?? {}).slice(0, 10) });
+        // Broader capture: any JSON array response or any object with data
+        if (Array.isArray(j) && j.length > 0) capturedMovies.push({ _arr: j });
+        else capturedMovies.push(j);
+      } catch {}
+    };
+    page.on("response", moviesPageHandler);
     console.log("[bms-movies] navigating to movies page…");
     await page.goto("https://in.bookmyshow.com/explore/movies-mumbai", {
       waitUntil: "load", timeout: 60_000,
@@ -298,6 +313,7 @@ async function scrapeBMS() {
     await sleep(2000);
     await page.evaluate(() => window.scrollTo(0, 0));
     await sleep(500);
+    page.off("response", moviesPageHandler);
 
     // Helper to parse a movie item from any captured JSON shape
     function parseMovieItem(m) {
@@ -316,14 +332,31 @@ async function scrapeBMS() {
       };
     }
 
+    // Read page state for diagnostics
+    const pageDebug = await page.evaluate(() => {
+      const anchors = Array.from(document.querySelectorAll("a[href*='/movie']"));
+      return {
+        title: document.title,
+        url: window.location.href,
+        totalAnchors: document.querySelectorAll("a").length,
+        movieAnchors: anchors.length,
+        sampleHrefs: anchors.slice(0, 5).map(a => a.href),
+        bodySnippet: document.body?.innerText?.slice(0, 300),
+        nextDataKeys: window.__NEXT_DATA__ ? Object.keys(window.__NEXT_DATA__) : [],
+      };
+    });
+    console.log("[bms-movies] page debug:", JSON.stringify(pageDebug));
+    console.log(`[bms-movies] captured ${capturedMovies.length} JSON responses; allMoviesPageResponses count=${allMoviesPageResponses.length}`);
+
     // 1. Primary: process network responses captured while on movies page
     if (capturedMovies.length > 0) {
       console.log(`[bms-movies] processing ${capturedMovies.length} captured network responses`);
       for (const json of capturedMovies) {
         // BMS API responses vary: arrays at top level or nested in known keys
         const candidates = [];
+        // _arr is our wrapper for top-level arrays
         const sources = [
-          json, json?.MovieList, json?.FilmGrid, json?.Films, json?.filmList,
+          json?._arr, json, json?.MovieList, json?.FilmGrid, json?.Films, json?.filmList,
           json?.ContentList, json?.Rows, json?.data, json?.results, json?.items,
         ];
         for (const src of sources) {
@@ -345,6 +378,8 @@ async function scrapeBMS() {
       }
       console.log(`[bms-movies] from network: ${movies.length} movies`);
     }
+    // Store response keys in debug so we can read from the JSON after the run
+    const responseKeySample = allMoviesPageResponses.slice(0, 15);
 
     // 2. Secondary: __NEXT_DATA__ walk (if network gave nothing)
     if (movies.length === 0) {
@@ -423,6 +458,7 @@ async function scrapeBMS() {
     }
 
     console.log(`[bms-movies] collected ${movies.length} movies total`);
+    moviesDebug = { pageDebug, responseKeySample };
 
   } catch (err) {
     console.warn("[bms] scrape error:", err.message);
@@ -430,7 +466,7 @@ async function scrapeBMS() {
     await browser.close();
   }
 
-  return { events, movies };
+  return { events, movies, _moviesDebug: moviesDebug };
 }
 
 // ─── BMS detail-page JSON-LD parser ──────────────────────────────────────────
@@ -661,7 +697,7 @@ async function main() {
   writeFileSync(OUTPUT, JSON.stringify({ fetchedAt: new Date().toISOString(), count: events.length, events }, null, 2));
   console.log(`Wrote → data/events-cache.json`);
 
-  writeFileSync(MOVIES_OUTPUT, JSON.stringify({ fetchedAt: new Date().toISOString(), count: bmsMovies.length, movies: bmsMovies }, null, 2));
+  writeFileSync(MOVIES_OUTPUT, JSON.stringify({ fetchedAt: new Date().toISOString(), count: bmsMovies.length, movies: bmsMovies, _debug: bmsData._moviesDebug ?? null }, null, 2));
   console.log(`Wrote → data/movies-cache.json (${bmsMovies.length} movies)`);
 }
 
