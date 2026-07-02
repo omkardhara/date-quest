@@ -32,10 +32,12 @@ const SERP_CATEGORIES: { q: string; category: EventCategory }[] = [
 ];
 
 // Best-effort parse of SerpAPI "when" strings like "Thursday, Jul 10, 8:30 PM"
-// into an ISO date string so the ±1 day filter works without guessing format.
+// or date ranges like "Jul 18 – Jul 20" into an ISO date string.
 function parseWhenIso(when?: string): string | undefined {
   if (!when) return undefined;
-  const m = when.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\.?\s+(\d{1,2})/i);
+  // For date ranges take only the start portion (before en/em dash or " - ")
+  const firstPart = when.split(/\s*[–—]\s*|\s+-\s+/)[0];
+  const m = firstPart.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*\.?\s+(\d{1,2})/i);
   if (!m) return undefined;
   const year = new Date().getFullYear();
   const d = new Date(`${m[1]} ${m[2]} ${year}`);
@@ -169,7 +171,15 @@ export async function searchEvents(
       return evMs >= outingMs - dayMs && evMs <= outingMs + 30 * dayMs;
     });
 
-    return dedup([...onDay, ...upcoming]).slice(0, 12);
+    // Sort: dated events first (closer date = higher priority), undated last.
+    const merged = dedup([...onDay, ...upcoming]);
+    merged.sort((a, b) => {
+      if (a.startIso && b.startIso) return new Date(a.startIso).getTime() - new Date(b.startIso).getTime();
+      if (a.startIso) return -1;
+      if (b.startIso) return 1;
+      return 0;
+    });
+    return merged.slice(0, 12);
   }
 
   return cachedEvents.slice(0, 12);
