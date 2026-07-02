@@ -1184,6 +1184,7 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bombay+Closet+Cleanse+Bandra",
     "summary": "Curated secondhand and vintage in a cool little store. Thrift without the dust, very photogenic.",
     "veg": true,
+    "rating": 3.6,
     "tags": [
       "shopping",
       "thrift",
@@ -2499,6 +2500,7 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Powai+Lake+Mumbai",
     "summary": "Mumbai's inland lake with IIT's green campus on one side and Hiranandani's skyline on the other. A calm, uncrowded walk — completely different energy to the city you just left.",
     "veg": true,
+    "restroom": "Cleanest nearby: a café in Hiranandani Gardens, 2 min from the Powai lake road.",
     "tags": [
       "nature",
       "lowcrowd",
@@ -5228,6 +5230,7 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=IIT+Bombay+campus+walk+Powai",
     "summary": "IIT's green campus around Powai lake is one of Mumbai's most scenic hidden walks — deer sightings, lake views and a quietness that doesn't feel like the city.",
     "veg": true,
+    "restroom": "Cleanest nearby: a café in Hiranandani Gardens, 2 min from the IIT main gate.",
     "tags": [
       "nature",
       "lakeside",

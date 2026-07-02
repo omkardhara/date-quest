@@ -30,6 +30,7 @@ export interface Place {
   closedDays?: number[];  // 0=Sun..6=Sat the venue is closed
   rating?: number;        // live: Google rating
   source?: "curated" | "live"; // where this place came from
+  restroom?: string;      // override zone-based restroom suggestion for this specific place
 }
 
 export interface Answers {

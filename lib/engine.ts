@@ -273,6 +273,7 @@ function pick(
       const distFromEnd = recentEnvs.length - 1 - lastIdx;
       v -= Math.max(4, 14 - distFromEnd * 2); // -14 recent, sliding to -4 for old picks
     }
+    v += (Math.random() - 0.5) * 2; // ±1 noise so the same place doesn't always win
     return v;
   };
 
@@ -280,20 +281,26 @@ function pick(
   // Pick from the close contenders, not always #1, so re-runs vary and the live
   // pool actually surfaces. A clear winner (e.g. a requested stop) still wins.
   const top = ranked[0].v;
-  const contenders = ranked.filter(r => r.v >= top - 4).slice(0, 4).map(r => r.p);
+  const contenders = ranked.filter(r => r.v >= top - 8).slice(0, 6).map(r => r.p);
   const best = weightedPick(contenders);
-  // Prefer same-zone alternatives so swapping a card doesn't break route geography.
+  // Alternatives: same category first (so swapping a shopping card shows more shops),
+  // then same zone, then anything. Keeps swap results relevant.
   const bestZone = best.zone ?? "multiple";
   const allAlts  = ranked.map(r => r.p).filter(p => p.id !== best.id);
-  const sameZone = allAlts.filter(p => (p.zone ?? "multiple") === bestZone).slice(0, 3);
-  const alts = sameZone.length >= 1 ? sameZone : allAlts.slice(0, 3);
+  const sameCatAlts = allAlts.filter(p => p.category === best.category);
+  const sameZoneSameCat = sameCatAlts.filter(p => (p.zone ?? "multiple") === bestZone);
+  const sameZone = allAlts.filter(p => (p.zone ?? "multiple") === bestZone);
+  const alts = sameZoneSameCat.length >= 1 ? sameZoneSameCat.slice(0, 3)
+             : sameCatAlts.length >= 1 ? sameCatAlts.slice(0, 3)
+             : sameZone.length >= 1 ? sameZone.slice(0, 3)
+             : allAlts.slice(0, 3);
   return { place: best, zone: (best.zone ?? "multiple") as Zone, alts };
 }
 
 // Weighted random favouring the front of the list (geometric falloff).
 function weightedPick<T>(arr: T[]): T {
   if (arr.length <= 1) return arr[0];
-  const weights = arr.map((_, i) => Math.pow(0.55, i));
+  const weights = arr.map((_, i) => Math.pow(0.65, i));
   const sum = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * sum;
   for (let i = 0; i < arr.length; i++) { r -= weights[i]; if (r <= 0) return arr[i]; }
@@ -372,7 +379,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
       travelFromPrev: blocks.length === 0 && tripMins <= 10 ? undefined : travel,
       backup:         backupFor(p),
       // Only suggest a restroom for outdoor/open-air stops — restaurants and indoor venues have their own.
-      restroom:       (p.indoor || ["food", "cafe", "dessert"].includes(p.category)) ? undefined : restroomFor(zone),
+      restroom:       (p.indoor || ["food", "cafe", "dessert"].includes(p.category)) ? undefined : (p.restroom ?? restroomFor(zone)),
       alternatives:   (result.alts ?? []).map(toAlt),
       kind,
     });
