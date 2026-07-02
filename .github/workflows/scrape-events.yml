@@ -36,6 +36,10 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/events-cache.json data/movies-cache.json
-          git diff --cached --quiet || git commit -m "chore: refresh Mumbai events + movies cache [skip ci]"
-          git pull --rebase origin main
-          git push
+          git diff --cached --quiet && echo "no cache changes" && exit 0
+          git commit -m "chore: refresh Mumbai events + movies cache [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            echo "push attempt $i failed, retrying in 5s…"
+            sleep 5
+          done
