@@ -325,7 +325,19 @@ export function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: numbe
         </div>
         <p className="mt-2 text-sm text-white/70">{shown.blurb}</p>
 
-        {b.movie && <MovieChip movie={b.movie} />}
+        {b.movie
+          ? <MovieChip movie={b.movie} />
+          : b.place?.tags?.includes("cinema") && (
+            <a href="https://in.bookmyshow.com/explore/movies-mumbai" target="_blank" rel="noreferrer"
+              className="mt-3 flex items-center gap-2 rounded-xl bg-violet-500/10 border border-violet-400/20 px-3 py-2.5 hover:bg-violet-500/15">
+              <span className="text-lg leading-none">🎬</span>
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-wide text-violet-300/70">Now Playing</p>
+                <p className="text-xs text-white/60">Check what's showing on BookMyShow →</p>
+              </div>
+            </a>
+          )
+        }
 
         {shown.topDishes && shown.topDishes.length > 0 && (
           <p className="mt-2 text-xs text-white/60"><span className="text-white/40">Order:</span> {shown.topDishes.join(" · ")}</p>

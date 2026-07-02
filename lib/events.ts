@@ -123,6 +123,9 @@ function loadFileCache(): PlanEvent[] {
   return [];
 }
 
+// Race live sources against this timeout so Vercel functions never hang.
+const LIVE_TIMEOUT_MS = 4000;
+
 export async function searchEvents(
   _q: string,
   dateISO?: string
@@ -131,15 +134,23 @@ export async function searchEvents(
 
   if (!cachedEvents || now - cacheTime > CACHE_TTL_MS) {
     const fileEvents = loadFileCache();
-    const [serpResult, liveResult] = await Promise.allSettled([
-      searchSerpAll(),
-      scrapeAllEvents(),
-    ]);
-    const serp    = serpResult.status  === "fulfilled" ? serpResult.value  : [];
-    const scraped = liveResult.status === "fulfilled" ? liveResult.value : [];
 
-    // Merge: serp first (date-parsed, most reliable), then live scrape, then file cache.
-    // Dedup by title so the serp version wins when the same event appears in multiple sources.
+    // If file cache has events, only wait for SerpAPI (fast, skips slow allevents scraping).
+    // If file cache is empty, try both sources but cap at LIVE_TIMEOUT_MS.
+    const liveSources = fileEvents.length > 0
+      ? Promise.allSettled([searchSerpAll()])
+          .then(([s]) => ({ serp: s.status === "fulfilled" ? s.value : [], scraped: [] }))
+      : Promise.allSettled([searchSerpAll(), scrapeAllEvents()])
+          .then(([s, sc]) => ({
+            serp: s.status === "fulfilled" ? s.value : [],
+            scraped: sc.status === "fulfilled" ? sc.value : [],
+          }));
+
+    const timeout = new Promise<{ serp: PlanEvent[]; scraped: PlanEvent[] }>(r =>
+      setTimeout(() => r({ serp: [], scraped: [] }), LIVE_TIMEOUT_MS)
+    );
+
+    const { serp, scraped } = await Promise.race([liveSources, timeout]);
     cachedEvents = dedup([...serp, ...scraped, ...fileEvents]);
     cacheTime = now;
     console.log(
