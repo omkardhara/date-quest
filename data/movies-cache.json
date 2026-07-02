@@ -1,5 +1,17 @@
 {
-  "fetchedAt": "2026-07-02T04:05:38.335Z",
+  "fetchedAt": "2026-07-02T04:12:37.612Z",
   "count": 0,
-  "movies": []
+  "movies": [],
+  "_debug": {
+    "pageDebug": {
+      "title": "Attention Required! | Cloudflare",
+      "url": "https://in.bookmyshow.com/explore/movies-mumbai",
+      "totalAnchors": 1,
+      "movieAnchors": 0,
+      "sampleHrefs": [],
+      "bodySnippet": "Sorry, you have been blocked\nYou are unable to access bookmyshow.com\nWhy have I been blocked?\n\nThis website is using a security service to protect itself from online attacks. The action you just performed triggered the security solution. There are several actions that could trigger this block includ",
+      "nextDataKeys": []
+    },
+    "responseKeySample": []
+  }
 }
