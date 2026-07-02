@@ -514,6 +514,13 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
   }
 
+  // Post-dinner experience: honours explicit requests that need a late slot — standup comedy,
+  // live music, gaming etc. that are gated to bestTime "night" (≥ 6 pm) and never get picked
+  // in afternoon slots. Only fires when requests are still unfulfilled and there's room.
+  if (pendingRequests.length > 0 && end > 1200 && cursor < end - 90) {
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, recentEnvs, spiritualUsed), "experience");
+  }
+
   // Dessert (20-min minimum to avoid a 5-minute dessert block)
   if (end - cursor > 20) {
     add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs, spiritualUsed), "dessert");

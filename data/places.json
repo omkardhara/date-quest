@@ -1,5 +1,25 @@
 [
   {
+    "id": "smaaash-lower-parel",
+    "name": "Smaaash, Lower Parel",
+    "category": "experience",
+    "area": "Lower Parel, Central Mumbai",
+    "zone": "central",
+    "moods": ["birthday", "celebrate", "chill", "date night", "group outing", "just because"],
+    "vibes": ["playful", "fun", "artsy"],
+    "cuisines": [],
+    "budgetLevel": 2,
+    "costPerPerson": 700,
+    "durationMins": 90,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Smaaash+Lower+Parel+Mumbai",
+    "summary": "Mumbai's biggest gaming entertainment centre — cricket simulators, VR, bowling, racing rigs and an arcade floor. Loud, competitive, actually fun.",
+    "veg": true,
+    "tags": ["gaming", "arcade", "indoor", "bowling", "vr", "playful"]
+  },
+  {
     "id": "sgnp-kanheri",
     "name": "SGNP forest trail to Kanheri Caves",
     "category": "activity",
