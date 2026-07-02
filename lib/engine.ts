@@ -1,5 +1,5 @@
 import placesData from "@/data/places.json";
-import { Answers, Place, Plan, PlanBlock, Category, TravelFromPrev, AltPlace } from "./types";
+import { Answers, Place, Plan, PlanBlock, Category, TravelFromPrev, AltPlace, MovieInfo } from "./types";
 import { PROFILE } from "./profile";
 import { narrate, greeting, signoff } from "./narrate";
 import { restroomFor, outfitFor, buildFlags } from "./concierge";
@@ -310,7 +310,7 @@ function backupFor(p: Place): string | undefined {
 }
 
 // ─── Main builder ─────────────────────────────────────────────────────────────
-export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
+export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[] = []): Plan {
   const pool       = extra.length ? [...PLACES, ...extra] : PLACES;
   const used       = new Set<string>();
   const blocks:      PlanBlock[] = [];
@@ -376,6 +376,22 @@ export function buildPlan(ans: Answers, extra: Place[] = []): Plan {
       alternatives:   (result.alts ?? []).map(toAlt),
       kind,
     });
+
+    // If this is a cinema and movies are available, attach a now-playing recommendation.
+    if ((p.tags ?? []).includes("cinema") && movies.length > 0) {
+      const allMoods = ans.moodList ?? [ans.mood];
+      const preferGenres = allMoods.some(m => ["romantic", "anniversary", "date night"].includes(m))
+        ? ["romance", "drama"]
+        : undefined;
+      let pool = movies;
+      if (preferGenres?.length) {
+        const filtered = movies.filter(m =>
+          preferGenres.some(g => (m.genre ?? "").toLowerCase().includes(g.toLowerCase()))
+        );
+        if (filtered.length > 0) pool = filtered;
+      }
+      blocks[blocks.length - 1].movie = pool[Math.floor(Math.random() * pool.length)];
+    }
 
     runningCost += blockCost;
     cursor       = arrivalMin + dur;

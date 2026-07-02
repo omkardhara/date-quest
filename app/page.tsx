@@ -119,6 +119,17 @@ export default function Page() {
       } catch { return []; }
     })();
 
+    const moviesReq = (async () => {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 4000);
+        const res = await fetch("/api/movies", { signal: ctrl.signal });
+        clearTimeout(t);
+        const data = await res.json();
+        return Array.isArray(data) ? data : [];
+      } catch { return []; }
+    })();
+
     const weather = (async () => {
       try {
         const ctrl = new AbortController();
@@ -129,10 +140,10 @@ export default function Page() {
       } catch { return { available: false }; }
     })();
 
-    const [extra, evts, wx] = await Promise.all([discover, events, weather]);
+    const [extra, evts, moviesData, wx] = await Promise.all([discover, events, moviesReq, weather]);
     if (wx?.available) { ans.wetDay = !!wx.wet; ans.weatherSummary = wx.summary; }
     try {
-      const p = buildPlan(ans, extra);
+      const p = buildPlan(ans, extra, moviesData);
       p.outingDate = outingDate;
       if (budget === 0) p.budget = 0;
       if (evts.length) p.events = evts;
@@ -183,8 +194,11 @@ export default function Page() {
       } catch { return []; }
     })();
     const extra = await discover;
+    const moviesForRegen = plan?.blocks.find(b => b.movie)
+      ? [] // already have a movie, don't re-fetch for regen
+      : await fetch("/api/movies").then(r => r.json()).catch(() => []);
     try {
-      const p = buildPlan(lastAns, extra);
+      const p = buildPlan(lastAns, extra, moviesForRegen);
       p.outingDate = outingDate;
       if (plan?.events?.length) p.events = plan.events;
       if (budget === 0) p.budget = 0;

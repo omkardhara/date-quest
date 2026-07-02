@@ -13,7 +13,8 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT    = join(__dirname, "../data/events-cache.json");
+const OUTPUT        = join(__dirname, "../data/events-cache.json");
+const MOVIES_OUTPUT = join(__dirname, "../data/movies-cache.json");
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ function guessBmsCategory(title = "", tags = []) {
 async function scrapeBMS() {
   let pw;
   try { pw = await import("playwright"); }
-  catch { console.warn("[bms] playwright not installed — skipping"); return []; }
+  catch { console.warn("[bms] playwright not installed — skipping"); return { events: [], movies: [] }; }
 
   console.log("[bms] launching Chromium…");
   const browser = await pw.chromium.launch({
@@ -91,6 +92,7 @@ async function scrapeBMS() {
   });
 
   const events = [];
+  const movies = [];
 
   try {
     await page.goto("https://in.bookmyshow.com/explore/events-mumbai", {
@@ -259,13 +261,86 @@ async function scrapeBMS() {
         } catch(err) { console.warn(`  [bms-detail] ${ev.title.slice(0,30)}: ${err.message}`); }
       }
     }
+    // ── Movies listing ────────────────────────────────────────────────────────
+    console.log("[bms-movies] navigating to movies page…");
+    await page.goto("https://in.bookmyshow.com/explore/movies-mumbai", {
+      waitUntil: "domcontentloaded", timeout: 60_000,
+    });
+    await sleep(4000);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await sleep(1000);
+
+    const movieData = await page.evaluate(() => {
+      // Try __NEXT_DATA__ first
+      try {
+        const nd = window.__NEXT_DATA__;
+        if (nd) {
+          const matches = [];
+          const walk = (obj) => {
+            if (!obj || typeof obj !== "object") return;
+            // BMS movie objects typically have MovieName + Genres or TrailerURL
+            if ((obj.MovieName || obj.filmName) && (obj.Genres || obj.TrailerURL || obj.MovieURL)) {
+              matches.push(obj);
+              return;
+            }
+            for (const v of Object.values(obj)) walk(v);
+          };
+          walk(nd.props ?? nd);
+          if (matches.length > 0) return matches.slice(0, 30).map(m => ({
+            title: m.MovieName ?? m.filmName ?? "",
+            genre: Array.isArray(m.Genres) ? m.Genres.join(", ") : (m.Genres ?? m.Genre ?? ""),
+            language: m.Language ?? m.language ?? "",
+            poster: m.MasterImage ?? m.Poster ?? m.posterImage ?? "",
+            link: m.MovieURL ?? m.url ?? "",
+          }));
+        }
+      } catch {}
+
+      // DOM fallback — movie cards are <a href*="/movies/mumbai/">
+      const anchors = Array.from(document.querySelectorAll("a[href*='/movies/mumbai/'], a[href*='/movies/']"));
+      const seen = new Set();
+      return anchors.slice(0, 40).reduce((acc, a) => {
+        const href = a.href;
+        if (seen.has(href) || !href.includes("/movies/")) return acc;
+        seen.add(href);
+        const img     = a.querySelector("img");
+        const titleEl = a.querySelector("h2,h3,h4,[class*='title'],[class*='name'],[class*='film']");
+        const genreEl = a.querySelector("[class*='genre'],[class*='tag'],[class*='category']");
+        const langEl  = a.querySelector("[class*='lang'],[class*='language']");
+        const title   = titleEl?.textContent?.trim() || img?.alt?.trim() || "";
+        if (!title || title.length < 2) return acc;
+        const dataSrc = img?.getAttribute("data-src");
+        const poster  = dataSrc || img?.src || "";
+        acc.push({
+          title,
+          genre: genreEl?.textContent?.trim() || "",
+          language: langEl?.textContent?.trim() || "",
+          poster,
+          link: href,
+        });
+        return acc;
+      }, []);
+    });
+
+    for (const m of movieData) {
+      if (!m.title) continue;
+      movies.push({
+        title: m.title.trim(),
+        genre: m.genre?.trim() || undefined,
+        language: m.language?.trim() || undefined,
+        poster: m.poster && m.poster.length > 30 ? m.poster : undefined,
+        link: m.link || undefined,
+      });
+    }
+    console.log(`[bms-movies] collected ${movies.length} movies`);
+
   } catch (err) {
     console.warn("[bms] scrape error:", err.message);
   } finally {
     await browser.close();
   }
 
-  return events;
+  return { events, movies };
 }
 
 // ─── BMS detail-page JSON-LD parser ──────────────────────────────────────────
@@ -446,8 +521,10 @@ async function main() {
     Promise.allSettled(AE_CATEGORIES.map(fetchAeCategory)),
   ]);
 
-  const bmsEvents = bmsResult.status === "fulfilled" ? bmsResult.value : [];
-  console.log(`[bms] collected ${bmsEvents.length} events`);
+  const bmsData   = bmsResult.status === "fulfilled" ? bmsResult.value : { events: [], movies: [] };
+  const bmsEvents = bmsData.events ?? [];
+  const bmsMovies = bmsData.movies ?? [];
+  console.log(`[bms] collected ${bmsEvents.length} events, ${bmsMovies.length} movies`);
 
   const aeRaw = [];
   if (aeResults.status === "fulfilled") {
@@ -493,6 +570,9 @@ async function main() {
 
   writeFileSync(OUTPUT, JSON.stringify({ fetchedAt: new Date().toISOString(), count: events.length, events }, null, 2));
   console.log(`Wrote → data/events-cache.json`);
+
+  writeFileSync(MOVIES_OUTPUT, JSON.stringify({ fetchedAt: new Date().toISOString(), count: bmsMovies.length, movies: bmsMovies }, null, 2));
+  console.log(`Wrote → data/movies-cache.json (${bmsMovies.length} movies)`);
 }
 
 main().catch(err => { console.error("Scrape failed:", err); process.exit(1); });

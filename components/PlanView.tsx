@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plan, PlanBlock, AltPlace } from "@/lib/types";
+import { Plan, PlanBlock, AltPlace, MovieInfo } from "@/lib/types";
 import { Chibi } from "./Chibi";
 import { Memories } from "./Memories";
 
@@ -253,6 +253,26 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
   );
 }
 
+function MovieChip({ movie }: { movie: MovieInfo }) {
+  return (
+    <div className="mt-3 flex items-center gap-3 rounded-xl bg-violet-500/10 border border-violet-400/20 px-3 py-2.5">
+      {movie.poster && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={movie.poster} alt={movie.title} className="h-16 w-11 rounded-md object-cover shrink-0" loading="lazy" />
+      )}
+      <div className="min-w-0 flex-1">
+        <p className="text-[10px] font-medium uppercase tracking-wide text-violet-300/70">🎬 Now Playing</p>
+        <p className="text-sm font-semibold text-white/90 leading-snug">{movie.title}</p>
+        {(movie.genre || movie.language) && (
+          <p className="mt-0.5 text-[10px] text-white/45">
+            {[movie.genre, movie.language].filter(Boolean).join(" · ")}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TravelSegment({ mins, fromLabel, directionsUrl }: { mins: number; fromLabel: string; directionsUrl: string }) {
   // Shorten very long place names so they don't overflow on mobile.
   const label = fromLabel.length > 28 ? fromLabel.slice(0, 26) + "…" : fromLabel;
@@ -305,6 +325,8 @@ export function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: numbe
         </div>
         <p className="mt-2 text-sm text-white/70">{shown.blurb}</p>
 
+        {b.movie && <MovieChip movie={b.movie} />}
+
         {shown.topDishes && shown.topDishes.length > 0 && (
           <p className="mt-2 text-xs text-white/60"><span className="text-white/40">Order:</span> {shown.topDishes.join(" · ")}</p>
         )}
@@ -323,8 +345,10 @@ export function Block({ b, i, shown, swapped, onSwap }: { b: PlanBlock; i: numbe
           {shown.mapsUrl && (
             <a href={shown.mapsUrl} target="_blank" rel="noreferrer" className="rounded-lg bg-white/8 px-3 py-1.5 text-xs hover:bg-white/15">Open in Maps</a>
           )}
-          {b.place?.bookingUrl && (
-            <a href={b.place.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary rounded-lg px-3 py-1.5 text-xs font-medium text-white">Book</a>
+          {(b.movie?.link || b.place?.bookingUrl) && (
+            <a href={b.movie?.link ?? b.place?.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary rounded-lg px-3 py-1.5 text-xs font-medium text-white">
+              {b.movie ? "Book tickets ↗" : "Book"}
+            </a>
           )}
           {hasAlts && (
             <button onClick={onSwap} className="ml-auto rounded-lg border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:text-white hover:border-white/30">

@@ -68,6 +68,7 @@ export interface PlanBlock {
   restroom?: string;      // nearest women-friendly restroom near this stop
   alternatives?: AltPlace[]; // swap options for this slot
   kind: Category | "buffer";
+  movie?: MovieInfo;
 }
 
 export interface AltPlace {
@@ -85,6 +86,14 @@ export interface AltPlace {
 export interface Flag {
   icon: string;
   text: string;
+}
+
+export interface MovieInfo {
+  title: string;
+  genre?: string;
+  language?: string;
+  poster?: string;
+  link?: string;
 }
 
 export type EventCategory = "music" | "comedy" | "theatre" | "art" | "food" | "film" | "fitness" | "other";
