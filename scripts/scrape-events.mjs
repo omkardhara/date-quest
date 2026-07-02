@@ -28,8 +28,10 @@ function formatDate(iso) {
 
 function buildPriceLabel(low, high) {
   if (low == null) return undefined;
-  if (Number(low) === 0) return "Free";
-  return high && high !== low ? `₹${low}–₹${high}` : `₹${low} onwards`;
+  const lo = Math.round(parseFloat(String(low)));
+  if (lo === 0 || isNaN(lo)) return lo === 0 ? "Free" : undefined;
+  const hi = high != null ? Math.round(parseFloat(String(high))) : undefined;
+  return hi && hi !== lo ? `₹${lo}–₹${hi}` : `₹${lo} onwards`;
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -202,6 +204,61 @@ async function scrapeBMS() {
       }
       console.log(`[bms] DOM → ${events.length} events`);
     }
+
+    // Playwright detail-page enrichment: visit each event link to get JSON-LD
+    // (plain fetch returns 403 from BMS; Playwright with same session bypasses it)
+    const toEnrich = events.filter(e => !e.startIso && e.link).slice(0, 15);
+    if (toEnrich.length > 0) {
+      console.log(`[bms] enriching ${toEnrich.length} events via detail pages…`);
+      for (const ev of toEnrich) {
+        try {
+          await sleep(800);
+          await page.goto(ev.link, { waitUntil: "domcontentloaded", timeout: 30_000 });
+          await sleep(1500);
+          const detail = await page.evaluate(() => {
+            try {
+              for (const s of document.querySelectorAll('script[type="application/ld+json"]')) {
+                const json = JSON.parse(s.textContent);
+                if (String(json["@type"]).match(/Event/i)) return json;
+              }
+            } catch {}
+            // Fallback: __NEXT_DATA__
+            try {
+              const nd = window.__NEXT_DATA__;
+              if (!nd) return null;
+              const str = JSON.stringify(nd);
+              const m = str.match(/"startDate":"([^"]+)"/);
+              if (!m) return null;
+              const priceM = str.match(/"(?:minPrice|MinCost|Price|price)"\s*:\s*"?(\d[\d.]*)"?/);
+              const venueM = str.match(/"(?:VenueName|venueName|venue)"\s*:\s*"([^"]+)"/);
+              const imgM   = str.match(/"(?:CoverImage|EventImage|image)"\s*:\s*"(https:[^"]+)"/);
+              return {
+                "@type": "Event",
+                startDate: m[1],
+                offers: priceM ? [{ "@type": "AggregateOffer", lowPrice: priceM[1] }] : undefined,
+                location: venueM ? { name: venueM[1] } : undefined,
+                image: imgM ? imgM[1] : undefined,
+              };
+            } catch {}
+            return null;
+          });
+          if (!detail) continue;
+          const start     = detail.startDate ?? detail.startTime;
+          const offersRaw = detail.offers;
+          const offerObj  = Array.isArray(offersRaw)
+            ? (offersRaw.find(o => o["@type"] === "AggregateOffer") ?? offersRaw[0])
+            : offersRaw;
+          const low = offerObj?.lowPrice ?? offerObj?.price;
+          const high = offerObj?.highPrice;
+          if (start) { ev.startIso = new Date(start).toISOString(); ev.when = formatDate(ev.startIso); }
+          if (low != null) { ev.price = Math.round(parseFloat(low)); ev.priceLabel = buildPriceLabel(low, high); }
+          if (detail.location?.name) ev.venue = detail.location.name.trim();
+          const img = Array.isArray(detail.image) ? detail.image[0] : detail.image;
+          if (img && String(img).startsWith("http") && String(img).length > 30) ev.thumbnail = img;
+          console.log(`  [bms-detail] ${ev.title.slice(0,45)} → ${ev.startIso ?? "(no date)"}`);
+        } catch(err) { console.warn(`  [bms-detail] ${ev.title.slice(0,30)}: ${err.message}`); }
+      }
+    }
   } catch (err) {
     console.warn("[bms] scrape error:", err.message);
   } finally {
@@ -345,54 +402,33 @@ async function fetchAeCategory({ url, category }) {
   }
 }
 
-// ─── 3. Detail-page enrichment (BMS + allevents) ─────────────────────────────
-// Fetches each undated event's own page to extract JSON-LD with exact date + price.
-// BMS uses Next.js SSR so plain fetch works. allevents detail pages also have JSON-LD.
-// BMS events are processed first (higher quality data), then allevents.
-// Capped at MAX_ENRICH total to stay within GitHub Actions time limits.
+// ─── 3. allevents detail-page enrichment ──────────────────────────────────────
+// Fetches each undated allevents event's own page to extract JSON-LD date + price.
+// BMS enrichment is handled in-browser by scrapeBMS() (plain fetch returns 403).
+// Capped at MAX_ENRICH to stay within GitHub Actions time limits.
 
-const MAX_ENRICH = 50;
+const MAX_ENRICH = 40;
 
 async function enrichWithDetails(events) {
-  const undatedBms = events.filter(e => !e.startIso && e.link && e.source === "bms");
-  const undatedAe  = events.filter(e => !e.startIso && e.link && e.source === "allevents");
-  // BMS first (20 max), then allevents up to the cap
-  const toEnrich = [
-    ...undatedBms,
-    ...undatedAe.slice(0, Math.max(0, MAX_ENRICH - undatedBms.length)),
-  ].slice(0, MAX_ENRICH);
-
+  const undated = events.filter(e => !e.startIso && e.link && e.source === "allevents");
+  const toEnrich = undated.slice(0, MAX_ENRICH);
   if (toEnrich.length === 0) return events;
-  console.log(`[enrich] ${undatedBms.length} BMS + ${Math.min(undatedAe.length, MAX_ENRICH - undatedBms.length)} allevents detail pages…`);
+  console.log(`[enrich] fetching ${toEnrich.length} allevents detail pages…`);
 
   for (const ev of toEnrich) {
     try {
-      await sleep(300); // polite delay
-      if (ev.source === "bms") {
-        const res = await fetch(ev.link, { headers: BMS_HEADERS });
-        if (!res.ok) continue;
-        const html   = await res.text();
-        const detail = bmsParseJsonLd(html);
-        if (!detail) continue;
-        if (detail.startIso)  { ev.startIso = detail.startIso; ev.when = detail.when; }
-        if (detail.price != null) { ev.price = detail.price; ev.priceLabel = detail.priceLabel; }
-        if (detail.venue)     ev.venue     = detail.venue;
-        if (detail.address)   ev.address   = detail.address;
-        if (detail.thumbnail) ev.thumbnail = detail.thumbnail; // fix truncated lazy-load URL
-        console.log(`  [bms] ${ev.title.slice(0, 50)} → ${ev.startIso ?? "(no date)"}`);
-      } else {
-        const res = await fetch(ev.link, { headers: AE_HEADERS });
-        if (!res.ok) continue;
-        const html   = await res.text();
-        const parsed = aeParseJsonLd(html, ev.category);
-        const detail = parsed[0];
-        if (!detail) continue;
-        if (detail.startIso)  { ev.startIso = detail.startIso; ev.when = detail.when; }
-        if (detail.price != null) { ev.price = detail.price; ev.priceLabel = detail.priceLabel; }
-        if (detail.venue)     ev.venue     = detail.venue;
-        if (detail.address)   ev.address   = detail.address;
-        console.log(`   [ae] ${ev.title.slice(0, 50)} → ${ev.startIso ?? "(no date)"}`);
-      }
+      await sleep(300);
+      const res = await fetch(ev.link, { headers: AE_HEADERS });
+      if (!res.ok) continue;
+      const html   = await res.text();
+      const parsed = aeParseJsonLd(html, ev.category);
+      const detail = parsed[0];
+      if (!detail) continue;
+      if (detail.startIso)      { ev.startIso = detail.startIso; ev.when = detail.when; }
+      if (detail.price != null) { ev.price = detail.price; ev.priceLabel = detail.priceLabel; }
+      if (detail.venue)         ev.venue    = detail.venue;
+      if (detail.address)       ev.address  = detail.address;
+      console.log(`   [ae] ${ev.title.slice(0, 50)} → ${ev.startIso ?? "(no date)"}`);
     } catch { /* skip on network error */ }
   }
 
