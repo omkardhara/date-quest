@@ -221,9 +221,13 @@ function bmsParseJsonLd(html) {
     try {
       const json = JSON.parse(m[1]);
       if (!(json["@type"] ?? "").match(/Event/i)) continue;
-      const start = json.startDate ?? json.startTime ?? "";
-      const low   = json.offers?.lowPrice ?? json.offers?.price;
-      const high  = json.offers?.highPrice;
+      const start     = json.startDate ?? json.startTime ?? "";
+      const offersRaw = json.offers;
+      const offerObj  = Array.isArray(offersRaw)
+        ? (offersRaw.find(o => o["@type"] === "AggregateOffer") ?? offersRaw[0])
+        : offersRaw;
+      const low   = offerObj?.lowPrice ?? offerObj?.price;
+      const high  = offerObj?.highPrice;
       const price = low != null ? parseFloat(String(low)) : undefined;
       const img   = Array.isArray(json.image) ? json.image[0] : json.image;
       return {
@@ -279,8 +283,13 @@ function aeParseJsonLd(html, category) {
       for (const ev of items) {
         if (!ev?.name) continue;
         const start = ev.startDate ?? ev.startTime ?? "";
-        const low   = ev.offers?.lowPrice  ?? ev.offers?.price;
-        const high  = ev.offers?.highPrice;
+        // offers may be a single object or an array; prefer AggregateOffer for price range
+        const offersRaw = ev.offers;
+        const offerObj  = Array.isArray(offersRaw)
+          ? (offersRaw.find(o => o["@type"] === "AggregateOffer") ?? offersRaw[0])
+          : offersRaw;
+        const low   = offerObj?.lowPrice ?? offerObj?.price;
+        const high  = offerObj?.highPrice;
         const price = low != null ? parseFloat(String(low)) : undefined;
         results.push({
           title: ev.name.trim(),

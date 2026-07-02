@@ -161,7 +161,7 @@ export async function searchEvents(
       return (e.when ?? "").includes(md);
     });
 
-    if (onDay.length >= 2) return dedup(onDay).slice(0, 12);
+    if (onDay.length >= 6) return dedup(onDay).slice(0, 12);
 
     // Fallback: show upcoming events within 30 days (or undated events when
     // the cache has no date info yet) so the section is never blank.
