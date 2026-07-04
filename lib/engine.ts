@@ -298,7 +298,7 @@ function pick(
   if (recentEnvs.includes("shopping")) {
     const noShop = cand.filter(p => environment(p) !== "shopping");
     if (noShop.length) cand = noShop;
-    else return undefined; // no non-shopping alternatives — skip slot rather than doubling up
+    else return null; // no non-shopping alternatives — skip slot rather than doubling up
   }
   if (recentEnvs.includes("sea")) {
     const noSea = cand.filter(p => environment(p) !== "sea");
