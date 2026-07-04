@@ -28,6 +28,12 @@ const TRAVEL_BASE: Record<string, number> = {
   "central-south":      20,
   "central-thane":      50,
   "gorai-home":         75,
+  "gorai-vasai":        75,  // coastal road north, feasible but a stretch
+  "karjat-kolad":       60,  // same direction, one valley over
+  "karjat-vasai":      200,  // must cut through the city — almost never worth it
+  "karjat-gorai":      180,  // city crossing required
+  "kolad-vasai":       220,  // city crossing + coastal highway
+  "kolad-gorai":       190,
   "home-south":         60,
   "home-thane":         45,
   "home-vasai":         90,
@@ -73,7 +79,7 @@ const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
   south_loop:      ["south", "central", "bandra", "multiple"],
   north_adventure: ["borivali", "andheri_w", "bandra", "multiple"],
   thane_east:      ["thane", "home", "andheri_w", "multiple"],
-  full_day_out:    ["vasai", "karjat", "kolad", "gorai", "multiple"],
+  full_day_out:    ["karjat", "kolad", "gorai", "multiple"],
 };
 
 function detectCorridor(ans: Answers): Corridor {
@@ -156,7 +162,10 @@ function wet(ans: Answers): boolean {
 
 function score(p: Place, ans: Answers, band: string, remainingBudget: number): number {
   let s = 0;
-  s += overlap(p.vibes, ans.personality) * 3;
+  // Food category: vibes × 1 (cuisine, budget, mood dominate restaurant selection).
+  // Activities: vibes × 3 (personality match is the primary driver).
+  const vibesWeight = FOODY.includes(p.category) ? 1 : 3;
+  s += overlap(p.vibes, ans.personality) * vibesWeight;
   // Score against ALL selected moods, not just the primary one.
   const allMoods = ans.moodList ?? [ans.mood];
   if (p.moods.some(m => allMoods.includes(m))) s += 2;
@@ -166,10 +175,14 @@ function score(p: Place, ans: Answers, band: string, remainingBudget: number): n
   const cost = p.costPerPerson * 2;
   if (cost <= remainingBudget)            s += 2;
   else if (cost > remainingBudget * 1.3)  s -= 5;
-  // Budget pressure: nudge toward paid experiences when plenty of budget is left,
-  // so a ₹5k plan doesn't end up costing ₹2k because free parks always win.
-  if (cost > 0 && remainingBudget > ans.budget * 0.5) {
-    s += Math.min(2, p.costPerPerson / 250);
+  // Budget pressure: scale with how much budget is left and the plan's total budget,
+  // so a ₹8k plan actively seeks premium experiences instead of settling for free parks.
+  // Threshold 20% (not 40%) so pressure still applies late in plan when budget is mostly spent.
+  if (cost > 0 && remainingBudget > ans.budget * 0.2) {
+    // Scale by cost-as-%-of-budget so expensive food/experiences clearly beat cheap ones.
+    const budgetScale = ans.budget / 5000; // 1.0 for ₹5k, 1.6 for ₹8k, 4.0 for ₹20k
+    const leftRatio   = remainingBudget / ans.budget;
+    s += Math.min(budgetScale * 25, (p.costPerPerson / ans.budget) * 100 * budgetScale) * leftRatio;
   }
   if (ans.personality.includes("adventure")) s += p.adventureLevel;
   if (ans.personality.includes("peaceful"))  s += 3 - p.adventureLevel;
@@ -196,11 +209,13 @@ function isSpiritual(p: Place): boolean {
   const name = p.name.toLowerCase();
   const tags = p.tags ?? [];
   return tags.includes("spiritual") ||
-    ["temple","mandir","ashram","mosque","church","gurudwara","dargah","iskcon","vitthal","sadbhakti"].some(w => name.includes(w));
+    ["temple","mandir","ashram","mosque","church","basilica","gurudwara","dargah","iskcon","vitthal","sadbhakti"].some(w => name.includes(w));
 }
 
 // Classify a place into a broad environment bucket for diversity scoring.
 function environment(p: Place): string {
+  // Food venues are always "food" regardless of their location or tags.
+  if (p.category === "food" || p.category === "cafe" || p.category === "dessert") return "food";
   const name = p.name.toLowerCase();
   const tags = p.tags ?? [];
   if (tags.some(t => ["beach","sea","promenade","waterfront","causeway","lake","river"].includes(t)) ||
@@ -209,13 +224,13 @@ function environment(p: Place): string {
   if (tags.some(t => ["garden","park","forest","nature","trek"].includes(t)) ||
       ["garden","park","colony","forest","hill","trail","nature"].some(w => name.includes(w)))
     return "park";
-  if (tags.some(t => ["heritage","architecture","walk","historic","fort","spiritual"].includes(t)) ||
-      ["heritage","walk","fort","temple","basilica","dargah","tank","mandir","ashram","mosque","church","gurudwara"].some(w => name.includes(w)))
-    return "heritage";
+  // Shopping check before heritage — a shopping place is "shopping" even if its name has "walk"
   if (tags.some(t => ["shopping","browse","market","fashion","bazaar","street food"].includes(t)) ||
       p.category === "shopping")
     return "shopping";
-  if (p.category === "food" || p.category === "cafe" || p.category === "dessert") return "food";
+  if (tags.some(t => ["heritage","architecture","walk","historic","fort","spiritual"].includes(t)) ||
+      ["heritage","walk","fort","temple","basilica","dargah","tank","mandir","ashram","mosque","church","gurudwara"].some(w => name.includes(w)))
+    return "heritage";
   if (p.indoor) return "indoor";
   return "outdoor";
 }
@@ -261,6 +276,25 @@ function pick(
     if (filtered.length) cand = filtered;
   }
 
+  // Hard-exclude a second shopping trip or a second sea/waterfront stop — both are repetitive.
+  if (recentEnvs.includes("shopping")) {
+    const noShop = cand.filter(p => environment(p) !== "shopping");
+    if (noShop.length) cand = noShop;
+    else return null; // no non-shopping alternatives — skip slot rather than doubling up
+  }
+  if (recentEnvs.includes("sea")) {
+    const noSea = cand.filter(p => environment(p) !== "sea");
+    if (noSea.length) cand = noSea;
+    else return null; // all remaining options are sea — skip this slot
+  }
+  // Heritage: culture/spiritual plans can visit multiple sites; all others get one heritage stop max.
+  const culturalDay = ans.personality.some((t: string) => ["culture","spiritual"].includes(t));
+  if (!culturalDay && recentEnvs.includes("heritage")) {
+    const noHeritage = cand.filter(p => environment(p) !== "heritage");
+    if (noHeritage.length) cand = noHeritage;
+    else return null; // all remaining options are heritage — skip this slot
+  }
+
   // Zones far enough from home that the travel penalty would otherwise keep the engine
   // near Andheri all day, even for corridors explicitly meant to go there.
   const FAR_ZONES = new Set<Zone>(["borivali", "thane", "south", "vasai", "karjat", "kolad", "gorai"]);
@@ -287,11 +321,16 @@ function pick(
     if (pendingRequests.length && matchesRequest(p, pendingRequests)) v += 25; // boost only until satisfied
     // Diversity: penalise repeating the same environment type across the whole day,
     // not just consecutive picks. This prevents two temples, two parks, two beaches etc.
+    // Skip penalty for explicitly requested places — if the user asked for comedy and
+    // gaming (both indoor), they should get both regardless of env repetition.
     const env = environment(p);
-    if (env !== "food" && recentEnvs.includes(env)) {
+    // "outdoor" is a catch-all for adventure spots — multiple outdoor activities per day is expected.
+    if (env !== "food" && env !== "outdoor" && recentEnvs.includes(env) && !matchesRequest(p, pendingRequests)) {
       const lastIdx = recentEnvs.lastIndexOf(env);
       const distFromEnd = recentEnvs.length - 1 - lastIdx;
-      v -= Math.max(4, 14 - distFromEnd * 2); // -14 recent, sliding to -4 for old picks
+      // Count-based stacking: 2nd occurrence −22, 3rd occurrence −44.
+      const envCount = recentEnvs.filter(e => e === env).length;
+      v -= Math.max(6, 22 - distFromEnd * 2) * Math.min(envCount, 2);
     }
     v += (Math.random() - 0.5) * 5; // ±2.5 noise — keeps top-ranked varied without tanking quality
     return v;
@@ -372,9 +411,9 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     const arrivalMin = cursor + tripMins;
     if (arrivalMin + 20 > end) return; // no time left after travel
 
-    // Meal spacing: two full meals need a 150-min gap. Dessert is exempt.
+    // Meal spacing: café-to-food or food-to-food needs a 90-min gap. Dessert is exempt.
     const isFullMeal = FULL_MEALS.includes(p.category);
-    if (isFullMeal && lastMealEnd > 0 && arrivalMin - lastMealEnd < 150) return;
+    if (isFullMeal && lastMealEnd > 0 && arrivalMin - lastMealEnd < 90) return;
 
     // Budget: never add paid stops that exceed budget. Free stops (costPerPerson 0) always fit.
     const blockCost = p.costPerPerson * 2;
@@ -400,7 +439,9 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
       backup:         backupFor(p),
       // Only suggest a restroom for outdoor/open-air stops — restaurants and indoor venues have their own.
       restroom:       (p.indoor || ["food", "cafe", "dessert"].includes(p.category)) ? undefined : (p.restroom ?? restroomFor(zone)),
-      alternatives:   (result.alts ?? []).map(toAlt),
+      // Filter alternatives by the actual arrival time so a swap card is always
+      // time-appropriate (no morning-only alt offered for an evening slot).
+      alternatives:   (result.alts ?? []).filter(a => timeAllowed(a, arrivalMin)).map(toAlt),
       kind,
     });
 
@@ -454,10 +495,19 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     return f.length > 0 ? f : undefined; // all prefs served → pick freely; never loop back to same cuisine
   };
 
-  // Hold back 25% for dinner so activities don't starve it, but leave more room
-  // than 40% so the plan actually spends closer to the stated budget.
-  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.25) : 0;
-  const actBudget = () => Math.max(0, remaining() - dinnerRes());
+  // Hold back 20% for dinner — enough protection without blocking paid afternoon activities.
+  const dinnerRes = () => end > 1140 ? Math.floor(ans.budget * 0.20) : 0;
+  // Reserve budget for pending must-include requests. For a single request (e.g. comedy only),
+  // this prevents an expensive activity from eating the budget needed for it. For two+ requests
+  // (gaming + comedy), both will be picked by the pre-dinner loop instead — no reservation needed
+  // (each actBudget call would only see the cheapest and still block the first item).
+  const pendingRes = () => {
+    if (pendingRequests.length !== 1) return 0; // only reserve when exactly one request is pending
+    const matches = pool.filter(p => matchesRequest(p, pendingRequests) && !used.has(p.id));
+    if (!matches.length) return 0;
+    return matches.reduce((mn, p) => Math.min(mn, p.costPerPerson * 2), Infinity) || 0;
+  };
+  const actBudget = () => Math.max(0, remaining() - dinnerRes() - pendingRes());
 
   // Morning activity + café (early starts only).
   // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
@@ -467,18 +517,23 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "cafe");
   }
 
-  // Lunch — reserve 40% of budget for post-lunch slots on the first food stop of the day,
-  // so one expensive pick can't starve the rest of the plan.
+  // Lunch — reserve dinner + pendingRes so a must-include isn't starved by an expensive lunch.
   if (cursor < 960 && end > 780) {
     const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
-    const lunchBudget = hadFood ? remaining() : Math.max(0, remaining() - Math.floor(ans.budget * 0.40));
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
+    const lunchBudget = hadFood ? remaining() : actBudget();
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
   }
 
   // Afternoon / first-half experience or shopping.
   // Always reserve dinner budget so afternoon picks can't starve dinner.
   if (end > 840) {
     add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+  }
+
+  // Second lunch opportunity — fires when the first food slot was blocked by meal spacing.
+  // cursor≥600 catches adventure (end=1080) days where the first activity still runs before noon.
+  if (cursor >= 600 && cursor < 1050 && end > 900 && end <= 1140 && !blocks.some(bl => ["food"].includes(bl.kind))) {
+    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
   }
 
   // Second afternoon slot: fills the pre-evening gap on long days (noon–midnight, 4pm–midnight).
@@ -503,10 +558,26 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     if (restPlace) add({ place: restPlace, zone: "home" }, "rest");
   }
 
+  // Pre-dinner must-include loop (attempt 1): fires BEFORE evening when cursor is already ≥1080.
+  // end-160 ensures at least 160 min remain: enough for travel + dinner.
+  for (let _pi = 0; _pi < 3 && pendingRequests.length > 0 && cursor >= 1080 && end > 1200 && cursor < end - 160; _pi++) {
+    const _prevCursor = cursor;
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    if (cursor === _prevCursor) break;
+  }
+
   // Evening activity / shopping — no cafe here (morning cafés always fail meal spacing at this hour)
   // Skip if dinner will fire and there's not enough room for both (~180 min: activity + travel + dinner).
   if (end > 1080 && !(end > 1140 && (end - cursor) < 180)) {
     add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+  }
+
+  // Pre-dinner must-include loop (attempt 2): catches plans where cursor was <1080 before evening.
+  // After evening fires, cursor is reliably ≥1080 so comedy/gaming can land before dinner consumes budget.
+  for (let _pi = 0; _pi < 3 && pendingRequests.length > 0 && cursor >= 1080 && end > 1200 && cursor < end - 160; _pi++) {
+    const _prevCursor = cursor;
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    if (cursor === _prevCursor) break;
   }
 
   // Dinner
