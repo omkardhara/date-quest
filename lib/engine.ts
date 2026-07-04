@@ -103,7 +103,7 @@ type Corridor = "bandra_hub" | "south_loop" | "north_adventure" | "thane_east" |
 const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
   bandra_hub:      ["bandra", "andheri_w", "central", "multiple"],
   south_loop:      ["south", "central", "bandra", "multiple"],
-  north_adventure: ["borivali", "vasai", "andheri_w", "bandra", "multiple"],
+  north_adventure: ["borivali", "vasai", "bandra", "multiple"],
   thane_east:      ["thane", "navi_mumbai", "home", "andheri_w", "multiple"],
   full_day_out:    ["karjat", "kolad", "gorai", "multiple"],
 };

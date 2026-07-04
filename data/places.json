@@ -7467,5 +7467,117 @@
       "peaceful",
       "unique"
     ]
+  },
+  {
+    "id": "naturals-borivali",
+    "name": "Naturals Ice Cream, Borivali",
+    "category": "dessert",
+    "area": "Borivali West",
+    "zone": "borivali",
+    "moods": [
+      "chill",
+      "just because",
+      "birthday",
+      "anniversary",
+      "group outing"
+    ],
+    "vibes": [
+      "peaceful",
+      "playful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 150,
+    "durationMins": 30,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Naturals+Ice+Cream+Borivali+West",
+    "summary": "The real-fruit ice cream institution. A necessary stop after a morning in the forest — the sitaphal and tender coconut flavours are worth the detour.",
+    "veg": true,
+    "tags": [
+      "icecream",
+      "dessert",
+      "local"
+    ]
+  },
+  {
+    "id": "aarey-dairy-cafe",
+    "name": "Aarey Milk Colony dairy café",
+    "category": "cafe",
+    "area": "Aarey Colony, Goregaon East",
+    "zone": "borivali",
+    "moods": [
+      "chill",
+      "date night",
+      "just because",
+      "anniversary",
+      "birthday"
+    ],
+    "vibes": [
+      "nature",
+      "peaceful",
+      "cozy"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 45,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Aarey+Milk+Colony+Dairy+Goregaon",
+    "summary": "Fresh milk, cold coffee, and kulfi served out of the Aarey Colony dairy — surrounded by open fields and grazing buffalo. The most Mumbai-specific cafe experience you can have.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "local",
+      "dairy",
+      "lowcrowd",
+      "unique",
+      "peaceful"
+    ]
+  },
+  {
+    "id": "borivali-ic-colony-food",
+    "name": "IC Colony food street, Borivali",
+    "category": "food",
+    "area": "IC Colony, Borivali West",
+    "zone": "borivali",
+    "moods": [
+      "chill",
+      "birthday",
+      "group outing",
+      "just because"
+    ],
+    "vibes": [
+      "playful",
+      "local"
+    ],
+    "cuisines": [
+      "indian",
+      "streetfood"
+    ],
+    "budgetLevel": 1,
+    "costPerPerson": 200,
+    "durationMins": 60,
+    "bestTime": "afternoon",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=IC+Colony+food+street+Borivali",
+    "summary": "The main food lane of Borivali West — chaats, pav bhaji, kebabs, and Gujarati snacks stacked side by side. A proper local lunch after a forest morning.",
+    "veg": false,
+    "tags": [
+      "street-food",
+      "local",
+      "casual",
+      "foodie"
+    ]
   }
 ]
