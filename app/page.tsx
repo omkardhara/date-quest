@@ -31,6 +31,7 @@ const GETAWAYS = [
   { id: "nashik",        name: "Nashik" },
   { id: "mahabaleshwar", name: "Mahabaleshwar" },
   { id: "palghar",       name: "Palghar" },
+  { id: "jawhar",        name: "Jawhar" },
   { id: "goa",           name: "Goa" },
 ];
 const GETAWAY_VIBES = ["Trekking & hikes", "Water spots", "Scenic photography", "Relaxed resort", "History & culture", "Wildlife & nature", "Camping & bonfire", "Wine & food"];

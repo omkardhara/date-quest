@@ -14,6 +14,7 @@ export const COORDS: Record<string, [number, number]> = {
   mahabaleshwar: [17.92, 73.66],
   bhandardara:   [19.54, 73.75],
   goa:           [15.30, 74.00],
+  jawhar:        [19.91, 73.22],
 };
 
 export interface Weather {

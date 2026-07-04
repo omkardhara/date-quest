@@ -5,8 +5,19 @@
     "category": "experience",
     "area": "Lower Parel, Central Mumbai",
     "zone": "central",
-    "moods": ["birthday", "celebrate", "chill", "date night", "group outing", "just because"],
-    "vibes": ["playful", "fun", "artsy"],
+    "moods": [
+      "birthday",
+      "celebrate",
+      "chill",
+      "date night",
+      "group outing",
+      "just because"
+    ],
+    "vibes": [
+      "playful",
+      "fun",
+      "artsy"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 700,
@@ -17,7 +28,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Smaaash+Lower+Parel+Mumbai",
     "summary": "Mumbai's biggest gaming entertainment centre — cricket simulators, VR, bowling, racing rigs and an arcade floor. Loud, competitive, actually fun.",
     "veg": true,
-    "tags": ["gaming", "arcade", "indoor", "bowling", "vr", "playful"]
+    "tags": [
+      "gaming",
+      "arcade",
+      "indoor",
+      "bowling",
+      "vr",
+      "playful"
+    ]
   },
   {
     "id": "sgnp-kanheri",
@@ -3157,9 +3175,28 @@
     "category": "food",
     "zone": "bandra",
     "area": "Bandra West, Mumbai",
-    "moods": ["date night","chill","just because","celebrate"],
-    "vibes": ["artsy","bohemian","indie","calm","cozy","quirky","garden","romantic","serene"],
-    "cuisines": ["italian","mediterranean","salads"],
+    "moods": [
+      "date night",
+      "chill",
+      "just because",
+      "celebrate"
+    ],
+    "vibes": [
+      "artsy",
+      "bohemian",
+      "indie",
+      "calm",
+      "cozy",
+      "quirky",
+      "garden",
+      "romantic",
+      "serene"
+    ],
+    "cuisines": [
+      "italian",
+      "mediterranean",
+      "salads"
+    ],
     "budgetLevel": 2,
     "costPerPerson": 700,
     "durationMins": 60,
@@ -3172,7 +3209,16 @@
     "summary": "A breezy café-restaurant with mismatched vintage furniture, fairy lights and a menu that does justice to both salads and pasta — the kind of place you linger over coffee and talk for three hours.",
     "veg": true,
     "rating": 4.3,
-    "tags": ["artsy","bohemian","indie","cozy","garden","veg-friendly","relaxed","quiet"]
+    "tags": [
+      "artsy",
+      "bohemian",
+      "indie",
+      "cozy",
+      "garden",
+      "veg-friendly",
+      "relaxed",
+      "quiet"
+    ]
   },
   {
     "id": "canvas-laugh-club",
@@ -5766,8 +5812,20 @@
     "category": "activity",
     "area": "Vasai, Palghar",
     "zone": "vasai",
-    "moods": ["adventure","chill","date night","anniversary","just because"],
-    "vibes": ["adventure","culture","peaceful","romantic","nature"],
+    "moods": [
+      "adventure",
+      "chill",
+      "date night",
+      "anniversary",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "culture",
+      "peaceful",
+      "romantic",
+      "nature"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -5780,7 +5838,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Vasai+Fort+Palghar+Mumbai",
     "summary": "Sprawling 16th-century Portuguese fort now slowly reclaimed by jungle — massive bastions, crumbling chapels, centuries of quiet. One of Maharashtra's most atmospheric ruins.",
     "veg": true,
-    "tags": ["heritage","fort","adventure","walk","free","historic","ruins","nature"]
+    "tags": [
+      "heritage",
+      "fort",
+      "adventure",
+      "walk",
+      "free",
+      "historic",
+      "ruins",
+      "nature"
+    ]
   },
   {
     "id": "kelva-beach",
@@ -5788,8 +5855,20 @@
     "category": "activity",
     "area": "Kelva, Palghar",
     "zone": "vasai",
-    "moods": ["adventure","chill","date night","romantic","anniversary","just because"],
-    "vibes": ["adventure","peaceful","nature","romantic"],
+    "moods": [
+      "adventure",
+      "chill",
+      "date night",
+      "romantic",
+      "anniversary",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful",
+      "nature",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 0,
@@ -5802,7 +5881,16 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kelva+Beach+Palghar+Maharashtra",
     "summary": "Long, empty beach 90 km north of Mumbai — clean sand, small fishing boats, almost no crowds. Drive past Vasai and keep going.",
     "veg": true,
-    "tags": ["beach","sea","adventure","nature","peaceful","lowcrowd","free","sunset"]
+    "tags": [
+      "beach",
+      "sea",
+      "adventure",
+      "nature",
+      "peaceful",
+      "lowcrowd",
+      "free",
+      "sunset"
+    ]
   },
   {
     "id": "kelva-seafood-shack",
@@ -5810,9 +5898,21 @@
     "category": "food",
     "area": "Kelva, Palghar",
     "zone": "vasai",
-    "moods": ["adventure","chill","birthday","just because"],
-    "vibes": ["adventure","peaceful","nature"],
-    "cuisines": ["seafood","indian"],
+    "moods": [
+      "adventure",
+      "chill",
+      "birthday",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful",
+      "nature"
+    ],
+    "cuisines": [
+      "seafood",
+      "indian"
+    ],
     "budgetLevel": 1,
     "costPerPerson": 300,
     "durationMins": 60,
@@ -5824,7 +5924,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kelva+Beach+seafood+stalls+Palghar",
     "summary": "Fresh catch straight from Kelva's fishing boats — surmai, pomfret, and bhakri eaten on a plastic chair with the sea right there.",
     "veg": false,
-    "tags": ["seafood","local","outdoor","nature","simple","rustic"]
+    "tags": [
+      "seafood",
+      "local",
+      "outdoor",
+      "nature",
+      "simple",
+      "rustic"
+    ]
   },
   {
     "id": "indigo-colaba",
@@ -5832,9 +5939,25 @@
     "category": "food",
     "area": "Colaba, South Mumbai",
     "zone": "south",
-    "moods": ["romantic","anniversary","birthday","celebrate","date night"],
-    "vibes": ["romantic","culture","artsy","luxe","queen"],
-    "cuisines": ["continental","mediterranean","european"],
+    "moods": [
+      "romantic",
+      "anniversary",
+      "birthday",
+      "celebrate",
+      "date night"
+    ],
+    "vibes": [
+      "romantic",
+      "culture",
+      "artsy",
+      "luxe",
+      "queen"
+    ],
+    "cuisines": [
+      "continental",
+      "mediterranean",
+      "european"
+    ],
     "budgetLevel": 3,
     "costPerPerson": 1800,
     "durationMins": 90,
@@ -5846,7 +5969,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Indigo+Restaurant+Colaba+Mumbai",
     "summary": "A Colaba institution — chandelier-lit rooms, excellent Continental menu and a wine cellar that actually knows what it's doing. One of those lunches that turns into dinner.",
     "veg": true,
-    "tags": ["heritage","culture","iconic","romantic","luxe","instagrammable"]
+    "tags": [
+      "heritage",
+      "culture",
+      "iconic",
+      "romantic",
+      "luxe",
+      "instagrammable"
+    ]
   },
   {
     "id": "gateway-harbour-cruise",
@@ -5854,8 +5984,20 @@
     "category": "experience",
     "area": "Gateway of India, Colaba",
     "zone": "south",
-    "moods": ["romantic","anniversary","birthday","date night","celebrate","chill"],
-    "vibes": ["romantic","culture","artsy","peaceful"],
+    "moods": [
+      "romantic",
+      "anniversary",
+      "birthday",
+      "date night",
+      "celebrate",
+      "chill"
+    ],
+    "vibes": [
+      "romantic",
+      "culture",
+      "artsy",
+      "peaceful"
+    ],
     "cuisines": [],
     "budgetLevel": 2,
     "costPerPerson": 800,
@@ -5868,7 +6010,17 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Mumbai+Harbour+boat+cruise+Gateway+of+India",
     "summary": "A private ferry out past the Gateway — views of the skyline dissolving into the harbour, no agenda, just the two of you on the water.",
     "veg": true,
-    "tags": ["boat","harbour","iconic","culture","heritage","romantic","outdoors","unique","views"]
+    "tags": [
+      "boat",
+      "harbour",
+      "iconic",
+      "culture",
+      "heritage",
+      "romantic",
+      "outdoors",
+      "unique",
+      "views"
+    ]
   },
   {
     "id": "matheran-viewpoints",
@@ -5876,8 +6028,21 @@
     "category": "activity",
     "area": "Matheran, Raigad",
     "zone": "karjat",
-    "moods": ["adventure","chill","date night","romantic","anniversary","just because"],
-    "vibes": ["adventure","peaceful","nature","romantic","culture"],
+    "moods": [
+      "adventure",
+      "chill",
+      "date night",
+      "romantic",
+      "anniversary",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "peaceful",
+      "nature",
+      "romantic",
+      "culture"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 200,
@@ -5890,7 +6055,18 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Matheran+hill+station+Maharashtra",
     "summary": "Asia's last no-vehicle hill station — red-clay paths through forest canopy, panoramic valley views, horses instead of rickshaws. Echo Point and Sunset Point for the best vistas.",
     "veg": true,
-    "tags": ["nature","trek","views","adventure","peaceful","romantic","forest","hill","sunrise","sunset"]
+    "tags": [
+      "nature",
+      "trek",
+      "views",
+      "adventure",
+      "peaceful",
+      "romantic",
+      "forest",
+      "hill",
+      "sunrise",
+      "sunset"
+    ]
   },
   {
     "id": "khyber-fort",
@@ -5898,9 +6074,24 @@
     "category": "food",
     "area": "Kala Ghoda, Fort",
     "zone": "south",
-    "moods": ["romantic","anniversary","date night","birthday"],
-    "vibes": ["culture","heritage","artsy","romantic","luxe"],
-    "cuisines": ["mughlai","north indian","indian"],
+    "moods": [
+      "romantic",
+      "anniversary",
+      "date night",
+      "birthday"
+    ],
+    "vibes": [
+      "culture",
+      "heritage",
+      "artsy",
+      "romantic",
+      "luxe"
+    ],
+    "cuisines": [
+      "mughlai",
+      "north indian",
+      "indian"
+    ],
     "budgetLevel": 4,
     "costPerPerson": 1300,
     "durationMins": 90,
@@ -5912,7 +6103,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Khyber+Restaurant+Fort+Mumbai",
     "summary": "Mumbai's most iconic Mughal restaurant — dark carved wood, hand-painted ceilings, and frontier-style cooking that has been a city institution since 1938. Order the dal Khyber and raan.",
     "veg": false,
-    "tags": ["heritage","iconic","culture","historic","romantic","grandeur"]
+    "tags": [
+      "heritage",
+      "iconic",
+      "culture",
+      "historic",
+      "romantic",
+      "grandeur"
+    ]
   },
   {
     "id": "mahesh-lunch-home",
@@ -5920,9 +6118,26 @@
     "category": "food",
     "area": "Fort, South Mumbai",
     "zone": "south",
-    "moods": ["romantic","anniversary","birthday","date night","just because"],
-    "vibes": ["culture","luxe","iconic","coastal","romantic"],
-    "cuisines": ["seafood","indian","coastal","konkan"],
+    "moods": [
+      "romantic",
+      "anniversary",
+      "birthday",
+      "date night",
+      "just because"
+    ],
+    "vibes": [
+      "culture",
+      "luxe",
+      "iconic",
+      "coastal",
+      "romantic"
+    ],
+    "cuisines": [
+      "seafood",
+      "indian",
+      "coastal",
+      "konkan"
+    ],
     "budgetLevel": 4,
     "costPerPerson": 1200,
     "durationMins": 90,
@@ -5934,7 +6149,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Mahesh+Lunch+Home+Fort+Mumbai",
     "summary": "The original Mumbai seafood institution — Mangalorean-style clams, butter garlic prawns and surmai that's been pulling in regulars since 1977. Functional, brilliant, always packed.",
     "veg": false,
-    "tags": ["iconic","seafood","culture","coastal","luxe","romantic"]
+    "tags": [
+      "iconic",
+      "seafood",
+      "culture",
+      "coastal",
+      "luxe",
+      "romantic"
+    ]
   },
   {
     "id": "taj-palace-afternoon-tea",
@@ -5942,8 +6164,21 @@
     "category": "experience",
     "area": "Colaba, South Mumbai",
     "zone": "south",
-    "moods": ["romantic","anniversary","birthday","date night","just because"],
-    "vibes": ["luxe","heritage","iconic","romantic","culture","spiritual"],
+    "moods": [
+      "romantic",
+      "anniversary",
+      "birthday",
+      "date night",
+      "just because"
+    ],
+    "vibes": [
+      "luxe",
+      "heritage",
+      "iconic",
+      "romantic",
+      "culture",
+      "spiritual"
+    ],
     "cuisines": [],
     "budgetLevel": 4,
     "costPerPerson": 2000,
@@ -5957,7 +6192,17 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Sea+Lounge+Taj+Mahal+Palace+Hotel+Mumbai",
     "summary": "High tea at the iconic Sea Lounge inside the Taj Mahal Palace — harbour views, warm scones, finger sandwiches, and the quiet grandeur of a century-old hotel looking out at the Gateway of India.",
     "veg": true,
-    "tags": ["heritage","iconic","luxe","culture","romantic","tea","sea-view","colaba","instagrammable"]
+    "tags": [
+      "heritage",
+      "iconic",
+      "luxe",
+      "culture",
+      "romantic",
+      "tea",
+      "sea-view",
+      "colaba",
+      "instagrammable"
+    ]
   },
   {
     "id": "kolad-adventure-rafting",
@@ -5965,8 +6210,19 @@
     "category": "experience",
     "zone": "kolad",
     "area": "Kolad, Raigad",
-    "moods": ["adventure","birthday","group outing"],
-    "vibes": ["adventure","adrenaline","outdoors","nature","thrilling","unique"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "adrenaline",
+      "outdoors",
+      "nature",
+      "thrilling",
+      "unique"
+    ],
     "cuisines": [],
     "budgetLevel": 4,
     "costPerPerson": 1800,
@@ -5980,7 +6236,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kolad+River+Rafting+Raigad",
     "summary": "Grade 2–3 rapids on the Kundalika river, two and a half hours from Mumbai. Best done early; the river is calm by noon. Book in advance on weekends.",
     "veg": true,
-    "tags": ["adventure","adrenaline","exciting","outdoors","unique","water","rafting"]
+    "tags": [
+      "adventure",
+      "adrenaline",
+      "exciting",
+      "outdoors",
+      "unique",
+      "water",
+      "rafting"
+    ]
   },
   {
     "id": "kamshet-paragliding",
@@ -5988,8 +6252,19 @@
     "category": "experience",
     "zone": "karjat",
     "area": "Kamshet, near Lonavala",
-    "moods": ["adventure","birthday","group outing"],
-    "vibes": ["adventure","adrenaline","thrilling","unique","sky","outdoors"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "adrenaline",
+      "thrilling",
+      "unique",
+      "sky",
+      "outdoors"
+    ],
     "cuisines": [],
     "budgetLevel": 4,
     "costPerPerson": 2000,
@@ -6003,7 +6278,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Paragliding+Kamshet+Maharashtra",
     "summary": "Tandem paragliding over the Sahyadri valleys — a 20-minute flight with jaw-dropping views of the hills and dams below. Kamshet is 2 hours from Mumbai and perfectly suited for a full-day trip.",
     "veg": true,
-    "tags": ["adrenaline","adventure","outdoors","unique","thrilling","sky"]
+    "tags": [
+      "adrenaline",
+      "adventure",
+      "outdoors",
+      "unique",
+      "thrilling",
+      "sky"
+    ]
   },
   {
     "id": "rajmachi-rappelling",
@@ -6011,8 +6293,19 @@
     "category": "experience",
     "zone": "karjat",
     "area": "Rajmachi, Sahyadris",
-    "moods": ["adventure","birthday","group outing"],
-    "vibes": ["adventure","outdoors","nature","trek","thrilling","adrenaline"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "outdoors",
+      "nature",
+      "trek",
+      "thrilling",
+      "adrenaline"
+    ],
     "cuisines": [],
     "budgetLevel": 3,
     "costPerPerson": 1700,
@@ -6026,7 +6319,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Rajmachi+Fort+Trek+Maharashtra",
     "summary": "A guided trek to twin forts (Shrivardhan and Manaranjan) perched on the Sahyadri ridgeline, ending with a thrilling rappel down the cliff face. 3–4 hours, includes base camping.",
     "veg": true,
-    "tags": ["adrenaline","adventure","trek","outdoors","nature","fort","thrilling"]
+    "tags": [
+      "adrenaline",
+      "adventure",
+      "trek",
+      "outdoors",
+      "nature",
+      "fort",
+      "thrilling"
+    ]
   },
   {
     "id": "tamhini-waterfall-trek",
@@ -6034,8 +6335,20 @@
     "category": "experience",
     "zone": "karjat",
     "area": "Tamhini Ghat, Pune District",
-    "moods": ["adventure","birthday","group outing","just because"],
-    "vibes": ["adventure","nature","outdoors","peaceful","waterfall","thrilling"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "nature",
+      "outdoors",
+      "peaceful",
+      "waterfall",
+      "thrilling"
+    ],
     "cuisines": [],
     "budgetLevel": 3,
     "costPerPerson": 1600,
@@ -6049,7 +6362,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tamhini+Ghat+Waterfall+Maharashtra",
     "summary": "A guided waterfall trek through jungle streams ending at a series of cascades where you can swim in natural pools. Lush and magical in the post-monsoon season.",
     "veg": true,
-    "tags": ["waterfall","nature","adventure","outdoors","trek","adrenaline"]
+    "tags": [
+      "waterfall",
+      "nature",
+      "adventure",
+      "outdoors",
+      "trek",
+      "adrenaline"
+    ]
   },
   {
     "id": "della-adventure-park",
@@ -6057,8 +6377,19 @@
     "category": "experience",
     "zone": "karjat",
     "area": "Kunegaon, Lonavala",
-    "moods": ["adventure","birthday","group outing"],
-    "vibes": ["adventure","adrenaline","thrilling","unique","outdoors","playful"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "adrenaline",
+      "thrilling",
+      "unique",
+      "outdoors",
+      "playful"
+    ],
     "cuisines": [],
     "budgetLevel": 4,
     "costPerPerson": 2000,
@@ -6072,7 +6403,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Della+Adventure+Park+Lonavala",
     "summary": "India's largest adventure park — bungee jumping, zip-lines, ATV trails, paintball, and 60+ activities spread across a hill resort near Lonavala. Book the combo pass.",
     "veg": true,
-    "tags": ["adrenaline","adventure","thrilling","unique","outdoors","bungee","zipline"]
+    "tags": [
+      "adrenaline",
+      "adventure",
+      "thrilling",
+      "unique",
+      "outdoors",
+      "bungee",
+      "zipline"
+    ]
   },
   {
     "id": "murud-kayaking",
@@ -6080,8 +6419,20 @@
     "category": "experience",
     "zone": "gorai",
     "area": "Murud, Raigad",
-    "moods": ["adventure","birthday","group outing","just because"],
-    "vibes": ["adventure","water","nature","outdoors","peaceful","thrilling"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "water",
+      "nature",
+      "outdoors",
+      "peaceful",
+      "thrilling"
+    ],
     "cuisines": [],
     "budgetLevel": 3,
     "costPerPerson": 1800,
@@ -6095,7 +6446,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Murud+Beach+Kayaking+Maharashtra",
     "summary": "Sea kayaking along the Murud coastline with views of the famous Janjira sea fort — the only fort in coastal Maharashtra never captured. Calm morning waters are perfect for first-timers.",
     "veg": true,
-    "tags": ["water","adventure","outdoor","adrenaline","sea","nature","thrilling"]
+    "tags": [
+      "water",
+      "adventure",
+      "outdoor",
+      "adrenaline",
+      "sea",
+      "nature",
+      "thrilling"
+    ]
   },
   {
     "id": "pa-pa-ya-bandra",
@@ -6103,9 +6462,27 @@
     "category": "food",
     "area": "Bandra Reclamation, Bandra West",
     "zone": "bandra",
-    "moods": ["birthday","anniversary","romantic","date night","group outing","celebrate"],
-    "vibes": ["luxe","queen","artsy","fun","romantic"],
-    "cuisines": ["asian","japanese","thai","chinese"],
+    "moods": [
+      "birthday",
+      "anniversary",
+      "romantic",
+      "date night",
+      "group outing",
+      "celebrate"
+    ],
+    "vibes": [
+      "luxe",
+      "queen",
+      "artsy",
+      "fun",
+      "romantic"
+    ],
+    "cuisines": [
+      "asian",
+      "japanese",
+      "thai",
+      "chinese"
+    ],
     "budgetLevel": 4,
     "costPerPerson": 2500,
     "durationMins": 90,
@@ -6118,7 +6495,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Pa+Pa+Ya+Modern+Asian+Kitchen+Bandra+Mumbai",
     "summary": "Mumbai's best modern Asian dining — Japanese sushi, Thai curries, and Chinese dim sum all on one menu. Buzzy vibe, inventive cocktails, and a long weekend queue for good reason.",
     "veg": true,
-    "tags": ["asian","japanese","thai","instagrammable","luxe","nightlife","dinner"]
+    "tags": [
+      "asian",
+      "japanese",
+      "thai",
+      "instagrammable",
+      "luxe",
+      "nightlife",
+      "dinner"
+    ]
   },
   {
     "id": "bandra-boutique-shopping",
@@ -6126,8 +6511,20 @@
     "category": "shopping",
     "area": "Linking Road, Bandra West",
     "zone": "bandra",
-    "moods": ["birthday","anniversary","romantic","date night","just because","celebrate"],
-    "vibes": ["shopper","queen","fashion","romantic"],
+    "moods": [
+      "birthday",
+      "anniversary",
+      "romantic",
+      "date night",
+      "just because",
+      "celebrate"
+    ],
+    "vibes": [
+      "shopper",
+      "queen",
+      "fashion",
+      "romantic"
+    ],
     "cuisines": [],
     "budgetLevel": 3,
     "costPerPerson": 1500,
@@ -6141,7 +6538,13 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Linking+Road+Bandra+West+Shopping+Mumbai",
     "summary": "Bandra's boutique strip on Linking Road — Indo-western designers, curated jewellery, artisan homewear and global street fashion all within walking distance. The city's best neighbourhood for guilt-free retail therapy.",
     "veg": true,
-    "tags": ["shopping","fashion","designer","instagrammable","bandra"]
+    "tags": [
+      "shopping",
+      "fashion",
+      "designer",
+      "instagrammable",
+      "bandra"
+    ]
   },
   {
     "id": "jw-marriott-spa",
@@ -6149,8 +6552,21 @@
     "category": "experience",
     "area": "Juhu, Andheri West",
     "zone": "andheri_w",
-    "moods": ["anniversary","romantic","birthday","date night","celebrate","just because"],
-    "vibes": ["luxe","queen","romantic","serene","cozy"],
+    "moods": [
+      "anniversary",
+      "romantic",
+      "birthday",
+      "date night",
+      "celebrate",
+      "just because"
+    ],
+    "vibes": [
+      "luxe",
+      "queen",
+      "romantic",
+      "serene",
+      "cozy"
+    ],
     "cuisines": [],
     "budgetLevel": 5,
     "costPerPerson": 3000,
@@ -6164,7 +6580,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Spa+JW+Marriott+Juhu+Mumbai",
     "summary": "A full-service spa inside the JW Marriott Juhu — deep-tissue massages, aromatherapy wraps and couple treatment rooms with views over the Arabian Sea. The kind of afternoon that makes the rest of the week feel earned.",
     "veg": true,
-    "tags": ["luxe","spa","wellness","romantic","instagrammable","couples"]
+    "tags": [
+      "luxe",
+      "spa",
+      "wellness",
+      "romantic",
+      "instagrammable",
+      "couples"
+    ]
   },
   {
     "id": "jw-kitchen-continental",
@@ -6172,9 +6595,24 @@
     "category": "food",
     "area": "Juhu, Andheri West",
     "zone": "andheri_w",
-    "moods": ["anniversary","romantic","birthday","date night","celebrate"],
-    "vibes": ["luxe","queen","romantic","iconic"],
-    "cuisines": ["continental","european","italian"],
+    "moods": [
+      "anniversary",
+      "romantic",
+      "birthday",
+      "date night",
+      "celebrate"
+    ],
+    "vibes": [
+      "luxe",
+      "queen",
+      "romantic",
+      "iconic"
+    ],
+    "cuisines": [
+      "continental",
+      "european",
+      "italian"
+    ],
     "budgetLevel": 5,
     "costPerPerson": 3000,
     "durationMins": 90,
@@ -6187,7 +6625,14 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=JW+Kitchen+JW+Marriott+Juhu+Mumbai",
     "summary": "Floor-to-ceiling windows, fresh pastas, grilled seafood and a wine list long enough to make decisions hard. The JW Marriott's all-day restaurant quietly delivers one of Juhu's best fine-dining nights.",
     "veg": true,
-    "tags": ["luxe","continental","fine-dining","romantic","instagrammable","dinner"]
+    "tags": [
+      "luxe",
+      "continental",
+      "fine-dining",
+      "romantic",
+      "instagrammable",
+      "dinner"
+    ]
   },
   {
     "id": "kolad-river-rafting",
@@ -6195,8 +6640,21 @@
     "category": "experience",
     "zone": "kolad",
     "area": "Kolad, Raigad",
-    "moods": ["adventure","birthday","group outing","celebrate","just because"],
-    "vibes": ["adventure","outdoors","nature","thrilling","adrenaline","water"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "group outing",
+      "celebrate",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "outdoors",
+      "nature",
+      "thrilling",
+      "adrenaline",
+      "water"
+    ],
     "cuisines": [],
     "budgetLevel": 3,
     "costPerPerson": 1500,
@@ -6210,7 +6668,15 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kundalika+River+Rafting+Kolad+Maharashtra",
     "summary": "Grade 3-4 rapids on the Kundalika — the best white-water river near Mumbai. About 3 hours from the city, fully guided, wetsuits provided. The entire 13km stretch takes about 2 hours on the water.",
     "veg": true,
-    "tags": ["adventure","water","adrenaline","thrilling","outdoors","nature","rafting"]
+    "tags": [
+      "adventure",
+      "water",
+      "adrenaline",
+      "thrilling",
+      "outdoors",
+      "nature",
+      "rafting"
+    ]
   },
   {
     "id": "kondana-caves",
@@ -6218,8 +6684,21 @@
     "category": "activity",
     "zone": "karjat",
     "area": "Kondana, Karjat",
-    "moods": ["adventure","birthday","chill","just because","group outing"],
-    "vibes": ["adventure","nature","outdoors","peaceful","heritage","trek"],
+    "moods": [
+      "adventure",
+      "birthday",
+      "chill",
+      "just because",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "nature",
+      "outdoors",
+      "peaceful",
+      "heritage",
+      "trek"
+    ],
     "cuisines": [],
     "budgetLevel": 1,
     "costPerPerson": 100,
@@ -6233,6 +6712,760 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kondana+Caves+Karjat+Maharashtra",
     "summary": "Ancient Buddhist rock-cut caves near Karjat with a seasonal waterfall at the entrance. Short 30-minute walk from the road, surprisingly uncrowded and very atmospheric in the monsoon.",
     "veg": true,
-    "tags": ["heritage","nature","caves","trek","lowcrowd","waterfall","outdoors"]
+    "tags": [
+      "heritage",
+      "nature",
+      "caves",
+      "trek",
+      "lowcrowd",
+      "waterfall",
+      "outdoors"
+    ]
+  },
+  {
+    "id": "thane-creek-flamingo",
+    "name": "Thane Creek Flamingo Sanctuary",
+    "category": "activity",
+    "area": "Thane Creek, Thane",
+    "zone": "thane",
+    "moods": [
+      "anniversary",
+      "date night",
+      "birthday",
+      "just because",
+      "group outing"
+    ],
+    "vibes": [
+      "nature",
+      "peaceful",
+      "romantic"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 150,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Thane+Creek+Flamingo+Sanctuary",
+    "summary": "One of the most accessible flamingo-watching spots in India — a boat glides you through mangroves while thousands of pink birds wade in the tidal flats. Best October to March, magical year-round.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "wildlife",
+      "flamingo",
+      "lowcrowd",
+      "instagrammable",
+      "unique"
+    ]
+  },
+  {
+    "id": "ghodbunder-fort",
+    "name": "Ghodbunder Fort",
+    "category": "activity",
+    "area": "Ghodbunder, Thane",
+    "zone": "thane",
+    "moods": [
+      "birthday",
+      "anniversary",
+      "just because",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "culture",
+      "romantic",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ghodbunder+Fort+Thane",
+    "summary": "A 16th-century Portuguese fort where Thane Creek meets the open water. Short climb to the top, then panoramic views over the creek and Sahyadri hills. Free, quiet, and genuinely photogenic.",
+    "veg": true,
+    "tags": [
+      "heritage",
+      "fort",
+      "views",
+      "lowcrowd",
+      "instagrammable",
+      "nature",
+      "history"
+    ]
+  },
+  {
+    "id": "ovalekar-butterfly-garden",
+    "name": "Ovalekar Wadi Butterfly Garden",
+    "category": "experience",
+    "area": "Bhiwandi Road, Thane",
+    "zone": "thane",
+    "moods": [
+      "date night",
+      "anniversary",
+      "birthday",
+      "just because",
+      "chill"
+    ],
+    "vibes": [
+      "nature",
+      "peaceful",
+      "romantic"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 75,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ovalekar+Wadi+Butterfly+Garden+Thane",
+    "summary": "A private garden with 500+ butterfly species drifting between 80 varieties of nectar plants. Intimate, quiet, unexpectedly magical — open mornings only, so go early.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "wildlife",
+      "butterfly",
+      "lowcrowd",
+      "instagrammable",
+      "morning",
+      "unique"
+    ]
+  },
+  {
+    "id": "masunda-talao",
+    "name": "Masunda Talao (Talao Pali)",
+    "category": "activity",
+    "area": "Thane West",
+    "zone": "thane",
+    "moods": [
+      "chill",
+      "romantic",
+      "date night",
+      "just because",
+      "anniversary"
+    ],
+    "vibes": [
+      "peaceful",
+      "romantic",
+      "culture"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 50,
+    "durationMins": 75,
+    "bestTime": "any",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Masunda+Talao+Thane",
+    "summary": "Thane's heart — a large natural lake with a tree-lined promenade, boating, and a 500-year-old church and ancient temple on its banks. The whole neighbourhood comes out for an evening walk here.",
+    "veg": true,
+    "tags": [
+      "lakeside",
+      "nature",
+      "romantic",
+      "peaceful",
+      "instagrammable",
+      "evening",
+      "heritage"
+    ]
+  },
+  {
+    "id": "kachrali-lake",
+    "name": "Kachrali Lake, Thane",
+    "category": "activity",
+    "area": "Thane West",
+    "zone": "thane",
+    "moods": [
+      "chill",
+      "romantic",
+      "date night",
+      "just because"
+    ],
+    "vibes": [
+      "peaceful",
+      "romantic"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 60,
+    "bestTime": "evening",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kachrali+Lake+Thane",
+    "summary": "A compact, beautifully lit urban lake with a fountain island and a proper promenade. Popular with couples after dark — lap it once, find a bench, let the evening happen.",
+    "veg": true,
+    "tags": [
+      "lakeside",
+      "romantic",
+      "peaceful",
+      "evening",
+      "lowcrowd"
+    ]
+  },
+  {
+    "id": "st-john-church-thane",
+    "name": "St. John the Baptist Church, Thane",
+    "category": "experience",
+    "area": "Thane West",
+    "zone": "thane",
+    "moods": [
+      "anniversary",
+      "date night",
+      "just because",
+      "chill"
+    ],
+    "vibes": [
+      "culture",
+      "spiritual",
+      "romantic",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 45,
+    "bestTime": "evening",
+    "indoor": true,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=St+John+Baptist+Church+Thane",
+    "summary": "A 500-year-old Portuguese-British church sitting on Masunda Lake on three sides — one of the most atmospheric heritage spots near Mumbai. Walk the perimeter at dusk.",
+    "veg": true,
+    "tags": [
+      "heritage",
+      "culture",
+      "church",
+      "peaceful",
+      "romantic",
+      "instagrammable",
+      "history"
+    ]
+  },
+  {
+    "id": "kopineshwar-mandir-thane",
+    "name": "Kopineshwar Mandir, Thane",
+    "category": "experience",
+    "area": "Thane West",
+    "zone": "thane",
+    "moods": [
+      "birthday",
+      "just because",
+      "anniversary",
+      "chill"
+    ],
+    "vibes": [
+      "spiritual",
+      "culture",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 45,
+    "bestTime": "morning",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kopineshwar+Mandir+Thane",
+    "summary": "Thane's patron Shiva temple in classical Hemadpanthi stone, right beside Masunda Lake. A thousand years of quiet devotion in a neighbourhood setting — pair it with a lakeside walk.",
+    "veg": true,
+    "tags": [
+      "spiritual",
+      "heritage",
+      "temple",
+      "culture",
+      "peaceful"
+    ]
+  },
+  {
+    "id": "palm-beach-road-nm",
+    "name": "Palm Beach Road promenade",
+    "category": "activity",
+    "area": "Vashi to Belapur, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "romantic",
+      "date night",
+      "anniversary",
+      "chill",
+      "just because"
+    ],
+    "vibes": [
+      "romantic",
+      "peaceful",
+      "nature"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 75,
+    "bestTime": "evening",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Palm+Beach+Road+Navi+Mumbai",
+    "summary": "A 10-km harbour-side boulevard with wide footpaths, sea views, and a long, unhurried sunset. One of the most underrated waterfront walks near Mumbai.",
+    "veg": true,
+    "tags": [
+      "sunset",
+      "romantic",
+      "promenade",
+      "harbour-view",
+      "instagrammable",
+      "lowcrowd"
+    ]
+  },
+  {
+    "id": "sagar-vihar-vashi",
+    "name": "Sagar Vihar, Vashi",
+    "category": "activity",
+    "area": "Vashi, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "romantic",
+      "chill",
+      "just because",
+      "anniversary",
+      "date night"
+    ],
+    "vibes": [
+      "peaceful",
+      "romantic",
+      "nature"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 60,
+    "bestTime": "evening",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Sagar+Vihar+Vashi+Navi+Mumbai",
+    "summary": "A waterfront garden on Thane Creek with open sea-channel views and a quiet walking path. Sunset here has a different quality from the western beaches — amber light on the mangroves.",
+    "veg": true,
+    "tags": [
+      "sunset",
+      "harbour-view",
+      "peaceful",
+      "romantic",
+      "lakeside",
+      "evening"
+    ]
+  },
+  {
+    "id": "kharghar-hills-trek",
+    "name": "Kharghar Hills trek",
+    "category": "activity",
+    "area": "Kharghar, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "birthday",
+      "anniversary",
+      "just because",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "nature",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 150,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Kharghar+Hills+Trek+Navi+Mumbai",
+    "summary": "Green hill trails above Kharghar with panoramic views of the city grid, mangroves, and the Parsik ranges. Popular for sunrise treks — go early and the city is entirely yours.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "trekking",
+      "views",
+      "lowcrowd",
+      "morning",
+      "sunrise",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "pandavkada-falls",
+    "name": "Pandavkada Falls, Kharghar",
+    "category": "activity",
+    "area": "Sector 8, Kharghar, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "birthday",
+      "adventure",
+      "group outing",
+      "just because"
+    ],
+    "vibes": [
+      "adventure",
+      "nature",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 50,
+    "durationMins": 150,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Pandavkada+Falls+Kharghar+Navi+Mumbai",
+    "summary": "A 107-ft plunge waterfall inside a city — the trail through Parsik Hill is lush and close. Monsoon only (June–September); dry the rest of the year.",
+    "veg": true,
+    "tags": [
+      "waterfall",
+      "nature",
+      "monsoon",
+      "adventure",
+      "lowcrowd",
+      "instagrammable"
+    ],
+    "safety": "Monsoon-only stop — falls are dry from October to May. Trail gets slippery; closed-toe shoes essential. Skip after very heavy overnight rain when access is restricted."
+  },
+  {
+    "id": "belapur-fort-nm",
+    "name": "Belapur Fort",
+    "category": "activity",
+    "area": "Sector 32, CBD Belapur, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "birthday",
+      "anniversary",
+      "just because",
+      "group outing"
+    ],
+    "vibes": [
+      "culture",
+      "adventure",
+      "peaceful",
+      "romantic"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 1,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Belapur+Fort+Navi+Mumbai",
+    "summary": "A 16th-century Siddi fort overlooking Panvel Creek — ruined, quiet, and almost completely unknown. The harbour views from the ramparts are the reward for getting here.",
+    "veg": true,
+    "tags": [
+      "heritage",
+      "fort",
+      "harbour-view",
+      "lowcrowd",
+      "history",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "karnala-bird-sanctuary",
+    "name": "Karnala Bird Sanctuary + Fort",
+    "category": "activity",
+    "area": "Panvel, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "birthday",
+      "just because",
+      "group outing",
+      "anniversary"
+    ],
+    "vibes": [
+      "nature",
+      "adventure",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 50,
+    "durationMins": 180,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Karnala+Bird+Sanctuary+Panvel",
+    "summary": "Dense forest sanctuary with 150+ bird species and a 12th-century hill fort at the summit — a 2 km climb with views across the Sahyadri and coast. The birding is best at dawn.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "birding",
+      "fort",
+      "trek",
+      "lowcrowd",
+      "wildlife",
+      "history"
+    ],
+    "safety": "Trail can be slippery in monsoon. Start by 7 AM for birding and to finish before the afternoon heat."
+  },
+  {
+    "id": "gadeshwar-dam-panvel",
+    "name": "Gadeshwar Dam, Panvel",
+    "category": "activity",
+    "area": "Khanda Colony, Panvel, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "chill",
+      "romantic",
+      "just because",
+      "anniversary"
+    ],
+    "vibes": [
+      "peaceful",
+      "nature",
+      "romantic"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Gadeshwar+Dam+Panvel",
+    "summary": "A calm reservoir surrounded by low hills — full and lush in monsoon, still and reflective in winter. The kind of place where you sit on a rock and forget what time it is.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "lakeside",
+      "lowcrowd",
+      "peaceful",
+      "instagrammable",
+      "monsoon"
+    ]
+  },
+  {
+    "id": "utsav-chowk-kharghar",
+    "name": "Utsav Chowk, Kharghar",
+    "category": "experience",
+    "area": "Kharghar, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "date night",
+      "romantic",
+      "birthday",
+      "chill",
+      "just because"
+    ],
+    "vibes": [
+      "romantic",
+      "playful",
+      "artsy"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 60,
+    "bestTime": "evening",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Utsav+Chowk+Kharghar+Navi+Mumbai",
+    "summary": "A dramatically lit Roman-style plaza with fountains and street food clusters in the evening. Unusual for Mumbai's suburbs — it genuinely looks like a set.",
+    "veg": true,
+    "tags": [
+      "instagrammable",
+      "evening",
+      "nighttime",
+      "street-food",
+      "romantic",
+      "unique"
+    ]
+  },
+  {
+    "id": "rain-forest-bar-belapur",
+    "name": "Rain Forest Bar & Restaurant",
+    "category": "food",
+    "area": "Sector 11, Belapur, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "date night",
+      "romantic",
+      "anniversary",
+      "birthday",
+      "celebrate"
+    ],
+    "vibes": [
+      "romantic",
+      "artsy",
+      "playful"
+    ],
+    "cuisines": [
+      "continental",
+      "cocktails",
+      "indian"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 700,
+    "durationMins": 120,
+    "bestTime": "evening",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Rain+Forest+Bar+Belapur+Navi+Mumbai",
+    "summary": "A restaurant built around actual full-grown trees — dark, atmospheric, atmospheric lighting threading through branches. Multi-cuisine menu, good cocktails, one of Navi Mumbai's best date spots.",
+    "veg": false,
+    "tags": [
+      "instagrammable",
+      "date-night",
+      "themed",
+      "bar",
+      "romantic",
+      "evening"
+    ]
+  },
+  {
+    "id": "central-park-kharghar",
+    "name": "Central Park, Kharghar",
+    "category": "activity",
+    "area": "Sector 23, Kharghar, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "chill",
+      "just because",
+      "birthday",
+      "anniversary",
+      "group outing"
+    ],
+    "vibes": [
+      "peaceful",
+      "nature"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 90,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Central+Park+Kharghar+Navi+Mumbai",
+    "summary": "An 80-hectare public park with a botanical garden, amphitheatre, walking trails, and enough space to actually breathe. One of the best-maintained green spaces near Mumbai.",
+    "veg": true,
+    "tags": [
+      "nature",
+      "park",
+      "walk",
+      "picnic",
+      "lowcrowd",
+      "garden"
+    ]
+  },
+  {
+    "id": "arnala-fort-virar",
+    "name": "Arnala Island Fort",
+    "category": "activity",
+    "area": "Arnala island, off Virar, Palghar",
+    "zone": "vasai",
+    "moods": [
+      "birthday",
+      "anniversary",
+      "just because",
+      "group outing"
+    ],
+    "vibes": [
+      "adventure",
+      "culture",
+      "romantic",
+      "nature"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 100,
+    "durationMins": 180,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "caution",
+    "adventureLevel": 2,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Arnala+Fort+Virar",
+    "summary": "A historic fort on a small island off Virar — reached by a short boat ferry. Inside: ancient temples, an octagonal freshwater reservoir, and Atlantic-facing bastions. Genuinely offbeat.",
+    "veg": true,
+    "tags": [
+      "island",
+      "fort",
+      "ferry",
+      "heritage",
+      "lowcrowd",
+      "offbeat",
+      "history",
+      "instagrammable"
+    ],
+    "safety": "Ferry runs from Arnala village (near Virar station W). Tide-dependent — confirm timing with the boatmen. Monsoon seas can be rough; avoid in heavy weather."
+  },
+  {
+    "id": "vajreshwari-hot-springs",
+    "name": "Vajreshwari Hot Springs & Temple",
+    "category": "experience",
+    "area": "Vajreshwari, near Wada, Palghar",
+    "zone": "vasai",
+    "moods": [
+      "birthday",
+      "chill",
+      "just because",
+      "anniversary",
+      "group outing"
+    ],
+    "vibes": [
+      "spiritual",
+      "nature",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 0,
+    "durationMins": 120,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Vajreshwari+Hot+Springs+Palghar",
+    "summary": "Twenty-one natural geothermal springs near a centuries-old Devi temple — you can bathe in them. The combination of sacred site and bubbling natural hot water is unlike anything else close to Mumbai.",
+    "veg": true,
+    "tags": [
+      "spiritual",
+      "nature",
+      "hot-springs",
+      "offbeat",
+      "peaceful",
+      "unique"
+    ]
   }
 ]

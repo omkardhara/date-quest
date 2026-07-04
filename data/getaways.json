@@ -10,16 +10,57 @@
     "monsoon": "great",
     "bestMonths": "Jun–Sep for green and waterfalls, Oct–Feb for pleasant weather",
     "summary": "The classic monsoon hill station: misty ghats, waterfalls, lakes and chikki. About 2 hours from Mumbai on the Expressway, and barely an hour from your Pune house.",
-    "vibes": ["romantic", "chill", "nature"],
-    "highlights": [
-      { "name": "Lion's Point", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "Sweeping valley views at golden hour. Often fogged in during peak monsoon, which is its own kind of magic." },
-      { "name": "Bhushi Dam", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Stepped dam that overflows in monsoon. Beautiful but crowded and slippery, go early and stay off the fast water." },
-      { "name": "Tiger's Leap", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "A dramatic cliff drop with a seasonal waterfall across the valley." },
-      { "name": "Karla Caves", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "Ancient rock-cut Buddhist caves. A good indoor-ish option if it pours." },
-      { "name": "Lonavala Lake", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "Calm and brimming green in the rains." }
+    "vibes": [
+      "romantic",
+      "chill",
+      "nature"
     ],
-    "stays": ["Della Resorts", "Fariyas Resort Lonavala", "Rhythm Lonavala"],
-    "eat": ["The Kinara Village Dhaba", "German Bakery Lonavala"]
+    "highlights": [
+      {
+        "name": "Lion's Point",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Sweeping valley views at golden hour. Often fogged in during peak monsoon, which is its own kind of magic."
+      },
+      {
+        "name": "Bhushi Dam",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Stepped dam that overflows in monsoon. Beautiful but crowded and slippery, go early and stay off the fast water."
+      },
+      {
+        "name": "Tiger's Leap",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "A dramatic cliff drop with a seasonal waterfall across the valley."
+      },
+      {
+        "name": "Karla Caves",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "Ancient rock-cut Buddhist caves. A good indoor-ish option if it pours."
+      },
+      {
+        "name": "Lonavala Lake",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Calm and brimming green in the rains."
+      }
+    ],
+    "stays": [
+      "Della Resorts",
+      "Fariyas Resort Lonavala",
+      "Rhythm Lonavala"
+    ],
+    "eat": [
+      "The Kinara Village Dhaba",
+      "German Bakery Lonavala"
+    ]
   },
   {
     "id": "karjat",
@@ -32,15 +73,50 @@
     "monsoon": "great",
     "bestMonths": "Jun–Sep for rivers and green, year-round for farm stays",
     "summary": "Riverside and farm-stay country at the foot of the Sahyadris. Closest of the lot to Mumbai, lush and full of water in the monsoon.",
-    "vibes": ["adventure", "chill", "nature"],
-    "highlights": [
-      { "name": "Kondana Caves trail", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "A green walk to rock-cut caves with a monsoon waterfall. Slippery, wear grippy shoes." },
-      { "name": "Ulhas river point", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Riverside spots run strong in monsoon; stay on the banks." },
-      { "name": "ND Studios tour", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "A film-set studio tour, fun and dry on a wet day." },
-      { "name": "Farm-stay pool and lawns", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "Most of Karjat's charm is a good farm stay with views." }
+    "vibes": [
+      "adventure",
+      "chill",
+      "nature"
     ],
-    "stays": ["Saj by The Lake", "Della Resorts (Lonavala-Karjat)", "a riverside farm stay"],
-    "eat": ["Hotel Sai Palace", "a farm-stay kitchen"]
+    "highlights": [
+      {
+        "name": "Kondana Caves trail",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "A green walk to rock-cut caves with a monsoon waterfall. Slippery, wear grippy shoes."
+      },
+      {
+        "name": "Ulhas river point",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Riverside spots run strong in monsoon; stay on the banks."
+      },
+      {
+        "name": "ND Studios tour",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "A film-set studio tour, fun and dry on a wet day."
+      },
+      {
+        "name": "Farm-stay pool and lawns",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Most of Karjat's charm is a good farm stay with views."
+      }
+    ],
+    "stays": [
+      "Saj by The Lake",
+      "Della Resorts (Lonavala-Karjat)",
+      "a riverside farm stay"
+    ],
+    "eat": [
+      "Hotel Sai Palace",
+      "a farm-stay kitchen"
+    ]
   },
   {
     "id": "mulshi",
@@ -53,14 +129,43 @@
     "monsoon": "great",
     "bestMonths": "Jun–Sep for full lakes and waterfalls",
     "summary": "Lake-and-dam country an hour from your Pune house, so it makes most sense as a Pune-side trip. Tamhini Ghat nearby turns into a wall of waterfalls in the rains.",
-    "vibes": ["romantic", "peaceful", "nature"],
-    "highlights": [
-      { "name": "Mulshi Dam and lake", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "Vast lake ringed by green hills, calm and uncrowded on weekdays." },
-      { "name": "Tamhini Ghat waterfalls", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "A ghat road lined with waterfalls in monsoon. Drive slow, fog and water on the road." },
-      { "name": "Temghar backwaters", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "Quiet backwater views, beautiful in the rains." }
+    "vibes": [
+      "romantic",
+      "peaceful",
+      "nature"
     ],
-    "stays": ["Your Pune (Wakad) house", "Radisson Blu Mulshi", "a lakeside resort"],
-    "eat": ["Malhar Machi", "a resort restaurant"]
+    "highlights": [
+      {
+        "name": "Mulshi Dam and lake",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Vast lake ringed by green hills, calm and uncrowded on weekdays."
+      },
+      {
+        "name": "Tamhini Ghat waterfalls",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "A ghat road lined with waterfalls in monsoon. Drive slow, fog and water on the road."
+      },
+      {
+        "name": "Temghar backwaters",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Quiet backwater views, beautiful in the rains."
+      }
+    ],
+    "stays": [
+      "Your Pune (Wakad) house",
+      "Radisson Blu Mulshi",
+      "a lakeside resort"
+    ],
+    "eat": [
+      "Malhar Machi",
+      "a resort restaurant"
+    ]
   },
   {
     "id": "malshej",
@@ -73,14 +178,42 @@
     "monsoon": "great",
     "bestMonths": "Jul–Sep is the whole point: waterfalls, mist and flamingos",
     "summary": "The monsoon spot. A mountain pass that becomes a curtain of waterfalls and mist in the rains, with pink flamingos at the dam. Limited stays, so book ahead.",
-    "vibes": ["adventure", "nature", "romantic"],
-    "highlights": [
-      { "name": "Malshej waterfalls stretch", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "Roadside falls everywhere in monsoon. Stunning, but the road is narrow and wet, drive carefully." },
-      { "name": "Pimpalgaon Joga Dam (flamingos)", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "Flamingos gather here in the rains." },
-      { "name": "Harishchandragad base", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Serious trek; only with a guide and not in heavy rain." }
+    "vibes": [
+      "adventure",
+      "nature",
+      "romantic"
     ],
-    "stays": ["MTDC Flamingo Hill Resort, Malshej", "a hilltop camp (book ahead)"],
-    "eat": ["MTDC restaurant", "roadside misal and vada pav"]
+    "highlights": [
+      {
+        "name": "Malshej waterfalls stretch",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Roadside falls everywhere in monsoon. Stunning, but the road is narrow and wet, drive carefully."
+      },
+      {
+        "name": "Pimpalgaon Joga Dam (flamingos)",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Flamingos gather here in the rains."
+      },
+      {
+        "name": "Harishchandragad base",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Serious trek; only with a guide and not in heavy rain."
+      }
+    ],
+    "stays": [
+      "MTDC Flamingo Hill Resort, Malshej",
+      "a hilltop camp (book ahead)"
+    ],
+    "eat": [
+      "MTDC restaurant",
+      "roadside misal and vada pav"
+    ]
   },
   {
     "id": "mahabaleshwar",
@@ -93,16 +226,58 @@
     "monsoon": "great",
     "bestMonths": "Oct–May for clear views; Jun–Sep for green and waterfalls",
     "summary": "Maharashtra's classic hill station — strawberry farms, viewpoints over the Sahyadris, and a gentler pace. Much closer from your Pune house than from Mumbai.",
-    "vibes": ["romantic", "peaceful", "nature"],
-    "highlights": [
-      { "name": "Arthur's Seat viewpoint", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "A dramatic edge above the valleys. Gets foggy in monsoon, which is part of its mystique — but wet rocks are slippery." },
-      { "name": "Venna Lake boat ride", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "A calm lake ringed by trees. Boat rides, horse rides, some quiet." },
-      { "name": "Mapro Garden strawberry farm", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "Fresh strawberry with cream, jams, crushes — the quintessential Mahabaleshwar stop." },
-      { "name": "Wilson's Point sunrise", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "The only east-facing viewpoint here — sunrise over the valley. Go early, it's worth the 5am alarm." },
-      { "name": "Pratapgad Fort", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "A historic Maratha fort on a hill, lush green in monsoon. About 25 km from town." }
+    "vibes": [
+      "romantic",
+      "peaceful",
+      "nature"
     ],
-    "stays": ["Evershine Keys Prima", "Brightland Resort", "The Fern Hotels Mahabaleshwar"],
-    "eat": ["Mapro Garden", "Grapevine restaurant", "Shivaji restaurant"]
+    "highlights": [
+      {
+        "name": "Arthur's Seat viewpoint",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "A dramatic edge above the valleys. Gets foggy in monsoon, which is part of its mystique — but wet rocks are slippery."
+      },
+      {
+        "name": "Venna Lake boat ride",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "A calm lake ringed by trees. Boat rides, horse rides, some quiet."
+      },
+      {
+        "name": "Mapro Garden strawberry farm",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "Fresh strawberry with cream, jams, crushes — the quintessential Mahabaleshwar stop."
+      },
+      {
+        "name": "Wilson's Point sunrise",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "The only east-facing viewpoint here — sunrise over the valley. Go early, it's worth the 5am alarm."
+      },
+      {
+        "name": "Pratapgad Fort",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "A historic Maratha fort on a hill, lush green in monsoon. About 25 km from town."
+      }
+    ],
+    "stays": [
+      "Evershine Keys Prima",
+      "Brightland Resort",
+      "The Fern Hotels Mahabaleshwar"
+    ],
+    "eat": [
+      "Mapro Garden",
+      "Grapevine restaurant",
+      "Shivaji restaurant"
+    ]
   },
   {
     "id": "alibaug",
@@ -115,15 +290,51 @@
     "monsoon": "caution",
     "bestMonths": "Oct–Feb for calm sea and beach walks; monsoon for lush forts but rough water",
     "summary": "The closest coastal escape from Mumbai — a quick ferry ride from the Gateway or an hour on the Mumbai-Pune Expressway and then NH66 south. Beach, colonial forts, and seafood.",
-    "vibes": ["romantic", "chill", "nature"],
-    "highlights": [
-      { "name": "Alibaug Beach and fort ruins", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Walk the beach at low tide to see the Kolaba Fort ruins. No swimming in monsoon, but the walk is beautiful." },
-      { "name": "Kashid Beach day trip", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "40 km south of Alibaug, Kashid is quieter and cleaner. Go early to beat the crowd." },
-      { "name": "Murud-Janjira sea fort", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "The only sea fort in Asia never to be conquered. A boat ride out to it is half the experience." },
-      { "name": "Varsoli beach sunset", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "The quieter, cleaner Alibaug beach — less crowd, great for a golden-hour walk." }
+    "vibes": [
+      "romantic",
+      "chill",
+      "nature"
     ],
-    "stays": ["U Tropicana Alibaug", "Radisson Blu Resort Alibaug", "a Bungalow on the Beach"],
-    "eat": ["Shivai Restaurant (seafood)", "Kopra Beach Shack", "a resort seafood kitchen"]
+    "highlights": [
+      {
+        "name": "Alibaug Beach and fort ruins",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Walk the beach at low tide to see the Kolaba Fort ruins. No swimming in monsoon, but the walk is beautiful."
+      },
+      {
+        "name": "Kashid Beach day trip",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "40 km south of Alibaug, Kashid is quieter and cleaner. Go early to beat the crowd."
+      },
+      {
+        "name": "Murud-Janjira sea fort",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "The only sea fort in Asia never to be conquered. A boat ride out to it is half the experience."
+      },
+      {
+        "name": "Varsoli beach sunset",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "The quieter, cleaner Alibaug beach — less crowd, great for a golden-hour walk."
+      }
+    ],
+    "stays": [
+      "U Tropicana Alibaug",
+      "Radisson Blu Resort Alibaug",
+      "a Bungalow on the Beach"
+    ],
+    "eat": [
+      "Shivai Restaurant (seafood)",
+      "Kopra Beach Shack",
+      "a resort seafood kitchen"
+    ]
   },
   {
     "id": "nashik",
@@ -136,15 +347,51 @@
     "monsoon": "caution",
     "bestMonths": "Oct–Mar for harvest and pleasant weather; monsoon grapes don't need tourists",
     "summary": "India's wine country — Sula Vineyards, Grover Zampa, and a handful of boutique wineries scattered across the hills outside town. Add Trimbak temple and Panchvati for a fuller trip.",
-    "vibes": ["romantic", "chill", "culture"],
-    "highlights": [
-      { "name": "Sula Vineyards tasting", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "The flagship Nashik winery — tasting session, vineyard walk, rooftop bar overlooking the vines. Book the tasting ahead." },
-      { "name": "York Winery lunch", "kind": "food", "outdoor": true, "monsoonRisk": "ok", "note": "Smaller and quieter than Sula, with a beautiful terrace restaurant." },
-      { "name": "Trimbakeshwar temple", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "One of the 12 Jyotirlinga — a significant Shiva temple 28 km from Nashik. Dress modestly." },
-      { "name": "Pandavleni Caves", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "Ancient Buddhist rock-cut caves on a hillside, 3rd century BCE. A quiet morning climb." }
+    "vibes": [
+      "romantic",
+      "chill",
+      "culture"
     ],
-    "stays": ["Beyond by Sula", "Soma Vine Village", "Grapevine Wellness Resort"],
-    "eat": ["Little Italy (at Sula)", "Soma at York Winery", "Shalimar Hotel (mutton dishes)"]
+    "highlights": [
+      {
+        "name": "Sula Vineyards tasting",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "The flagship Nashik winery — tasting session, vineyard walk, rooftop bar overlooking the vines. Book the tasting ahead."
+      },
+      {
+        "name": "York Winery lunch",
+        "kind": "food",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Smaller and quieter than Sula, with a beautiful terrace restaurant."
+      },
+      {
+        "name": "Trimbakeshwar temple",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "One of the 12 Jyotirlinga — a significant Shiva temple 28 km from Nashik. Dress modestly."
+      },
+      {
+        "name": "Pandavleni Caves",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Ancient Buddhist rock-cut caves on a hillside, 3rd century BCE. A quiet morning climb."
+      }
+    ],
+    "stays": [
+      "Beyond by Sula",
+      "Soma Vine Village",
+      "Grapevine Wellness Resort"
+    ],
+    "eat": [
+      "Little Italy (at Sula)",
+      "Soma at York Winery",
+      "Shalimar Hotel (mutton dishes)"
+    ]
   },
   {
     "id": "bhandardara",
@@ -157,15 +404,51 @@
     "monsoon": "great",
     "bestMonths": "Jul–Sep is the whole point: full lake, fireflies at night, waterfalls",
     "summary": "A lake-and-dam escape in the Sahyadris — full and green in the monsoon, with firefly walks at night in June–July. Randha Falls roars in the rains.",
-    "vibes": ["adventure", "romantic", "nature"],
-    "highlights": [
-      { "name": "Arthur Lake viewpoint", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "The reservoir fills beautifully in monsoon. Sunrise from the dam is spectacular." },
-      { "name": "Randha Falls", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Roaring waterfall in monsoon. Keep a safe distance — the gorge runs fast." },
-      { "name": "Firefly walk (June–July only)", "kind": "experience", "outdoor": true, "monsoonRisk": "ok", "note": "Bhandardara is one of the best spots in Maharashtra to see fireflies. Night walk after dinner." },
-      { "name": "Wilson Dam spillway walk", "kind": "activity", "outdoor": true, "monsoonRisk": "ok", "note": "When the dam overflows the spillway run is hypnotic. Views all the way to the hills." }
+    "vibes": [
+      "adventure",
+      "romantic",
+      "nature"
     ],
-    "stays": ["MTDC Bhandardara", "Bhandardara Camp", "Anand Sagar Resort"],
-    "eat": ["MTDC canteen", "a farm kitchen near Bhandardara village", "camp bonfire dinner"]
+    "highlights": [
+      {
+        "name": "Arthur Lake viewpoint",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "The reservoir fills beautifully in monsoon. Sunrise from the dam is spectacular."
+      },
+      {
+        "name": "Randha Falls",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Roaring waterfall in monsoon. Keep a safe distance — the gorge runs fast."
+      },
+      {
+        "name": "Firefly walk (June–July only)",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "Bhandardara is one of the best spots in Maharashtra to see fireflies. Night walk after dinner."
+      },
+      {
+        "name": "Wilson Dam spillway walk",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "When the dam overflows the spillway run is hypnotic. Views all the way to the hills."
+      }
+    ],
+    "stays": [
+      "MTDC Bhandardara",
+      "Bhandardara Camp",
+      "Anand Sagar Resort"
+    ],
+    "eat": [
+      "MTDC canteen",
+      "a farm kitchen near Bhandardara village",
+      "camp bonfire dinner"
+    ]
   },
   {
     "id": "goa",
@@ -178,16 +461,59 @@
     "monsoon": "caution",
     "bestMonths": "Nov–Feb for parties and sun; Oct for quiet and green after the rains",
     "summary": "When you want to go bigger — Goa is a 2-night minimum. Fly in 1 hour, or drive the NH66 in a day from Mumbai. Old Goa churches, Anjuna flea market, North Goa beach cafés, seafood dinners.",
-    "vibes": ["romantic", "chill", "adventure"],
-    "highlights": [
-      { "name": "Anjuna or Vagator sunset at a cliffside café", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "North Goa's clifftop cafés at sunset — Curlies, Nine Bar, Hilltop. The sea goes gold." },
-      { "name": "Old Goa basilicas and Se Cathedral", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "UNESCO World Heritage — a 16th-century Portuguese city centre. Quiet, grand, unlike the rest of Goa." },
-      { "name": "Dudhsagar Falls day trip", "kind": "activity", "outdoor": true, "monsoonRisk": "avoid", "note": "The milk waterfall — one of India's tallest. Only accessible Oct–May (Jeep tours); closed in monsoon." },
-      { "name": "Candolim or Calangute beach morning walk", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "The wide North Goa beaches are best early before the umbrellas go up." },
-      { "name": "Night market or Saturday Market (Arpora/Anjuna)", "kind": "shopping", "outdoor": true, "monsoonRisk": "caution", "note": "Goa's flea markets: silver jewellery, clothing, Tibetan crafts, live music." }
+    "vibes": [
+      "romantic",
+      "chill",
+      "adventure"
     ],
-    "stays": ["Taj Fort Aguada", "W Goa (Vagator)", "The Postcard Cuelim", "a boutique villa in Siolim"],
-    "eat": ["Gunpowder (Assagao)", "A Reverie (Calangute)", "Martin's Corner (Betalbatim)"]
+    "highlights": [
+      {
+        "name": "Anjuna or Vagator sunset at a cliffside café",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "North Goa's clifftop cafés at sunset — Curlies, Nine Bar, Hilltop. The sea goes gold."
+      },
+      {
+        "name": "Old Goa basilicas and Se Cathedral",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "UNESCO World Heritage — a 16th-century Portuguese city centre. Quiet, grand, unlike the rest of Goa."
+      },
+      {
+        "name": "Dudhsagar Falls day trip",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "avoid",
+        "note": "The milk waterfall — one of India's tallest. Only accessible Oct–May (Jeep tours); closed in monsoon."
+      },
+      {
+        "name": "Candolim or Calangute beach morning walk",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "The wide North Goa beaches are best early before the umbrellas go up."
+      },
+      {
+        "name": "Night market or Saturday Market (Arpora/Anjuna)",
+        "kind": "shopping",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Goa's flea markets: silver jewellery, clothing, Tibetan crafts, live music."
+      }
+    ],
+    "stays": [
+      "Taj Fort Aguada",
+      "W Goa (Vagator)",
+      "The Postcard Cuelim",
+      "a boutique villa in Siolim"
+    ],
+    "eat": [
+      "Gunpowder (Assagao)",
+      "A Reverie (Calangute)",
+      "Martin's Corner (Betalbatim)"
+    ]
   },
   {
     "id": "palghar",
@@ -200,13 +526,140 @@
     "monsoon": "caution",
     "bestMonths": "Oct–Feb for the beaches; monsoon seas are rough",
     "summary": "Quiet Konkan beaches, forts and hot springs north of Mumbai. Lovely in winter; in monsoon the sea is rough, so lean on temples, springs and forts over swimming.",
-    "vibes": ["chill", "romantic", "culture"],
-    "highlights": [
-      { "name": "Kelva Beach", "kind": "activity", "outdoor": true, "monsoonRisk": "caution", "note": "Long casuarina-lined beach. No swimming in monsoon, the sea is rough, but a fine walk." },
-      { "name": "Shirgaon Fort", "kind": "experience", "outdoor": true, "monsoonRisk": "caution", "note": "A small coastal fort, green and quiet in the rains." },
-      { "name": "Vajreshwari hot springs and temple", "kind": "experience", "outdoor": false, "monsoonRisk": "ok", "note": "Warm sulphur springs and a temple, a good rainy-day pick. Dress modestly." }
+    "vibes": [
+      "chill",
+      "romantic",
+      "culture",
+      "adventure"
     ],
-    "stays": ["a Kelva beach resort", "an MTDC property"],
-    "eat": ["a Konkan thali place", "fresh seafood shack (in season)"]
+    "highlights": [
+      {
+        "name": "Kelva Beach",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Long casuarina-lined beach. Walkable at low tide with the Portuguese Kelva Fort on a small island offshore. No swimming in monsoon but a fine beach walk."
+      },
+      {
+        "name": "Kelva Fort (Kelwe Killa)",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "A Portuguese island fort — walkable at low tide, boat hire at high tide (~₹100). Great photo spot at golden hour."
+      },
+      {
+        "name": "Arnala Island Fort",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Historic fort on an island off Virar reached by ferry. Ancient temples, an octagonal reservoir, and Atlantic-facing bastions inside. Very offbeat."
+      },
+      {
+        "name": "Vajreshwari hot springs and temple",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "Twenty-one natural geothermal springs beside a centuries-old Devi temple. You can bathe in them. Unique stop."
+      },
+      {
+        "name": "Bordi Beach & Chickoo Farms",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Quiet coconut-lined beach with almost no tourism infrastructure, paired with a walk through chickoo (sapodilla) farms. Utterly unhurried."
+      },
+      {
+        "name": "Shirgaon Beach",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Palms, quiet sand, and almost no crowds. Good for a slow morning walk."
+      },
+      {
+        "name": "Dahanu Beach + Fort",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Family-safe beach with a 400-year-old Portuguese fort 3.5 km from centre (open 10 AM–5 PM, closed Sunday)."
+      }
+    ],
+    "stays": [
+      "a Kelva beach resort",
+      "an MTDC property"
+    ],
+    "eat": [
+      "a Konkan thali place",
+      "fresh seafood shack (in season)"
+    ]
+  },
+  {
+    "id": "jawhar",
+    "name": "Jawhar",
+    "region": "Sahyadri foothills, Palghar",
+    "driveFromMumbaiMins": 150,
+    "driveFromMumbaiKm": 100,
+    "driveFromPuneMins": 300,
+    "driveFromPuneKm": 240,
+    "monsoon": "great",
+    "bestMonths": "Jun–Sep for waterfalls and green hills; Oct–Feb for comfortable hiking",
+    "summary": "A little-visited Sahyadri hill station inside Palghar district — forested, cool, and dotted with tribal Warli art. Best known for Dabhosa Falls (one of Maharashtra's highest) and the hillside Jai Vilas Palace.",
+    "vibes": [
+      "nature",
+      "adventure",
+      "culture",
+      "peaceful"
+    ],
+    "highlights": [
+      {
+        "name": "Dabhosa Falls",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "One of Maharashtra's highest waterfalls at ~60 m — at full roar in the monsoon. Short walk through forest to the base; slip risk, go with care."
+      },
+      {
+        "name": "Jai Vilas Palace",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "An 80-room hilltop royal palace of the Mukne rulers with stuffed animals, period furniture, and cashew plantations. Quirky and atmospheric. ~₹50 entry."
+      },
+      {
+        "name": "Warli art village walk",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "ok",
+        "note": "The Jawhar region is the heartland of Warli tribal painting. Walk the village lanes, buy work directly from artisans."
+      },
+      {
+        "name": "Sunset Point, Jawhar",
+        "kind": "experience",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Panoramic Sahyadri views over the forested valley. Cloud-level in monsoon, golden in winter."
+      },
+      {
+        "name": "Dadara Kopra Falls",
+        "kind": "activity",
+        "outdoor": true,
+        "monsoonRisk": "caution",
+        "note": "Another scenic seasonal waterfall near Jawhar town, smaller than Dabhosa but less visited."
+      },
+      {
+        "name": "Govardhan Eco Village (near Wada)",
+        "kind": "experience",
+        "outdoor": false,
+        "monsoonRisk": "ok",
+        "note": "ISKCON's 700-acre organic farm and retreat. Day visitors can do farm tours, Vedic workshops, organic meals, and cow sanctuary. Advance registration preferred."
+      }
+    ],
+    "stays": [
+      "Jai Vilas Palace heritage hotel",
+      "a forest homestay"
+    ],
+    "eat": [
+      "a Warli-owned dhaba",
+      "traditional tribal thali at a local home"
+    ]
   }
 ]

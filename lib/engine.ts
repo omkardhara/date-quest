@@ -12,7 +12,7 @@ const MONSOON_MONTHS = [5, 6, 7, 8]; // Jun–Sep
 const PLACES = placesData as Place[];
 
 // ─── Zones ────────────────────────────────────────────────────────────────────
-type Zone = "home" | "bandra" | "south" | "central" | "andheri_w" | "borivali" | "thane" | "vasai" | "karjat" | "kolad" | "gorai" | "multiple";
+type Zone = "home" | "bandra" | "south" | "central" | "andheri_w" | "borivali" | "thane" | "vasai" | "navi_mumbai" | "karjat" | "kolad" | "gorai" | "multiple";
 
 const TRAVEL_BASE: Record<string, number> = {
   "andheri_w-bandra":   20,
@@ -34,6 +34,14 @@ const TRAVEL_BASE: Record<string, number> = {
   "central-thane":      50,
   "gorai-home":         75,
   "gorai-vasai":        75,  // coastal road north, feasible but a stretch
+  "home-navi_mumbai":   55,  // via Atal Setu (Trans-Harbor Link)
+  "andheri_w-navi_mumbai": 50,
+  "bandra-navi_mumbai": 55,
+  "central-navi_mumbai": 50,
+  "south-navi_mumbai":  40,  // shorter via MTHL from Sewri
+  "thane-navi_mumbai":  60,
+  "borivali-navi_mumbai": 75,
+  "navi_mumbai-vasai":  90,
   "karjat-kolad":       60,  // same direction, one valley over
   "karjat-vasai":      200,  // must cut through the city — almost never worth it
   "karjat-gorai":      180,  // city crossing required
@@ -52,7 +60,7 @@ const TRAVEL_BASE: Record<string, number> = {
 // Approx minutes to get back to the city from a far-out destination. Used when
 // the next stop is a flexible ("multiple") place — you can't teleport from Vasai.
 const FAR_RETURN: Partial<Record<Zone, number>> = {
-  vasai: 90, karjat: 130, kolad: 150, gorai: 70, borivali: 50, thane: 45,
+  vasai: 90, karjat: 130, kolad: 150, gorai: 70, borivali: 50, thane: 45, navi_mumbai: 55,
 };
 
 function travelMins(from: Zone, to: Zone, atMin: number): number {
@@ -95,8 +103,8 @@ type Corridor = "bandra_hub" | "south_loop" | "north_adventure" | "thane_east" |
 const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
   bandra_hub:      ["bandra", "andheri_w", "central", "multiple"],
   south_loop:      ["south", "central", "bandra", "multiple"],
-  north_adventure: ["borivali", "andheri_w", "bandra", "multiple"],
-  thane_east:      ["thane", "home", "andheri_w", "multiple"],
+  north_adventure: ["borivali", "vasai", "andheri_w", "bandra", "multiple"],
+  thane_east:      ["thane", "navi_mumbai", "home", "andheri_w", "multiple"],
   full_day_out:    ["karjat", "kolad", "gorai", "multiple"],
 };
 
@@ -343,7 +351,7 @@ function pick(
 
   // Zones far enough from home that the travel penalty would otherwise keep the engine
   // near Andheri all day, even for corridors explicitly meant to go there.
-  const FAR_ZONES = new Set<Zone>(["borivali", "thane", "south", "vasai", "karjat", "kolad", "gorai"]);
+  const FAR_ZONES = new Set<Zone>(["borivali", "thane", "south", "vasai", "navi_mumbai", "karjat", "kolad", "gorai"]);
   const primaryFarZone = corridorZones.find(z => FAR_ZONES.has(z as Zone)) as Zone | undefined;
 
   const rank = (p: Place) => {
