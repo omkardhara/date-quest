@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildGetaway } from "@/lib/getaway";
-import { searchEvents } from "@/lib/events";
 import { getWeather, COORDS } from "@/lib/weather";
 
 export const runtime = "nodejs";
@@ -27,12 +26,6 @@ export async function POST(req: NextRequest) {
     const customStops = Array.isArray(body.customStops) ? (body.customStops as string[]) : [];
     const plan = await buildGetaway(destId, nights, wet, weatherSummary, month, preferences, hotelBooked, customStops);
     if (!plan) return NextResponse.json({ error: "unknown destination" }, { status: 404 });
-
-    // Events in the destination around the date (best-effort).
-    try {
-      const events = await searchEvents(`events in ${plan.destination}`, body.date);
-      if (events.length) plan.events = events;
-    } catch { /* ignore */ }
 
     return NextResponse.json({ plan });
   } catch {

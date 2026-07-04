@@ -7579,5 +7579,171 @@
       "casual",
       "foodie"
     ]
+  },
+  {
+    "id": "cafe-by-masunda-thane",
+    "name": "Lakeside café, Masunda Talao",
+    "category": "cafe",
+    "area": "Thane West",
+    "zone": "thane",
+    "moods": [
+      "chill",
+      "romantic",
+      "date night",
+      "just because",
+      "anniversary",
+      "birthday"
+    ],
+    "vibes": [
+      "peaceful",
+      "romantic",
+      "nature",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe",
+      "coffee",
+      "snacks"
+    ],
+    "budgetLevel": 1,
+    "costPerPerson": 200,
+    "durationMins": 60,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=cafe+near+Masunda+Lake+Thane",
+    "summary": "Open-air cafés line the edge of Masunda Lake — chai, cold coffee, and snacks with a view of the water. The quietest morning start you can have in Thane.",
+    "veg": true,
+    "tags": [
+      "lakeside",
+      "cozy",
+      "peaceful",
+      "morning",
+      "nature",
+      "romantic"
+    ]
+  },
+  {
+    "id": "theobroma-thane",
+    "name": "Theobroma, Thane",
+    "category": "dessert",
+    "area": "Thane West",
+    "zone": "thane",
+    "moods": [
+      "chill",
+      "birthday",
+      "just because",
+      "anniversary",
+      "date night",
+      "celebrate"
+    ],
+    "vibes": [
+      "cozy",
+      "playful",
+      "foodie"
+    ],
+    "cuisines": [
+      "dessert",
+      "cafe",
+      "coffee"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 400,
+    "durationMins": 45,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Theobroma+Thane",
+    "summary": "The beloved Mumbai bakery-café chain's Thane outpost — brownies, pastries, cold coffee. A reliable sweet stop after a morning at the lakes or fort.",
+    "veg": true,
+    "tags": [
+      "dessert",
+      "cozy",
+      "bakery",
+      "instagrammable"
+    ]
+  },
+  {
+    "id": "palm-beach-cafe-nm",
+    "name": "Palm Beach Road café",
+    "category": "cafe",
+    "area": "Palm Beach Road, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "romantic",
+      "chill",
+      "date night",
+      "just because",
+      "anniversary"
+    ],
+    "vibes": [
+      "romantic",
+      "peaceful",
+      "nature",
+      "cozy"
+    ],
+    "cuisines": [
+      "cafe",
+      "coffee",
+      "continental"
+    ],
+    "budgetLevel": 2,
+    "costPerPerson": 300,
+    "durationMins": 60,
+    "bestTime": "morning",
+    "indoor": false,
+    "outdoor": true,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=cafe+Palm+Beach+Road+Navi+Mumbai",
+    "summary": "Several open-air cafés line this harbour-side boulevard — cold brew, light bites, and an unobstructed view of the creek. Good start before the Kharghar hills or a long promenade walk.",
+    "veg": true,
+    "tags": [
+      "harbour-view",
+      "romantic",
+      "cozy",
+      "morning",
+      "peaceful",
+      "promenade"
+    ]
+  },
+  {
+    "id": "naturals-vashi",
+    "name": "Naturals Ice Cream, Vashi",
+    "category": "dessert",
+    "area": "Vashi, Navi Mumbai",
+    "zone": "navi_mumbai",
+    "moods": [
+      "chill",
+      "birthday",
+      "just because",
+      "anniversary",
+      "group outing"
+    ],
+    "vibes": [
+      "playful",
+      "peaceful"
+    ],
+    "cuisines": [],
+    "budgetLevel": 1,
+    "costPerPerson": 150,
+    "durationMins": 30,
+    "bestTime": "afternoon",
+    "indoor": true,
+    "outdoor": false,
+    "monsoonRisk": "ok",
+    "adventureLevel": 0,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Naturals+Ice+Cream+Vashi+Navi+Mumbai",
+    "summary": "Naturals in Vashi — sitaphal, tender coconut, and mango. The right ending to a fort or trail day in Navi Mumbai.",
+    "veg": true,
+    "tags": [
+      "icecream",
+      "dessert",
+      "local"
+    ]
   }
 ]

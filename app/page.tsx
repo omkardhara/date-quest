@@ -181,10 +181,13 @@ export default function Page() {
     setBuilding(true);
     setBuildError(false);
     try {
+      const destId = dest === "random"
+        ? GETAWAYS[Math.floor(Math.random() * GETAWAYS.length)].id
+        : dest;
       const res = await fetch("/api/getaway", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ destId: dest, nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate, preferences: getawayVibes, hotelBooked, customStops }),
+        body: JSON.stringify({ destId, nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate, preferences: getawayVibes, hotelBooked, customStops }),
       });
       const d = await res.json();
       if (d.plan) { setGetaway(d.plan); setStep("getaway-plan"); }
@@ -313,7 +316,14 @@ export default function Page() {
               <Chibi mood="excited" />
               <Q>A weekend away. Where to?</Q>
               <Hint>Quick escapes from Mumbai. {[5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()) ? "It's monsoon, so the green hill spots shine right now." : ""}</Hint>
-              <Chips options={GETAWAYS.map((g) => g.name)} selected={dest ? [GETAWAYS.find((g) => g.id === dest)!.name] : []} onTap={(v) => setDest(GETAWAYS.find((g) => g.name === v)!.id)} />
+              <Chips
+                options={["Surprise me", ...GETAWAYS.map((g) => g.name)]}
+                selected={dest === "random" ? ["Surprise me"] : dest ? [GETAWAYS.find((g) => g.id === dest)?.name ?? ""] : []}
+                onTap={(v) => {
+                  if (v === "Surprise me") { setDest("random"); return; }
+                  setDest(GETAWAYS.find((g) => g.name === v)?.id ?? "");
+                }}
+              />
               <p className="mt-4 text-sm text-white/50">How long?</p>
               <Chips options={NIGHTS.map((n) => n[0])} selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])} onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])} />
               <p className="mt-4 text-sm text-white/50">When?</p>
