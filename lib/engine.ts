@@ -314,7 +314,9 @@ return; // all remaining options are sea — skip this slot
   if (!culturalDay && recentEnvs.includes("heritage")) {
     const noHeritage = cand.filter(p => environment(p) !== "heritage");
     if (noHeritage.length) cand = noHeritage;
-    else return null; // all remaining options are heritage — skip this slot
+     else return undefined;
+// or simply
+return; // all remaining options are sea; // all remaining options are heritage — skip this slot
   }
 
   // Zones far enough from home that the travel penalty would otherwise keep the engine
