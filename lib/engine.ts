@@ -298,12 +298,16 @@ function pick(
   if (recentEnvs.includes("shopping")) {
     const noShop = cand.filter(p => environment(p) !== "shopping");
     if (noShop.length) cand = noShop;
-    else return null; // no non-shopping alternatives — skip slot rather than doubling up
+    else return undefined;
+// or simply
+return; // no non-shopping alternatives — skip slot rather than doubling up
   }
   if (recentEnvs.includes("sea")) {
     const noSea = cand.filter(p => environment(p) !== "sea");
     if (noSea.length) cand = noSea;
-    else return null; // all remaining options are sea — skip this slot
+   else return undefined;
+// or simply
+return; // all remaining options are sea — skip this slot
   }
   // Heritage: culture/spiritual plans can visit multiple sites; all others get one heritage stop max.
   const culturalDay = ans.personality.some((t: string) => ["culture","spiritual"].includes(t));
