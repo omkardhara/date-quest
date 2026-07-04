@@ -22,6 +22,8 @@ const TRAVEL_BASE: Record<string, number> = {
   "bandra-home":        35,
   "bandra-south":       35,
   "bandra-thane":       65,
+  "borivali-bandra":    50,
+  "borivali-central":   55,
   "borivali-home":      60,
   "borivali-vasai":     50,
   "central-home":       40,

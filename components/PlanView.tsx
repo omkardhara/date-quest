@@ -18,14 +18,19 @@ const TRAVEL_BASE_CLIENT: Record<string, number> = {
   "andheri_w-bandra":   20, "andheri_w-borivali": 35, "andheri_w-central":  40,
   "andheri_w-home":     20, "andheri_w-south":    55, "andheri_w-thane":    55,
   "bandra-central":     30, "bandra-home":         35, "bandra-south":       35,
-  "bandra-thane":       65, "borivali-home":       60, "central-home":       40,
-  "central-south":      20, "central-thane":       50, "home-south":         60,
-  "home-thane":         45, "gorai-home":          75,
+  "bandra-thane":       65, "borivali-bandra":     50, "borivali-central":   55,
+  "borivali-home":      60, "central-home":        40, "central-south":      20,
+  "central-thane":      50, "home-south":          60, "home-thane":         45,
+  "gorai-home":         75,
 };
-function approxTravelMins(fromZone: string, toZone: string): number {
+// Only called when a block is swapped — applies rush-hour multiplier like the engine.
+function approxTravelMins(fromZone: string, toZone: string, atMin?: number): number {
   if (fromZone === toZone) return 10;
   const key = [fromZone, toZone].sort().join("-");
-  return TRAVEL_BASE_CLIENT[key] ?? 45;
+  const base = TRAVEL_BASE_CLIENT[key] ?? 45;
+  const m = atMin ?? 0;
+  const mult = (m >= 1020 && m <= 1200) ? 1.4 : (m >= 720 && m <= 900) ? 1.2 : 1;
+  return Math.round(base * mult);
 }
 
 // Fetches a real venue photo + mini-map, via our key-safe API proxy.
@@ -201,12 +206,15 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
           const dirUrl    = b.travelFromPrev
             ? buildDirectionsUrl(fromLabel, fromArea, currentShown.title, currentShown.area ?? "")
             : "";
-          // Recalculate travel mins when zones change due to a swap.
+          // Use engine's rush-hour-aware value unless a swap changed the zones.
           const travelMinsVal = (() => {
             if (!b.travelFromPrev) return 0;
-            const prevZone = prevShown?.zone;
-            const curZone  = currentShown?.zone;
-            if (prevZone && curZone) return approxTravelMins(prevZone, curZone);
+            const isSwapped = (swaps[i] ?? 0) > 0 || (swaps[i - 1] ?? 0) > 0;
+            if (isSwapped) {
+              const prevZone = prevShown?.zone;
+              const curZone  = currentShown?.zone;
+              if (prevZone && curZone) return approxTravelMins(prevZone, curZone, b.startMin);
+            }
             return b.travelFromPrev.mins;
           })();
           return (
@@ -227,8 +235,10 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
           const homeUrl   = lastShown
             ? buildDirectionsUrl(lastShown.title, homeArea, "Home", "Marol, Andheri East")
             : plan.returnTravel.directionsUrl;
-          const homeMins  = lastShown?.zone
-            ? approxTravelMins(lastShown.zone, "home")
+          const lastIdx   = plan.blocks.length - 1;
+          const lastSwapped = (swaps[lastIdx] ?? 0) > 0;
+          const homeMins  = (lastSwapped && lastShown?.zone)
+            ? approxTravelMins(lastShown.zone, "home", lastBlock?.endMin)
             : plan.returnTravel.mins;
           return (
             <>

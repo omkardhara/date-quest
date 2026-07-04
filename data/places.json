@@ -1469,7 +1469,7 @@
     "name": "Aarey Colony nature walk",
     "category": "activity",
     "area": "Aarey Colony, Goregaon",
-    "zone": "andheri_w",
+    "zone": "borivali",
     "moods": [
       "chill",
       "date night",
@@ -2850,7 +2850,7 @@
     "name": "Mizu Japanese restaurant",
     "category": "food",
     "area": "BKC, Bandra East",
-    "zone": "bandra",
+    "zone": "central",
     "moods": [
       "birthday",
       "date night",
@@ -3179,7 +3179,7 @@
     "name": "Canvas Laugh Club",
     "category": "experience",
     "area": "BKC, Bandra East",
-    "zone": "bandra",
+    "zone": "central",
     "moods": [
       "birthday",
       "date night",
@@ -3300,7 +3300,7 @@
     "name": "PVR Director's Cut, BKC",
     "category": "experience",
     "area": "BKC, Bandra East",
-    "zone": "bandra",
+    "zone": "central",
     "moods": [
       "birthday",
       "chill",
@@ -4677,7 +4677,7 @@
     "name": "O Pedro (Goa-inspired)",
     "category": "food",
     "area": "BKC, Bandra East",
-    "zone": "bandra",
+    "zone": "central",
     "moods": [
       "birthday",
       "celebrate",
