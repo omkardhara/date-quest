@@ -261,7 +261,7 @@ function pick(
   cuisineFilter?: string[],
   recentEnvs: string[] = [],
   spiritualUsed = false,
-): { place: Place; zone: Zone; alts: Place[] } | undefined {
+): { place: Place; zone: Zone; alts: Place[] } | undefined | null { // 👈 Added "| null" here  {
   const base = pool.filter(p =>
     cats.includes(p.category) &&
     !used.has(p.id) &&
