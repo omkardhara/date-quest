@@ -3,12 +3,17 @@
 // "unavailable" and the planner falls back to seasonal (monsoon) assumptions.
 
 export const COORDS: Record<string, [number, number]> = {
-  mumbai:   [19.07, 72.88],
-  lonavala: [18.75, 73.41],
-  karjat:   [18.91, 73.33],
-  mulshi:   [18.49, 73.49],
-  malshej:  [19.33, 73.77],
-  palghar:  [19.69, 72.77],
+  mumbai:        [19.07, 72.88],
+  lonavala:      [18.75, 73.41],
+  karjat:        [18.91, 73.33],
+  mulshi:        [18.49, 73.49],
+  malshej:       [19.33, 73.77],
+  palghar:       [19.69, 72.77],
+  alibaug:       [18.64, 72.87],
+  nashik:        [19.99, 73.79],
+  mahabaleshwar: [17.92, 73.66],
+  bhandardara:   [19.54, 73.75],
+  goa:           [15.30, 74.00],
 };
 
 export interface Weather {

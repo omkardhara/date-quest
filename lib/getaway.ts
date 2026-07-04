@@ -50,7 +50,27 @@ function block(startMin: number, durMin: number, kind: Category | "buffer", titl
   return { startMin, endMin: startMin + durMin, title, place, why, cost: place?.costPerPerson ? place.costPerPerson * 2 : 0, kind, backup };
 }
 
-export async function buildGetaway(destId: string, nights: number, monsoon: boolean, weatherSummary?: string, month?: number): Promise<GetawayPlan | null> {
+function scoreHighlight(h: Highlight, prefs: string[]): number {
+  if (!prefs.length) return 0;
+  const text = (h.name + " " + h.note).toLowerCase();
+  let s = 0;
+  if (prefs.includes("Trekking & hikes")   && /trek|trail|climb|hike|fort|rappel/.test(text)) s += 5;
+  if (prefs.includes("Water spots")        && /water|fall|river|lake|dam|rafting|kayak|pool|stream/.test(text)) s += 5;
+  if (prefs.includes("Scenic photography") && /view|point|sunrise|sunset|valley|cliff|vista|scenic|panoram/.test(text)) s += 5;
+  if (prefs.includes("Relaxed resort")     && !h.outdoor) s += 4;
+  if (prefs.includes("Relaxed resort")     && h.outdoor && h.monsoonRisk === "ok") s += 1;
+  if (prefs.includes("History & culture")  && /temple|cave|fort|heritage|historic|church|ruin|buddhist|ancient/.test(text)) s += 5;
+  if (prefs.includes("Wildlife & nature")  && /forest|bird|wildlife|flamingo|nature|jungle|animal/.test(text)) s += 5;
+  if (prefs.includes("Camping & bonfire")  && /camp|bonfire|night|firefly|star/.test(text)) s += 5;
+  if (prefs.includes("Wine & food")        && h.kind === "food") s += 5;
+  return s;
+}
+
+export async function buildGetaway(
+  destId: string, nights: number, monsoon: boolean,
+  weatherSummary?: string, month?: number,
+  preferences: string[] = [], hotelBooked: string = "", customStops: string[] = []
+): Promise<GetawayPlan | null> {
   const d = DESTS.find(x => x.id === destId);
   if (!d) return null;
 
@@ -70,11 +90,22 @@ export async function buildGetaway(destId: string, nights: number, monsoon: bool
     return block(mealMins, 75, "food", `${label}: ${p.name}`, p.summary || "A good local table.", p);
   };
 
-  // Highlights: curated (with monsoon awareness) first, then any extra live things-to-do.
+  // Highlights: curated (with monsoon awareness), sorted by user's preferences, then live extras.
   const usableHi = d.highlights.filter(h => !(monsoon && h.outdoor && h.monsoonRisk === "avoid"));
+  const sortedHi = preferences.length
+    ? [...usableHi].sort((a, b) => scoreHighlight(b, preferences) - scoreHighlight(a, preferences))
+    : usableHi;
+
+  // User's explicit custom stops go first — they always make the itinerary.
+  const customHiBlocks: PlanBlock[] = customStops.map(name => {
+    const p = syntheticPlace(name, d.name, "experience", { outdoor: true, monsoonRisk: "caution", summary: `Your must-see stop: ${name}.` });
+    return block(0, 120, "experience", name, `Your must-see stop at ${name}.`, p);
+  });
+
   const liveHi = liveThings.map(t => liveToPlace(t, d.name, "experience"));
   const highlightQueue: PlanBlock[] = [
-    ...usableHi.map(h => {
+    ...customHiBlocks,
+    ...sortedHi.map(h => {
       const p = syntheticPlace(h.name, d.name, (h.kind as Category) || "experience", { outdoor: h.outdoor, monsoonRisk: h.monsoonRisk, summary: h.note });
       const backup = monsoon && h.outdoor && h.monsoonRisk === "caution" ? `Monsoon caution: ${h.note}` : undefined;
       return block(0, 120, p.category, h.name, h.note, p, backup);
@@ -145,7 +176,11 @@ export async function buildGetaway(destId: string, nights: number, monsoon: bool
   } else if (monsoon && d.monsoon === "poor") {
     flags.push({ icon: "🌧️", text: `${d.name} is better outside the monsoon (${d.bestMonths}). In the rains, lean on the indoor and sheltered stops.` });
   }
-  flags.push({ icon: "🏨", text: `Book the stay ahead — ${stayName} and similar fill up on weekends.` });
+  if (hotelBooked === "booked") {
+    flags.push({ icon: "🏨", text: `Stay is sorted — nice. Just confirm your check-in time ahead of the drive so you're not waiting around after a long road.` });
+  } else {
+    flags.push({ icon: "🏨", text: `Book the stay ahead — ${stayName} and similar fill up on weekends. See the suggestions below.` });
+  }
 
   const allPlaces = days.flatMap(dy => dy.blocks.map(b => b.place).filter(Boolean)) as Place[];
 

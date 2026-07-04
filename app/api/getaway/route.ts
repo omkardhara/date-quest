@@ -21,8 +21,11 @@ export async function POST(req: NextRequest) {
       if (wx.available) { wet = wx.wet; weatherSummary = wx.summary; }
     }
 
-    const month = body.date ? new Date(body.date + "T00:00:00").getMonth() : undefined;
-    const plan = await buildGetaway(destId, nights, wet, weatherSummary, month);
+    const month       = body.date ? new Date(body.date + "T00:00:00").getMonth() : undefined;
+    const preferences = Array.isArray(body.preferences) ? (body.preferences as string[]) : [];
+    const hotelBooked = typeof body.hotelBooked === "string" ? body.hotelBooked : "";
+    const customStops = Array.isArray(body.customStops) ? (body.customStops as string[]) : [];
+    const plan = await buildGetaway(destId, nights, wet, weatherSummary, month, preferences, hotelBooked, customStops);
     if (!plan) return NextResponse.json({ error: "unknown destination" }, { status: 404 });
 
     // Events in the destination around the date (best-effort).

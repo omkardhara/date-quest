@@ -22,12 +22,18 @@ const STARTS = [["6 AM", 360], ["8 AM", 480], ["10 AM", 600], ["12 PM", 720], ["
 const ENDS = [["10 AM", 600], ["12 PM", 720], ["2 PM", 840], ["4 PM", 960], ["6 PM", 1080], ["8 PM", 1200], ["10 PM", 1320], ["Midnight", 1440]] as const;
 
 const GETAWAYS = [
-  { id: "lonavala", name: "Lonavala" },
-  { id: "karjat", name: "Karjat" },
-  { id: "mulshi", name: "Mulshi" },
-  { id: "malshej", name: "Malshej Ghat" },
-  { id: "palghar", name: "Palghar" },
+  { id: "lonavala",      name: "Lonavala" },
+  { id: "alibaug",       name: "Alibaug" },
+  { id: "karjat",        name: "Karjat" },
+  { id: "mulshi",        name: "Mulshi" },
+  { id: "malshej",       name: "Malshej Ghat" },
+  { id: "bhandardara",   name: "Bhandardara" },
+  { id: "nashik",        name: "Nashik" },
+  { id: "mahabaleshwar", name: "Mahabaleshwar" },
+  { id: "palghar",       name: "Palghar" },
+  { id: "goa",           name: "Goa" },
 ];
+const GETAWAY_VIBES = ["Trekking & hikes", "Water spots", "Scenic photography", "Relaxed resort", "History & culture", "Wildlife & nature", "Camping & bonfire", "Wine & food"];
 const NIGHTS = [["Day trip", 0], ["1 night", 1], ["2 nights", 2]] as const;
 
 type Step = "intro" | "mood" | "personality" | "foods" | "activities" | "budget" | "time" | "plan" | "getaway-pick" | "getaway-plan";
@@ -51,6 +57,10 @@ export default function Page() {
   const [dest, setDest] = useState("");
   const [nights, setNights] = useState(1);
   const [getaway, setGetaway] = useState<GetawayPlan | null>(null);
+  const [getawayVibes, setGetawayVibes] = useState<string[]>([]);
+  const [hotelBooked, setHotelBooked] = useState<"" | "booked" | "need-suggestions">("");
+  const [customStops, setCustomStops] = useState<string[]>([]);
+  const [stopInput, setStopInput] = useState("");
   const [outingDate, setOutingDate] = useState(PROFILE.birthday); // "YYYY-MM-DD"
   const [hello, setHello] = useState("");
   useEffect(() => { setHello(randomNickname()); }, [step]);
@@ -65,6 +75,13 @@ export default function Page() {
   function setStart(v: number) {
     setStartMin(v);
     if (endMin && endMin <= v) setEndMin(0);
+  }
+
+  function addStop() {
+    const v = stopInput.trim();
+    if (!v || customStops.includes(v)) return;
+    setCustomStops([...customStops, v]);
+    setStopInput("");
   }
 
   async function generate() {
@@ -146,7 +163,9 @@ export default function Page() {
       const p = buildPlan(ans, extra, moviesData);
       p.outingDate = outingDate;
       if (budget === 0) p.budget = 0;
-      if (evts.length) p.events = evts;
+      const OUT_ZONES = new Set(["karjat", "kolad", "gorai", "vasai"]);
+      const isOutOfCity = p.blocks.some(b => OUT_ZONES.has(b.place?.zone ?? ""));
+      if (evts.length && !isOutOfCity) p.events = evts;
       setLastAns(ans);
       setPlan(p);
       setStep("plan");
@@ -164,7 +183,7 @@ export default function Page() {
       const res = await fetch("/api/getaway", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ destId: dest, nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate }),
+        body: JSON.stringify({ destId: dest, nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate, preferences: getawayVibes, hotelBooked, customStops }),
       });
       const d = await res.json();
       if (d.plan) { setGetaway(d.plan); setStep("getaway-plan"); }
@@ -306,6 +325,45 @@ export default function Page() {
                   className="w-full rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm text-white outline-none focus:border-glow"
                 />
               </div>
+
+              <p className="mt-5 text-sm text-white/50">What kind of trip? (optional)</p>
+              <Chips options={GETAWAY_VIBES} selected={getawayVibes} onTap={(v) => toggle(getawayVibes, v, setGetawayVibes)} />
+
+              {nights > 0 && (
+                <>
+                  <p className="mt-5 text-sm text-white/50">Stay sorted?</p>
+                  <Chips
+                    options={["Yes, already booked", "Need suggestions"]}
+                    selected={hotelBooked === "booked" ? ["Yes, already booked"] : hotelBooked === "need-suggestions" ? ["Need suggestions"] : []}
+                    onTap={(v) => {
+                      const val = v === "Yes, already booked" ? "booked" : "need-suggestions";
+                      setHotelBooked(hotelBooked === val ? "" : val);
+                    }}
+                  />
+                </>
+              )}
+
+              <p className="mt-5 text-sm text-white/50">Any must-see spot? (optional)</p>
+              <div className="mt-2 flex gap-2">
+                <input
+                  value={stopInput}
+                  onChange={(e) => setStopInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addStop(); } }}
+                  placeholder="e.g. Duke's Nose, Tiger's Leap…"
+                  className="flex-1 rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm outline-none focus:border-glow"
+                />
+                <button onClick={addStop} className="rounded-xl bg-white/10 px-5 text-sm font-medium hover:bg-white/20">Add</button>
+              </div>
+              {customStops.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {customStops.map((s) => (
+                    <button key={s} onClick={() => setCustomStops(customStops.filter(x => x !== s))} className="chip chip-on rounded-full px-4 py-2 text-sm">
+                      {s} <span className="opacity-60">✕</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {buildError && <p className="mt-3 text-sm text-rose-400">Couldn't build the trip — check your connection and try again.</p>}
               <Nav onBack={() => setStep("intro")} onNext={generateGetaway} canNext={!!dest} nextLabel="Plan the trip" />
             </Screen>
