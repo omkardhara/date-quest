@@ -298,19 +298,19 @@ function pick(
   if (recentEnvs.includes("shopping")) {
     const noShop = cand.filter(p => environment(p) !== "shopping");
     if (noShop.length) cand = noShop;
-    else return null; // no non-shopping alternatives — skip slot rather than doubling up
+    else return undefined; // no non-shopping alternatives — skip slot rather than doubling up
   }
   if (recentEnvs.includes("sea")) {
     const noSea = cand.filter(p => environment(p) !== "sea");
     if (noSea.length) cand = noSea;
-   else return null; // all remaining options are sea — skip this slot
+    else return undefined; // all remaining options are sea — skip this slot
   }
   // Heritage: culture/spiritual plans can visit multiple sites; all others get one heritage stop max.
   const culturalDay = ans.personality.some((t: string) => ["culture","spiritual"].includes(t));
   if (!culturalDay && recentEnvs.includes("heritage")) {
     const noHeritage = cand.filter(p => environment(p) !== "heritage");
     if (noHeritage.length) cand = noHeritage;
-     else return null; // all remaining options are sea; // all remaining options are heritage — skip this slot
+    else return undefined; // all remaining options are heritage — skip this slot
   }
 
   // Zones far enough from home that the travel penalty would otherwise keep the engine
@@ -608,7 +608,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   // live music, gaming etc. that are gated to bestTime "night" (≥ 6 pm) and never get picked
   // in afternoon slots. Only fires when requests are still unfulfilled and there's room.
   if (pendingRequests.length > 0 && end > 1200 && cursor < end - 90) {
-    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Dessert (20-min minimum to avoid a 5-minute dessert block)
