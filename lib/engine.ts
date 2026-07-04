@@ -101,20 +101,43 @@ const CORRIDOR_ZONES: Record<Corridor, Zone[]> = {
 };
 
 function detectCorridor(ans: Answers): Corridor {
-  const p = ans.personality;
-  const allMoods = ans.moodList ?? [ans.mood];
+  const p    = ans.personality;
+  const mood = ans.moodList ?? [ans.mood];
   const dayMins = ans.endMin - ans.startMin;
   const monsoon = wet(ans);
-  const isRomantic = allMoods.some(m => ["romantic", "anniversary"].includes(m));
-  // Romantic/anniversary day without adventure intent → stay in city, scenic corridors.
-  if (isRomantic && !p.includes("adventure")) {
-    return p.includes("culture") || p.includes("spiritual") ? "south_loop" : "bandra_hub";
-  }
-  // On a wet day the far waterfalls are unsafe, so never route a full day out to them.
-  if (!monsoon && p.includes("adventure") && ans.startMin <= 480 && dayMins >= 660) return "full_day_out";
-  if (p.includes("adventure") && ans.startMin <= 600 && dayMins >= 480) return "north_adventure";
-  if (p.includes("adventure")) return "thane_east";
-  if (p.includes("culture") || p.includes("spiritual") || allMoods.includes("romantic")) return "south_loop";
+
+  const hasAdventure = p.includes("adventure");
+  const hasNature    = p.includes("nature");
+  const hasSpiritual = p.includes("spiritual");
+  const hasCulture   = p.includes("culture");
+  const isRomantic   = mood.some(m => ["romantic", "anniversary"].includes(m));
+
+  const veryEarly = ans.startMin <= 480;  // ≤ 8 am
+  const earlyish  = ans.startMin <= 600;  // ≤ 10 am
+  const longDay   = dayMins >= 480;       // ≥ 8 h
+  const fullDay   = dayMins >= 660;       // ≥ 11 h
+
+  // Full-day-out: adventure + very early start + very long day + no monsoon.
+  if (!monsoon && hasAdventure && veryEarly && fullDay) return "full_day_out";
+
+  // North/Borivali (SGNP, Aarey): adventure with time to get there, OR
+  // nature-seekers who start early enough to make the drive worthwhile.
+  if (hasAdventure && earlyish && longDay) return "north_adventure";
+  if (hasNature    && earlyish)            return "north_adventure";
+
+  // Thane/East: adventure fallback when start is too late for Borivali, OR
+  // nature with a later start (Yeoor Hills, Upvan Lake don't need an early alarm).
+  if (hasAdventure || hasNature) return "thane_east";
+
+  // South/Colaba/Fort: spiritual strongly anchors here (temples, dargahs,
+  // churches concentrated in the south). Romantic + culture = heritage date in
+  // Colaba/Fort — the one romantic case where south beats Bandra.
+  if (hasSpiritual)             return "south_loop";
+  if (isRomantic && hasCulture) return "south_loop";
+
+  // Default: Bandra hub — covers culture alone (Prithvi, galleries, heritage
+  // walks in Bandra/Central), romantic alone (Carter Road, Sea Link, Bandra
+  // Fort), artsy, playful, foodie, shopper, cozy, luxe, nightlife.
   return "bandra_hub";
 }
 
