@@ -110,6 +110,7 @@ function detectCorridor(ans: Answers): Corridor {
   const hasNature    = p.includes("nature");
   const hasSpiritual = p.includes("spiritual");
   const hasCulture   = p.includes("culture");
+  const hasArtsy     = p.includes("artsy");
   const isRomantic   = mood.some(m => ["romantic", "anniversary"].includes(m));
 
   const veryEarly = ans.startMin <= 480;  // ≤ 8 am
@@ -132,12 +133,16 @@ function detectCorridor(ans: Answers): Corridor {
   // South/Colaba/Fort: spiritual strongly anchors here (temples, dargahs,
   // churches concentrated in the south). Romantic + culture = heritage date in
   // Colaba/Fort — the one romantic case where south beats Bandra.
-  if (hasSpiritual)             return "south_loop";
-  if (isRomantic && hasCulture) return "south_loop";
+  // Artsy alone routes here too: Kala Ghoda, Jehangir, CSMVS, Fort galleries
+  // are the core of Mumbai's art scene — bandra_hub would miss all 15 south
+  // artsy places. south_loop covers south+central+bandra = 34 of 35 artsy places.
+  if (hasSpiritual)              return "south_loop";
+  if (isRomantic && hasCulture)  return "south_loop";
+  if (hasArtsy)                  return "south_loop";
+  if (hasCulture)                return "south_loop";
 
-  // Default: Bandra hub — covers culture alone (Prithvi, galleries, heritage
-  // walks in Bandra/Central), romantic alone (Carter Road, Sea Link, Bandra
-  // Fort), artsy, playful, foodie, shopper, cozy, luxe, nightlife.
+  // Default: Bandra hub — covers romantic alone (Carter Road, Sea Link, Bandra
+  // Fort), playful, foodie, shopper, cozy, luxe, nightlife.
   return "bandra_hub";
 }
 
