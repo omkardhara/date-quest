@@ -1,8 +1,11 @@
 import placesData from "@/data/places.json";
+import travelMatrixData from "@/data/travel-matrix.json";
 import { Answers, Place, Plan, PlanBlock, Category, TravelFromPrev, AltPlace, MovieInfo } from "./types";
 import { PROFILE } from "./profile";
 import { narrate, greeting, signoff } from "./narrate";
 import { restroomFor, outfitFor, buildFlags } from "./concierge";
+
+const TRAVEL_MATRIX = travelMatrixData as Record<string, number>;
 
 const MONSOON_MONTHS = [5, 6, 7, 8]; // Jun–Sep
 
@@ -65,6 +68,19 @@ function travelMins(from: Zone, to: Zone, atMin: number): number {
   if (atMin >= 1020 && atMin < 1200) return Math.round(base * 1.4); // 5–8 pm rush
   if (atMin >= 720  && atMin < 900)  return Math.round(base * 1.2); // noon rush
   return base;
+}
+
+// Per-place accurate lookup using the precomputed Google Maps matrix.
+// Falls back to zone-based travelMins when a pair is not in the matrix
+// (out-of-city places, or the home→home self-trip).
+function travelMinsById(fromId: string, from: Zone, toId: string, to: Zone, atMin: number): number {
+  const base = TRAVEL_MATRIX[`${fromId}|${toId}`];
+  if (base !== undefined) {
+    if (atMin >= 1020 && atMin < 1200) return Math.round(base * 1.4);
+    if (atMin >= 720  && atMin < 900)  return Math.round(base * 1.2);
+    return base;
+  }
+  return travelMins(from, to, atMin);
 }
 
 function directionsUrl(fromName: string, fromArea: string, toName: string, toArea: string): string {
@@ -384,6 +400,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   const blocks:      PlanBlock[] = [];
   let cursor         = ans.startMin;
   let currentZone:   Zone = "home";
+  let currentPlaceId = "home";
   let prevName       = `Home (${PROFILE.homeArea})`;
   let prevArea       = PROFILE.homeArea;
   let runningCost    = 0;
@@ -409,7 +426,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     if (!result || cursor >= end) return;
     const { place: p, zone } = result;
 
-    const tripMins   = travelMins(currentZone, zone, cursor);
+    const tripMins   = travelMinsById(currentPlaceId, currentZone, p.id, zone, cursor);
     const arrivalMin = cursor + tripMins;
     if (arrivalMin + 20 > end) return; // no time left after travel
 
@@ -473,8 +490,8 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     for (let i = pendingRequests.length - 1; i >= 0; i--) {
       if (matchesRequest(p, [pendingRequests[i]])) pendingRequests.splice(i, 1);
     }
-    if (zone !== "multiple") currentZone = zone;
-    else if (FAR_RETURN[currentZone]) currentZone = "home"; // we've driven back to the city
+    if (zone !== "multiple") { currentZone = zone; currentPlaceId = p.id; }
+    else if (FAR_RETURN[currentZone]) { currentZone = "home"; currentPlaceId = "home"; }
     // Track environment for consecutive-diversity penalty (food slots vary naturally, skip them)
     if (!FULL_MEALS.includes(p.category) && p.category !== "rest") {
       recentEnvs.push(environment(p));
@@ -633,7 +650,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   // Return-home travel segment — always show how long it takes to get back.
   let returnTravel: Plan["returnTravel"];
   if (blocks.length > 0) {
-    const homeMins = travelMins(currentZone, "home", cursor);
+    const homeMins = travelMinsById(currentPlaceId, currentZone, "home", "home", cursor);
     returnTravel = {
       mins: homeMins,
       fromLabel: prevName,
