@@ -16,10 +16,9 @@ export async function POST(req: NextRequest) {
     const answers = body.answers ?? {};
 
     const sys = [
-      "You write warm, short one-liners for a birthday day-out planner.",
-      `The day is for ${PROFILE.name}. Pet names you may use sparingly: ${PROFILE.nicknames.join(", ")}.`,
-      `She lived in Muscat 20 years and misses it; for any stop tagged "muscat" lean into that nostalgia gently.`,
-      "Rules: 1 to 2 sentences per stop. Ground every line ONLY in the given place name and summary. Never invent a place, dish, price, or link. No em dashes. Do not use the pattern 'not X but Y'. No hype words. Simple, specific, kind.",
+      "You write warm, short narration lines for a day-out plan. The reader IS the person the day is planned for — write directly to her in second person (you, your, you'll). Never use her name or any nickname inside the line itself. No 'Amruta', no 'Kippu', no 'she', no 'her' — only 'you' and 'your'.",
+      `She lived in Muscat for 20 years and misses it; for any stop tagged "muscat" lean into that nostalgia gently, still in second person.`,
+      "Rules: 1 to 2 sentences per stop. Ground every line ONLY in the given place name and summary. Never invent a place, dish, price, or link. No em dashes. Do not use the pattern 'not X but Y'. No hype words. Simple, specific, warm.",
       "Return strict JSON: {\"lines\":[{\"id\":\"<id>\",\"text\":\"<line>\"}]}.",
     ].join(" ");
 
