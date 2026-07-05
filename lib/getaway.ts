@@ -1,6 +1,5 @@
 import getawayData from "@/data/getaways.json";
 import { Place, PlanBlock, GetawayPlan, GetawayDay, AltPlace, Flag, Category } from "./types";
-import { outfitFor } from "./concierge";
 import { searchPlaces, LivePlace } from "./google";
 
 interface Highlight { name: string; kind: string; outdoor?: boolean; monsoonRisk?: "ok" | "caution" | "avoid"; note: string; }
@@ -13,6 +12,129 @@ interface Dest {
 }
 
 const DESTS = getawayData as Dest[];
+
+function rnd<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function getawayOutfitFor(d: Dest, highlights: Highlight[], isMonsoon: boolean, month?: number): string {
+  const text = highlights.map(h => h.name + " " + h.note).join(" ").toLowerCase();
+  const hasTrek    = /trek|trail|hike|climb|peak|fort|rappel|waterfall/.test(text);
+  const hasBeach   = /\bbeach\b|\bcoast\b|\bsea\b|\bsand\b|\bshore\b/.test(text);
+  const isHill     = /\bghat|\bhill\b|\bvalley\b|\bghats\b/.test(d.region.toLowerCase()) || /mahabaleshwar|lonavala|jawhar|malshej|mulshi|bhandardara/.test(d.id);
+  const hasTemple  = /\btemple\b|\bmandir\b|\bdargah\b|\bchurch\b|\biskcon\b|\bcaves\b/.test(text);
+  const hasWater   = /waterfall|river|\blake\b|\bdam\b|rafting|kayak/.test(text);
+  const isBeachDest = /alibaug|palghar|goa/.test(d.id) || hasBeach;
+  const parts: string[] = [];
+
+  // ── Base outfit ──────────────────────────────────────────────────────────────
+  // Priority: beach > hill > trek > casual — beach and hill destinations have
+  // specific needs that trump generic "fort hike" detection.
+  if (isBeachDest) {
+    parts.push(isMonsoon
+      ? rnd([
+          "breezy separates you're happy to get sea-spray on — leave anything precious at home",
+          "casual beachwear in quick-dry fabric; monsoon beaches are more drama and wind than swimming",
+          "easy cotton separates that dry fast; the sea air will do what it wants",
+        ])
+      : rnd([
+          "a flowy beach dress or easy separates that look great against sand without requiring maintenance",
+          "your favourite beach outfit — something that moves in the sea breeze and photographs naturally",
+          "light, airy clothes for the day; a cover-up for when you step off the beach into a restaurant",
+        ]));
+  } else if (isHill) {
+    const m = month ?? 10;
+    const cold = m === 11 || m === 0 || m === 1;
+    parts.push(isMonsoon
+      ? rnd([
+          "layers — hill mornings are cool, afternoons unpredictably wet; a light waterproof jacket is not optional",
+          "a windcheater or waterproof layer on top, comfortable separates underneath; hill weather makes its own rules",
+        ])
+      : cold
+        ? rnd([
+            "proper warm layers — hill stations in winter are colder than people expect; a fleece or jacket is essential",
+            "warm clothes for the day and genuinely warm layers for evening; temperature drops fast after sunset at altitude",
+          ])
+        : rnd([
+            "light layers for the day, a jacket for evenings — hills cool down quickly after sunset",
+            "comfortable separates plus a light jacket or shawl; mornings at altitude have a chill even when Mumbai felt warm",
+          ]));
+  } else if (hasTrek || hasWater) {
+    parts.push(isMonsoon
+      ? rnd([
+          "moisture-wicking clothes you don't mind getting mud-splattered — dark colours hide the trail better",
+          "quick-dry separates; save your nicer things for the resort in the evening",
+          "trekking-ready layers you can peel off as it warms up — quick-dry everything, nothing cotton",
+        ])
+      : rnd([
+          "breathable trekking clothes — a full-sleeve layer for the cool morning start, something lighter underneath",
+          "comfortable activewear you can move freely in; nothing too precious for rocks and forest paths",
+          "light trekking clothes, ideally full-length tracks to avoid scratchy undergrowth on the trail",
+        ]));
+  } else {
+    parts.push(isMonsoon
+      ? rnd([
+          "easy, quick-dry separates — leave anything silk or suede behind",
+          "comfortable clothes in forgiving fabric; the rains will have opinions",
+        ])
+      : rnd([
+          "resort-casual: something comfortable and put-together that works from morning into dinner",
+          "a nice outfit you actually enjoy wearing on holiday — not your travelling clothes, the proper ones",
+        ]));
+  }
+
+  // ── Footwear ─────────────────────────────────────────────────────────────────
+  if (hasTrek) {
+    parts.push(rnd([
+      "proper closed-toe shoes with grip — trail runners or sturdy sneakers; sandals are for the resort, not the trail",
+      "footwear with real grip: trail runners or trekking shoes — no slip-ons on any wet surface",
+    ]));
+  } else if (isBeachDest) {
+    parts.push(rnd([
+      "flat sandals for the beach and a second pair that handles the drive, forts, and dinner",
+      "sandals or juttis for the beach, something more structured for cobblestone forts or restaurants",
+    ]));
+  } else if (isHill || hasTrek) {
+    parts.push(rnd([
+      "comfortable closed-toe walking shoes — hill paths and fort steps are uneven",
+      "flat shoes with grip; heels make no sense on a hill path or inside a fort",
+    ]));
+  } else {
+    parts.push(rnd([
+      "flat, comfortable shoes you can walk in for longer than you expect",
+      "comfortable walking shoes — even a relaxed getaway covers more ground than a city day",
+    ]));
+  }
+
+  // ── Temple cover ─────────────────────────────────────────────────────────────
+  if (hasTemple) parts.push(rnd([
+    "pack a stole or dupatta — there's a temple or cave stop, so covered shoulders and knees are needed",
+    "a light scarf in your bag for the temple; it doubles as a layer on breezy evenings",
+  ]));
+
+  // ── Rain / sun protection ────────────────────────────────────────────────────
+  if (isMonsoon) {
+    parts.push(rnd([
+      "a packable rain jacket or poncho — umbrellas lose on forest trails and near waterfalls",
+      "rain protection that leaves your hands free; a poncho beats an umbrella on any outdoor getaway",
+      "a compact waterproof layer; waterfall spray and forest rain don't announce themselves",
+    ]));
+  } else {
+    const m = month ?? 10;
+    if (m >= 3 && m <= 5) parts.push(rnd([
+      "real sunscreen — not the SPF 15 one you've been meaning to replace — and carry water",
+      "sunscreen, a hat if you have one you like, and water; it'll be genuinely hot",
+    ]));
+    else if (m === 11 || m === 0 || m === 1) parts.push(rnd([
+      "sunscreen still matters even when it's cool; dry winter air is deceptive",
+      "sunscreen — people forget it when it's cold, but the sun at altitude hits harder",
+    ]));
+    else parts.push(rnd([
+      "sunscreen is non-negotiable even on overcast days",
+      "sunscreen and something breathable for the warmer stretches of the day",
+    ]));
+  }
+
+  return parts.join("; ") + ".";
+}
 
 export function listGetaways(): { id: string; name: string; region: string }[] {
   return DESTS.map(d => ({ id: d.id, name: d.name, region: d.region }));
@@ -192,7 +314,7 @@ export async function buildGetaway(
     driveNote: `~${hrs(d.driveFromMumbaiMins)} from Mumbai · ~${hrs(d.driveFromPuneMins)} from your Pune house`,
     monsoonNote: monsoon ? `Monsoon trip. ${d.name} in the rains: ${d.monsoon === "great" ? "lush and at its best, with care." : "manageable, but not its prettiest season."}` : undefined,
     bestMonths: d.bestMonths,
-    outfit: allPlaces.length ? outfitFor(allPlaces, monsoon, month) : undefined,
+    outfit: getawayOutfitFor(d, d.highlights, monsoon, month),
     flags,
     days,
     stays,
