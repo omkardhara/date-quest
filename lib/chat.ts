@@ -1,8 +1,12 @@
-// Backs the chat assistant: pulls relevant curated places for grounding, and
-// live web snippets for time-sensitive questions (showtimes, current events).
+// Backs the chat assistant: pulls relevant curated places for grounding, live
+// web snippets for time-sensitive questions (showtimes, current events), and
+// real Google review excerpts for "what to order" style questions (generic
+// web search surfaces "10 best X restaurants" listicles for small/niche
+// venues rather than anything about the specific place asked about).
 import { readFileSync } from "fs";
 import { join } from "path";
 import { Place } from "./types";
+import { searchPlaceReviews } from "./google";
 
 const STOP_WORDS = new Set([
   "the", "a", "an", "is", "are", "to", "of", "in", "on", "at", "for", "what",
@@ -101,8 +105,48 @@ export async function liveSearchSnippets(query: string, max = 4): Promise<Search
   }
 }
 
-const LIVE_HINT = /\b(movie|movies|showtime|showtimes|now showing|cinema|theatre|theater|showing today|event|events|happening|concert|weather|forecast|rain|open now|open today|hours today|timings today)\b/i;
+const FOOD_HINT = /\b(order|dish|dishes|menu|must[- ]try|specialt|what to eat|signature|popular (dish|food|item)|recommend)\b/i;
+const OTHER_LIVE_HINT = /\b(movie|movies|showtime|showtimes|now showing|cinema|theatre|theater|showing today|event|events|happening|concert|weather|forecast|rain|open now|open today|hours today|timings today)\b/i;
+
+export function isFoodQuestion(message: string): boolean {
+  return FOOD_HINT.test(message);
+}
 
 export function needsLiveSearch(message: string): boolean {
-  return LIVE_HINT.test(message);
+  return FOOD_HINT.test(message) || OTHER_LIVE_HINT.test(message);
+}
+
+// Question words to strip so what's left is (hopefully) just the venue name,
+// e.g. "whats the best 2 things to order in italianoz bandra" -> "italianoz bandra".
+const VENUE_QUESTION_WORDS = new Set([
+  "the", "a", "an", "is", "are", "to", "of", "in", "on", "at", "for", "what",
+  "whats", "best", "top", "good", "great", "things", "thing", "order", "dish",
+  "dishes", "menu", "must", "try", "specialty", "specialties", "recommend",
+  "recommendation", "recommendations", "popular", "item", "items", "eat",
+  "should", "get", "and", "or", "you", "your", "i", "we", "can", "two",
+  "three", "one",
+]);
+
+function extractVenueQuery(message: string): string {
+  return message.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/)
+    .filter((w) => w && !VENUE_QUESTION_WORDS.has(w) && !/^\d+$/.test(w))
+    .join(" ").trim();
+}
+
+export interface VenueReviews { name: string; rating?: number; userRatings?: number; reviews: string[] }
+
+// Resolves the venue named in a food/menu question via Google Places and
+// pulls its recent review text, so the model can point to dishes real
+// customers actually mention instead of guessing or refusing to answer.
+export async function findVenueReviews(message: string): Promise<VenueReviews | null> {
+  const venue = extractVenueQuery(message);
+  if (!venue) return null;
+  const res = await searchPlaceReviews(`${venue} Mumbai`);
+  if (!res.found || !res.reviews?.length) return null;
+  return {
+    name: res.name!,
+    rating: res.rating,
+    userRatings: res.userRatings,
+    reviews: res.reviews.map((r) => (r.length > 300 ? r.slice(0, 300) + "…" : r)),
+  };
 }

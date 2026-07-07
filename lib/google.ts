@@ -68,6 +68,61 @@ export async function searchPlace(q: string): Promise<PlaceMedia> {
   }
 }
 
+export interface PlaceReviews {
+  found: boolean;
+  name?: string;
+  rating?: number;
+  userRatings?: number;
+  reviews?: string[]; // recent review excerpts, newest first
+}
+
+// Separate cache from searchPlace: this pulls the heavier "reviews" field,
+// which we only want on the rare chat request that actually needs it (not
+// every place-media photo lookup on every plan render).
+const reviewsCache = new Map<string, PlaceReviews>();
+
+export async function searchPlaceReviews(q: string): Promise<PlaceReviews> {
+  if (!KEY) return { found: false };
+  const cacheKey = q.toLowerCase().trim();
+  const hit = reviewsCache.get(cacheKey);
+  if (hit) return hit;
+
+  try {
+    const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": KEY,
+        "X-Goog-FieldMask": "places.displayName,places.rating,places.userRatingCount,places.reviews",
+      },
+      body: JSON.stringify({ textQuery: q, maxResultCount: 1, regionCode: "IN" }),
+    });
+    if (!res.ok) {
+      const miss = { found: false };
+      reviewsCache.set(cacheKey, miss);
+      return miss;
+    }
+    const data = await res.json();
+    const p = data?.places?.[0];
+    if (!p) {
+      const miss = { found: false };
+      reviewsCache.set(cacheKey, miss);
+      return miss;
+    }
+    const result: PlaceReviews = {
+      found: true,
+      name: p.displayName?.text,
+      rating: p.rating,
+      userRatings: p.userRatingCount,
+      reviews: (p.reviews ?? []).map((r: any) => r.text?.text).filter(Boolean).slice(0, 5),
+    };
+    reviewsCache.set(cacheKey, result);
+    return result;
+  } catch {
+    return { found: false };
+  }
+}
+
 export interface LivePlace {
   id: string;
   name: string;

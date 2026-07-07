@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { findRelevantPlaces, liveSearchSnippets, needsLiveSearch } from "@/lib/chat";
+import { findRelevantPlaces, findVenueReviews, isFoodQuestion, liveSearchSnippets, needsLiveSearch } from "@/lib/chat";
 
 export const runtime = "nodejs";
 
@@ -22,14 +22,22 @@ export async function POST(req: NextRequest) {
     if (!message) return NextResponse.json({ ok: false, reply: "Ask me something about a Mumbai spot or activity!" });
 
     const places = findRelevantPlaces(message);
-    const liveSnippets = needsLiveSearch(message) ? await liveSearchSnippets(`${message} Mumbai`) : [];
+    const isFoodQ = isFoodQuestion(message);
+
+    // Food/menu questions ("what to order at X") are answered from real Google
+    // review excerpts for the named venue — a generic web search mostly surfaces
+    // "10 best X restaurants" listicles rather than anything about the specific
+    // place asked about, especially for small/lightly-reviewed spots.
+    const venueReviews = isFoodQ ? await findVenueReviews(message) : null;
+    const liveSnippets = needsLiveSearch(message) && !venueReviews ? await liveSearchSnippets(`${message} Mumbai`) : [];
 
     const sys = [
       "You are the Date Quest assistant — a friendly, concise guide inside a Mumbai day-planning app.",
       "Answer questions about specific activities, restaurants, and locations in and around Mumbai.",
       "If 'Curated spots' context is given, ground venue-specific facts (area, vibe, monsoon suitability, cost) in that data — never invent an address, price, or opening hours for a place listed there.",
+      "If 'Recent Google reviews' are given, use them to name specific dishes/drinks reviewers actually praised — mention 1-3 by name if they come up, and say it's based on recent reviews, not an official menu.",
       "If 'Live search results' are given, use them for anything time-sensitive (movie showtimes, current events, weather) and note that it can change — don't state it as a certain fact.",
-      "If asked something time-sensitive and no live results are provided, say you don't have live data for that right now and suggest where to check (BookMyShow for movies, Google for showtimes/hours).",
+      "If asked something time-sensitive and no live results or reviews are provided, say you don't have live data for that right now and suggest where to check (Zomato/Google reviews for dishes, BookMyShow for movies).",
       "For general knowledge (best season for butterflies, typical Mumbai monsoon months, etc.) answer normally from what you know.",
       "Keep answers short: 2-4 sentences, conversational, no markdown headers or bullet lists unless truly needed.",
     ].join(" ");
@@ -39,6 +47,12 @@ export async function POST(req: NextRequest) {
       contextParts.push("Curated spots:\n" + places.map((p) =>
         `- ${p.name} (${p.area}): ${p.summary}${p.bestTime ? ` Best time of day: ${p.bestTime}.` : ""}${p.monsoonRisk ? ` Monsoon: ${p.monsoonRisk}.` : ""}${p.safety ? ` Note: ${p.safety}` : ""}`
       ).join("\n"));
+    }
+    if (venueReviews) {
+      contextParts.push(
+        `Recent Google reviews for ${venueReviews.name}${venueReviews.rating ? ` (${venueReviews.rating}★, ${venueReviews.userRatings ?? 0} reviews)` : ""}:\n` +
+        venueReviews.reviews.map((r) => `- "${r}"`).join("\n")
+      );
     }
     if (liveSnippets.length) {
       contextParts.push("Live search results:\n" + liveSnippets.map((s) => `- ${s.title}: ${s.snippet}`).join("\n"));
