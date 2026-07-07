@@ -1,6 +1,7 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Plan, GetawayPlan } from "@/lib/types";
 
 interface Msg { role: "user" | "assistant"; content: string }
 
@@ -9,6 +10,41 @@ const STARTERS = [
   "What movies are on at Infiniti Mall right now?",
   "Any good rain-friendly spots?",
 ];
+
+const ITINERARY_STARTERS = [
+  "What's the best time to visit my first stop?",
+  "How do I get to my next stop from here?",
+  "Any good shopping spots near my plan?",
+];
+
+function fmtTime(min: number): string {
+  const h = Math.floor(min / 60) % 24, m = min % 60;
+  const ap = h < 12 ? "AM" : "PM";
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return `${hh}:${m.toString().padStart(2, "0")} ${ap}`;
+}
+
+// Summarizes whatever itinerary is currently on screen so the model can
+// answer "this place" / "the shopping stop" / "my plan" questions against
+// the actual stops shown, instead of only generic curated/live lookups.
+function buildItinerarySummary(plan?: Plan | null, getaway?: GetawayPlan | null): string {
+  if (getaway) {
+    const lines = getaway.days.flatMap((day) =>
+      day.blocks
+        .filter((b) => b.kind !== "buffer")
+        .map((b) => `${day.label}, ${fmtTime(b.startMin)}: ${b.title}${b.place?.area ? ` (${b.place.area})` : ""} — ₹${b.cost}`)
+    );
+    if (!lines.length) return "";
+    return `Weekend getaway to ${getaway.destination} (${getaway.nights} night${getaway.nights === 1 ? "" : "s"}):\n${lines.join("\n")}`;
+  }
+  if (plan?.blocks?.length) {
+    const lines = plan.blocks.map((b) =>
+      `${fmtTime(b.startMin)}–${fmtTime(b.endMin)}: ${b.title}${b.place?.area ? ` (${b.place.area})` : ""} — ₹${b.cost}`
+    );
+    return `Today's Mumbai plan:\n${lines.join("\n")}`;
+  }
+  return "";
+}
 
 // Crops the full-body chibi art down to just the face, since /public/chibi/*.png
 // is a portrait meant for a tall hero area, not a small round avatar.
@@ -28,12 +64,13 @@ function ChibiAvatar({ size }: { size: number }) {
   );
 }
 
-export function ChatWidget() {
+export function ChatWidget({ plan, getaway }: { plan?: Plan | null; getaway?: GetawayPlan | null }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const itinerary = useMemo(() => buildItinerarySummary(plan, getaway), [plan, getaway]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -50,7 +87,7 @@ export function ChatWidget() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: content, history: next.slice(-8) }),
+        body: JSON.stringify({ message: content, history: next.slice(-8), itinerary }),
       });
       const data = await res.json();
       setMessages([...next, { role: "assistant", content: data.reply ?? "Something went wrong — try again in a moment." }]);
@@ -88,7 +125,7 @@ export function ChatWidget() {
               <ChibiAvatar size={36} />
               <div>
                 <p className="font-display text-sm font-semibold hero-text">Ask about a spot</p>
-                <p className="text-xs text-white/45">Movies, best times to visit, what's nearby…</p>
+                <p className="text-xs text-white/45">{itinerary ? "Ask about your plan, movies, what's nearby…" : "Movies, best times to visit, what's nearby…"}</p>
               </div>
             </div>
 
@@ -96,7 +133,7 @@ export function ChatWidget() {
               {messages.length === 0 && (
                 <div className="space-y-2">
                   <p className="text-xs text-white/40">Try asking:</p>
-                  {STARTERS.map((s) => (
+                  {(itinerary ? ITINERARY_STARTERS : STARTERS).map((s) => (
                     <button
                       key={s}
                       onClick={() => send(s)}

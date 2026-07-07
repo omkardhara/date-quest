@@ -8,6 +8,7 @@ import { Chibi } from "@/components/Chibi";
 import { PlanView } from "@/components/PlanView";
 import { GetawayView } from "@/components/GetawayView";
 import { Memories } from "@/components/Memories";
+import { ChatWidget } from "@/components/ChatWidget";
 import { PROFILE, randomNickname } from "@/lib/profile";
 
 const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Celebrate", "Adventure", "Group outing", "Proposal", "Reunion", "Just because"];
@@ -272,6 +273,7 @@ export default function Page() {
   }
 
   return (
+    <>
     <main className="mx-auto max-w-xl px-5 py-8 min-h-screen flex flex-col">
       {ORDER.includes(step) && step !== "plan" && step !== "intro" && (
         <div className="mb-6 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
@@ -492,6 +494,8 @@ export default function Page() {
         </motion.div>
       </AnimatePresence>
     </main>
+    <ChatWidget plan={plan} getaway={getaway} />
+    </>
   );
 }
 

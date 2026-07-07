@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const message: string = (body.message ?? "").trim();
     const history: ChatMessage[] = Array.isArray(body.history) ? body.history.slice(-8) : [];
+    const itinerary: string = (body.itinerary ?? "").trim();
     if (!message) return NextResponse.json({ ok: false, reply: "Ask me something about a Mumbai spot or activity!" });
 
     const isFoodQ = isFoodQuestion(message);
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
     const sys = [
       "You are the Date Quest assistant — a friendly, concise guide inside a Mumbai day-planning app.",
       "Answer questions about specific activities, restaurants, and locations in and around Mumbai.",
+      "If 'Current itinerary' context is given, that is the exact plan already generated and shown to the user on screen right now. When they say 'this place', 'here', 'my plan', 'the first/next stop', or refer to a stop without naming it, resolve it against that itinerary first — don't ask them to clarify which place they mean if the itinerary makes it clear.",
       "If 'Curated spots' context is given, ground venue-specific facts (area, vibe, monsoon suitability, cost) in that data — never invent an address, price, or opening hours for a place listed there.",
       "If 'Recent Google reviews' are given, use them to name specific dishes/drinks reviewers actually praised — mention 1-3 by name if they come up, and say it's based on recent reviews, not an official menu.",
       "If 'Live search results' are given, use them for anything time-sensitive (movie showtimes, current events, weather) and note that it can change — don't state it as a certain fact.",
@@ -52,6 +54,9 @@ export async function POST(req: NextRequest) {
     ].join(" ");
 
     const contextParts: string[] = [];
+    if (itinerary) {
+      contextParts.push(`Current itinerary (exactly what the user sees on screen right now):\n${itinerary}`);
+    }
     if (places.length) {
       contextParts.push("Curated spots:\n" + places.map((p) =>
         `- ${p.name} (${p.area}${p.distanceKm !== undefined ? `, ~${p.distanceKm} km away` : ""}): ${p.summary}${p.bestTime ? ` Best time of day: ${p.bestTime}.` : ""}${p.monsoonRisk ? ` Monsoon: ${p.monsoonRisk}.` : ""}${p.safety ? ` Note: ${p.safety}` : ""}`
