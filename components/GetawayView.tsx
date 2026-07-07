@@ -1,8 +1,9 @@
 "use client";
-import { GetawayPlan } from "@/lib/types";
+import { useState } from "react";
+import { AltPlace, GetawayPlan } from "@/lib/types";
 import { Chibi } from "./Chibi";
 import { Memories } from "./Memories";
-import { Block, shownFromBlock } from "./PlanView";
+import { Block, resolveShown } from "./PlanView";
 
 function fmt(min: number) {
   const h = Math.floor(min / 60) % 24, m = min % 60;
@@ -11,6 +12,13 @@ function fmt(min: number) {
 }
 
 export function GetawayView({ plan, onRestart }: { plan: GetawayPlan; onRestart: () => void }) {
+  // Keyed by "<dayIndex>-<blockIndex>" since blocks are nested under days.
+  const [swaps, setSwaps] = useState<Record<string, number>>({});
+  const cycle = (key: string, alts?: AltPlace[]) => {
+    if (!alts?.length) return;
+    setSwaps((s) => ({ ...s, [key]: ((s[key] ?? 0) + 1) % (alts.length + 1) }));
+  };
+
   return (
     <div>
       <div className="text-center">
@@ -79,9 +87,14 @@ export function GetawayView({ plan, onRestart }: { plan: GetawayPlan; onRestart:
                   <div className="absolute -left-[16px] top-2 h-2 w-2 rounded-full bg-white/30" />
                   <span>🚗 {fmt(b.startMin)} — {b.title}. {b.why}</span>
                 </div>
-              ) : (
-                <Block key={bi} b={b} i={bi} shown={shownFromBlock(b)} swapped={false} onSwap={() => {}} />
-              )
+              ) : (() => {
+                const key = `${di}-${bi}`;
+                const idx = swaps[key] ?? 0;
+                return (
+                  <Block key={bi} b={b} i={bi} shown={resolveShown(b, idx)} swapped={idx > 0}
+                    onSwap={() => cycle(key, b.alternatives)} />
+                );
+              })()
             ))}
           </div>
         </div>

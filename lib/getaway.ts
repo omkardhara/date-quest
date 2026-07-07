@@ -159,6 +159,13 @@ function syntheticPlace(title: string, area: string, kind: Category, opts: Parti
   };
 }
 
+function toAlt(p: Place): AltPlace {
+  return {
+    id: p.id, name: p.name, area: p.area, zone: p.zone, summary: p.summary,
+    cost: p.costPerPerson * 2, mapsUrl: p.mapsUrl, topDishes: p.topDishes, mustBook: p.mustBook,
+  };
+}
+
 function liveToPlace(lp: LivePlace, area: string, kind: Category): Place {
   return syntheticPlace(lp.name, area, kind, {
     rating: lp.rating, source: "live",
@@ -305,6 +312,31 @@ export async function buildGetaway(
   }
 
   const allPlaces = days.flatMap(dy => dy.blocks.map(b => b.place).filter(Boolean)) as Place[];
+
+  // Swap options — same feature as the Mumbai day plan: each card offers a
+  // few real substitutes from this destination's own pool (other highlights,
+  // other meal options, other stays), never a place already used elsewhere
+  // in the trip.
+  const highlightIds = new Set(highlightQueue.map(b => b.place?.id).filter(Boolean));
+  const eatIds = new Set(eats.map(p => p.id));
+  const usedElsewhere = new Set(allPlaces.map(p => p.id));
+
+  for (const day of days) {
+    for (const b of day.blocks) {
+      if (!b.place) continue;
+      if (eatIds.has(b.place.id)) {
+        b.alternatives = eats.filter(p => p.id !== b.place!.id).slice(0, 3).map(toAlt);
+      } else if (highlightIds.has(b.place.id)) {
+        b.alternatives = highlightQueue
+          .map(hb => hb.place)
+          .filter((p): p is Place => !!p && p.id !== b.place!.id && !usedElsewhere.has(p.id))
+          .slice(0, 3)
+          .map(toAlt);
+      } else if (b.kind === "rest") {
+        b.alternatives = stays.filter(s => s.name !== stayName).slice(0, 3);
+      }
+    }
+  }
 
   return {
     destination: d.name,

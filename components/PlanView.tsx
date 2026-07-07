@@ -69,8 +69,18 @@ const CAT: Record<string, { label: string; cls: string }> = {
 // What a card actually shows, after any swap is applied.
 export interface Shown { title: string; area?: string; zone?: string; blurb: string; cost: number; mapsUrl?: string; topDishes?: string[]; mustBook?: boolean; }
 
-// Non-swapped view of a block (used by the getaway view, which has no swapping).
+// Non-swapped view of a block (used by the getaway view before swapping existed).
 export function shownFromBlock(b: PlanBlock): Shown {
+  return { title: b.title, area: b.place?.area, zone: b.place?.zone, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
+}
+
+// altIdx: 0 = original place, 1..n = that alternative. Shared by PlanView and
+// GetawayView so both apply a swap the same way.
+export function resolveShown(b: PlanBlock, altIdx: number): Shown {
+  if (altIdx > 0 && b.alternatives?.[altIdx - 1]) {
+    const a = b.alternatives[altIdx - 1];
+    return { title: a.name, area: a.area, zone: a.zone, blurb: a.summary, cost: a.cost, mapsUrl: a.mapsUrl, topDishes: a.topDishes, mustBook: a.mustBook };
+  }
   return { title: b.title, area: b.place?.area, zone: b.place?.zone, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
 }
 
@@ -78,14 +88,7 @@ export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; 
   // swaps[i] = 0 → original place; 1..n → that alternative
   const [swaps, setSwaps] = useState<Record<number, number>>({});
 
-  const shownFor = (b: PlanBlock, i: number): Shown => {
-    const idx = swaps[i] ?? 0;
-    if (idx > 0 && b.alternatives?.[idx - 1]) {
-      const a = b.alternatives[idx - 1];
-      return { title: a.name, area: a.area, zone: a.zone, blurb: a.summary, cost: a.cost, mapsUrl: a.mapsUrl, topDishes: a.topDishes, mustBook: a.mustBook };
-    }
-    return { title: b.title, area: b.place?.area, zone: b.place?.zone, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
-  };
+  const shownFor = (b: PlanBlock, i: number): Shown => resolveShown(b, swaps[i] ?? 0);
 
   const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
   const isFreeDay = plan.budget === 0;
