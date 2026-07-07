@@ -16,7 +16,9 @@ export async function POST(req: NextRequest) {
     const answers = body.answers ?? {};
 
     const sys = [
-      "You write warm, short narration lines for a day-out plan. The reader IS the person the day is planned for — write directly to her in second person (you, your, you'll). Never use her name or any nickname inside the line itself. No 'Amruta', no 'Kippu', no 'she', no 'her' — only 'you' and 'your'.",
+      "You write warm, short narration lines for a day-out plan. The reader IS the person the day is planned for.",
+      `Open EVERY line with a warm direct-address nickname followed by a comma, then the rest of the line in second person (you, your, you'll) — e.g. "${PROFILE.nicknames[0]}, this spot is..." Pick a different nickname from this list for each stop so it doesn't repeat: ${PROFILE.nicknames.join(", ")}.`,
+      "After the nickname, never slip into third person — no 'she', 'her', or 'Amruta' anywhere else in the line. Everything past the opening nickname is 'you'/'your' only.",
       `She lived in Muscat for 20 years and misses it; for any stop tagged "muscat" lean into that nostalgia gently, still in second person.`,
       "Rules: 1 to 2 sentences per stop. Ground every line ONLY in the given place name and summary. Never invent a place, dish, price, or link. No em dashes. Do not use the pattern 'not X but Y'. No hype words. Simple, specific, warm.",
       "Return strict JSON: {\"lines\":[{\"id\":\"<id>\",\"text\":\"<line>\"}]}.",

@@ -11,85 +11,89 @@ function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function lowerFirst(s: string): string {
+  return s.charAt(0).toLowerCase() + s.slice(1);
+}
+
 // Warm, grounded one-liner for a block. Templates only — AI upgrade follows via /api/narrate.
+// Every line opens with a direct-address nickname, then stays in second person throughout.
 export function narrate(p: Place, ans: Answers): string {
-  const useNick = Math.random() < 0.4;
-  const n = useNick ? `, ${nick()}` : "";
+  const lead = `${nick()}, `;
 
   if (has(p, "muscat")) {
-    return pick([
-      `A little taste of Muscat${n}. ${p.summary}`,
-      `This one is for the twenty years in Oman${n}. ${p.summary}`,
-      `Closest thing to home${n}. ${p.summary}`,
+    return lead + pick([
+      `a little taste of Muscat. ${p.summary}`,
+      `this one is for the twenty years in Oman. ${p.summary}`,
+      `closest thing to home. ${p.summary}`,
     ]);
   }
   if (has(p, "spa")) {
-    return pick([
-      `She would never book this for herself${n}. ${p.summary}`,
-      `An afternoon that belongs entirely to her${n}. ${p.summary}`,
+    return lead + pick([
+      `you'd never book this for yourself, so here it is. ${p.summary}`,
+      `this afternoon belongs entirely to you. ${p.summary}`,
     ]);
   }
   if (p.category === "dessert") {
-    return pick([
-      `The part you actually came for${n}. ${p.summary}`,
-      `Save room. ${p.summary}`,
-      `A sweet end to a good stretch${n}. ${p.summary}`,
+    return lead + pick([
+      `the part you actually came for. ${p.summary}`,
+      `save room. ${p.summary}`,
+      `a sweet end to a good stretch. ${p.summary}`,
     ]);
   }
   if (p.category === "shopping") {
-    return pick([
-      `Time to hunt${n}. ${p.summary}`,
-      `She will find something. ${p.summary}`,
-      `A window you browse and a bag you carry home${n}. ${p.summary}`,
+    return lead + pick([
+      `time to hunt. ${p.summary}`,
+      `you'll find something. ${p.summary}`,
+      `a window you browse and a bag you carry home. ${p.summary}`,
     ]);
   }
   if (has(p, "temple") || (p.vibes ?? []).includes("spiritual")) {
-    return pick([
-      `A quiet hour for you${n}. ${p.summary}`,
-      `Unhurried and calm${n}. ${p.summary}`,
-      `The city goes quiet here${n}. ${p.summary}`,
+    return lead + pick([
+      `a quiet hour for you. ${p.summary}`,
+      `unhurried and calm. ${p.summary}`,
+      `the city goes quiet here. ${p.summary}`,
     ]);
   }
   if (has(p, "sunset") || has(p, "lakeside") || has(p, "waterfall")) {
-    return pick([
-      `Out where it opens up. ${p.summary}`,
-      `The kind of view that makes the city worth it. ${p.summary}`,
-      `No screen makes this better. ${p.summary}`,
+    return lead + pick([
+      `out where it opens up. ${p.summary}`,
+      `the kind of view that makes the city worth it. ${p.summary}`,
+      `no screen makes this better. ${p.summary}`,
     ]);
   }
   if (p.category === "activity" && !p.indoor) {
-    return pick([
-      `Out where the city turns green. ${p.summary}`,
-      `Fresh air and a different pace. ${p.summary}`,
-      `The version of Mumbai that doesn't feel like Mumbai. ${p.summary}`,
+    return lead + pick([
+      `out where the city turns green. ${p.summary}`,
+      `fresh air and a different pace. ${p.summary}`,
+      `the version of Mumbai that doesn't feel like Mumbai. ${p.summary}`,
     ]);
   }
   if (p.category === "cafe") {
-    return pick([
-      `Slow down, good plate. ${p.summary}`,
-      `A table worth sitting at${n}. ${p.summary}`,
-      `Coffee, a good plate, no rush. ${p.summary}`,
+    return lead + pick([
+      `slow down, good plate. ${p.summary}`,
+      `a table worth sitting at. ${p.summary}`,
+      `coffee, a good plate, no rush. ${p.summary}`,
     ]);
   }
-  if (p.category === "rest") return p.summary;
+  if (p.category === "rest") return lead + lowerFirst(p.summary);
 
   const c = (p.cuisines ?? []).find((x) => ans.foods.includes(x));
   if (c) {
-    return pick([
-      `You wanted ${c}, so here we are${n}. ${p.summary}`,
-      `The ${c} stop${n}. ${p.summary}`,
-      `This one is for the ${c} craving${n}. ${p.summary}`,
+    return lead + pick([
+      `you wanted ${c}, so here we are. ${p.summary}`,
+      `the ${c} stop. ${p.summary}`,
+      `this one is for the ${c} craving. ${p.summary}`,
     ]);
   }
 
   const traits = ans.personality.filter((t) => t !== "queen").join(" and ");
   if (traits) {
-    return pick([
-      `For the ${traits} in you. ${p.summary}`,
-      `Built for exactly the ${traits} energy. ${p.summary}`,
+    return lead + pick([
+      `for the ${traits} in you. ${p.summary}`,
+      `built for exactly the ${traits} energy. ${p.summary}`,
     ]);
   }
-  return p.summary;
+  return lead + lowerFirst(p.summary);
 }
 
 export function greeting(ans: Answers): string {
