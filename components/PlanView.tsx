@@ -84,11 +84,23 @@ export function resolveShown(b: PlanBlock, altIdx: number): Shown {
   return { title: b.title, area: b.place?.area, zone: b.place?.zone, blurb: b.why, cost: b.cost, mapsUrl: b.place?.mapsUrl, topDishes: b.place?.topDishes, mustBook: b.place?.mustBook };
 }
 
-export function PlanView({ plan, name, onRestart, onRegenerate }: { plan: Plan; name: string; onRestart: () => void; onRegenerate?: () => void }) {
+export function PlanView({ plan, name, onRestart, onRegenerate, onItineraryChange }: { plan: Plan; name: string; onRestart: () => void; onRegenerate?: () => void; onItineraryChange?: (lines: string[]) => void }) {
   // swaps[i] = 0 → original place; 1..n → that alternative
   const [swaps, setSwaps] = useState<Record<number, number>>({});
 
   const shownFor = (b: PlanBlock, i: number): Shown => resolveShown(b, swaps[i] ?? 0);
+
+  // Reports the currently-displayed itinerary (swaps applied) up to the page,
+  // so the chat widget always knows what's actually on screen right now.
+  useEffect(() => {
+    if (!onItineraryChange) return;
+    const lines = plan.blocks.map((b, i) => {
+      const shown = shownFor(b, i);
+      return `${fmt(b.startMin)}–${fmt(b.endMin)}: ${shown.title}${shown.area ? ` (${shown.area})` : ""} — ₹${shown.cost}`;
+    });
+    onItineraryChange(lines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan, swaps]);
 
   const liveTotal = plan.blocks.reduce((s, b, i) => s + shownFor(b, i).cost, 0);
   const isFreeDay = plan.budget === 0;

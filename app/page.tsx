@@ -59,6 +59,7 @@ export default function Page() {
   const [dest, setDest] = useState("");
   const [nights, setNights] = useState(1);
   const [getaway, setGetaway] = useState<GetawayPlan | null>(null);
+  const [itineraryLines, setItineraryLines] = useState<string[]>([]);
   const [getawayVibes, setGetawayVibes] = useState<string[]>([]);
   const [hotelBooked, setHotelBooked] = useState<"" | "booked" | "need-suggestions">("");
   const [customStops, setCustomStops] = useState<string[]>([]);
@@ -485,16 +486,16 @@ export default function Page() {
           )}
 
           {step === "plan" && plan && (
-            <PlanView plan={plan} name={HER_NAME} onRestart={() => setStep("intro")} onRegenerate={regenerate} />
+            <PlanView plan={plan} name={HER_NAME} onRestart={() => setStep("intro")} onRegenerate={regenerate} onItineraryChange={setItineraryLines} />
           )}
 
           {step === "getaway-plan" && getaway && (
-            <GetawayView plan={getaway} onRestart={() => setStep("intro")} />
+            <GetawayView plan={getaway} onRestart={() => setStep("intro")} onItineraryChange={setItineraryLines} />
           )}
         </motion.div>
       </AnimatePresence>
     </main>
-    <ChatWidget plan={plan} getaway={getaway} />
+    <ChatWidget plan={plan} getaway={getaway} itineraryLines={itineraryLines} />
     </>
   );
 }

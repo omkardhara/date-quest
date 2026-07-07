@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AltPlace, GetawayPlan } from "@/lib/types";
 import { Chibi } from "./Chibi";
 import { Memories } from "./Memories";
@@ -11,13 +11,30 @@ function fmt(min: number) {
   return `${hh}:${m.toString().padStart(2, "0")} ${ap}`;
 }
 
-export function GetawayView({ plan, onRestart }: { plan: GetawayPlan; onRestart: () => void }) {
+export function GetawayView({ plan, onRestart, onItineraryChange }: { plan: GetawayPlan; onRestart: () => void; onItineraryChange?: (lines: string[]) => void }) {
   // Keyed by "<dayIndex>-<blockIndex>" since blocks are nested under days.
   const [swaps, setSwaps] = useState<Record<string, number>>({});
   const cycle = (key: string, alts?: AltPlace[]) => {
     if (!alts?.length) return;
     setSwaps((s) => ({ ...s, [key]: ((s[key] ?? 0) + 1) % (alts.length + 1) }));
   };
+
+  // Reports the currently-displayed itinerary (swaps applied) up to the page,
+  // so the chat widget always knows what's actually on screen right now.
+  useEffect(() => {
+    if (!onItineraryChange) return;
+    const lines = plan.days.flatMap((day, di) =>
+      day.blocks
+        .map((b, bi) => ({ b, bi }))
+        .filter(({ b }) => b.kind !== "buffer")
+        .map(({ b, bi }) => {
+          const shown = resolveShown(b, swaps[`${di}-${bi}`] ?? 0);
+          return `${day.label}, ${fmt(b.startMin)}: ${shown.title}${shown.area ? ` (${shown.area})` : ""} — ₹${shown.cost}`;
+        })
+    );
+    onItineraryChange(lines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan, swaps]);
 
   return (
     <div>
