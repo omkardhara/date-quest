@@ -1,0 +1,76 @@
+import { NextRequest, NextResponse } from "next/server";
+import { findRelevantPlaces, liveSearchSnippets, needsLiveSearch } from "@/lib/chat";
+
+export const runtime = "nodejs";
+
+interface ChatMessage { role: "user" | "assistant"; content: string }
+
+// Answers freeform questions about Mumbai activities/venues for the chat widget.
+// Grounds venue-specific facts in data/places.json, pulls live search snippets
+// for time-sensitive questions (showtimes, current events), and otherwise lets
+// the model answer from general knowledge (e.g. seasonal advice).
+export async function POST(req: NextRequest) {
+  const key = process.env.GROQ_API_KEY;
+  if (!key) {
+    return NextResponse.json({ ok: false, reply: "Chat isn't set up yet — GROQ_API_KEY is missing." });
+  }
+
+  try {
+    const body = await req.json();
+    const message: string = (body.message ?? "").trim();
+    const history: ChatMessage[] = Array.isArray(body.history) ? body.history.slice(-8) : [];
+    if (!message) return NextResponse.json({ ok: false, reply: "Ask me something about a Mumbai spot or activity!" });
+
+    const places = findRelevantPlaces(message);
+    const liveSnippets = needsLiveSearch(message) ? await liveSearchSnippets(`${message} Mumbai`) : [];
+
+    const sys = [
+      "You are the Date Quest assistant — a friendly, concise guide inside a Mumbai day-planning app.",
+      "Answer questions about specific activities, restaurants, and locations in and around Mumbai.",
+      "If 'Curated spots' context is given, ground venue-specific facts (area, vibe, monsoon suitability, cost) in that data — never invent an address, price, or opening hours for a place listed there.",
+      "If 'Live search results' are given, use them for anything time-sensitive (movie showtimes, current events, weather) and note that it can change — don't state it as a certain fact.",
+      "If asked something time-sensitive and no live results are provided, say you don't have live data for that right now and suggest where to check (BookMyShow for movies, Google for showtimes/hours).",
+      "For general knowledge (best season for butterflies, typical Mumbai monsoon months, etc.) answer normally from what you know.",
+      "Keep answers short: 2-4 sentences, conversational, no markdown headers or bullet lists unless truly needed.",
+    ].join(" ");
+
+    const contextParts: string[] = [];
+    if (places.length) {
+      contextParts.push("Curated spots:\n" + places.map((p) =>
+        `- ${p.name} (${p.area}): ${p.summary}${p.bestTime ? ` Best time of day: ${p.bestTime}.` : ""}${p.monsoonRisk ? ` Monsoon: ${p.monsoonRisk}.` : ""}${p.safety ? ` Note: ${p.safety}` : ""}`
+      ).join("\n"));
+    }
+    if (liveSnippets.length) {
+      contextParts.push("Live search results:\n" + liveSnippets.map((s) => `- ${s.title}: ${s.snippet}`).join("\n"));
+    }
+
+    const messages = [
+      { role: "system", content: sys },
+      ...(contextParts.length ? [{ role: "system", content: contextParts.join("\n\n") }] : []),
+      ...history,
+      { role: "user", content: message },
+    ];
+
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 12000);
+    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.4,
+        messages,
+      }),
+    });
+    clearTimeout(t);
+
+    if (!r.ok) return NextResponse.json({ ok: false, reply: "Couldn't reach the chat service — try again in a moment." });
+    const data = await r.json();
+    const reply = data?.choices?.[0]?.message?.content?.trim();
+    if (!reply) return NextResponse.json({ ok: false, reply: "Didn't quite catch that — try rephrasing?" });
+    return NextResponse.json({ ok: true, reply });
+  } catch {
+    return NextResponse.json({ ok: false, reply: "Something went wrong — try again in a moment." });
+  }
+}

@@ -13,14 +13,26 @@ function tokens(s: string): string[] {
   return s.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean).filter(w => !STOP.has(w));
 }
 
+// A word-prefix relation only counts as a match when the words are close enough
+// in length to be spelling/plural variants (e.g. "cafe"/"caf", "restaurants"/
+// "restaurant") — otherwise unrelated words that happen to share a prefix
+// (e.g. "Birds" vs "Birdsong") would falsely match two different venues.
+function sameWord(a: string, b: string): boolean {
+  return a === b || ((a.startsWith(b) || b.startsWith(a)) && Math.abs(a.length - b.length) <= 2);
+}
+
 // Confirm the place Google returned is actually the venue we asked for.
 // Uses a 3-char minimum so short names like "Ali", "Bay", "Le" still match.
+// Only compares against the text before the first comma: some nearby shops
+// list themselves as "Shop Name, ground floor, next to <landmark>" on Maps,
+// and matching against that trailing descriptor would let a neighboring
+// business's photo/rating get attached to the landmark we actually asked for.
 function nameMatches(expected: string, got?: string): boolean {
   if (!got) return false;
   const e = tokens(expected);
-  const g = tokens(got);
+  const g = tokens(got.split(",")[0]);
   if (!e.length) return false;
-  return e.some(t => t.length >= 3 && g.some(x => x.length >= 3 && (x.startsWith(t) || t.startsWith(x))));
+  return e.some(t => t.length >= 3 && g.some(x => x.length >= 3 && sameWord(t, x)));
 }
 
 // Returns rating/address + proxied photo & map URLs, only when we're confident
