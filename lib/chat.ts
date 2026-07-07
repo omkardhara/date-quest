@@ -47,14 +47,25 @@ export interface PlaceContext {
   monsoonRisk?: string;
   safety?: string;
   costPerPerson?: number;
+  distanceKm?: number;
 }
 
-function toContext(p: Place): PlaceContext {
+function toContext(p: Place, distanceKm?: number): PlaceContext {
   return {
     name: p.name, area: p.area, category: p.category, summary: p.summary,
     tags: p.tags, bestTime: p.bestTime, monsoonRisk: p.monsoonRisk,
     safety: p.safety, costPerPerson: p.costPerPerson,
+    distanceKm: distanceKm !== undefined ? Math.round(distanceKm * 10) / 10 : undefined,
   };
+}
+
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 // Scores every curated place by word overlap with the query text (name/area/
@@ -233,26 +244,45 @@ function detectCategory(message: string): Place["category"] | null {
 export interface NearbyResult { category: string; zone?: string; places: PlaceContext[] }
 
 // Handles "3 good shopping places near X" style questions: detects the
-// category asked for, resolves the anchor venue's zone, and filters curated
-// places by both — rather than the generic word-overlap search, which has no
-// concept of "near" and would happily return a shopping spot on the other
-// side of the city.
+// category asked for, resolves the anchor venue, and filters curated places
+// by real distance (haversine over geocoded lat/lng) when available — falling
+// back to the coarser zone label otherwise. Zone alone isn't precise enough:
+// Powai and Vile Parle are both "andheri_w" but 8+ km apart.
 export function findNearby(message: string, max = 4): NearbyResult | null {
   const category = detectCategory(message);
   if (!category) return null;
 
   const anchorText = message.match(/near\s+(.+)$/i)?.[1] ?? message;
-  const anchor = scorePlaces(anchorText)[0];
-  const zone = anchor?.p.zone;
+  const anchor = scorePlaces(anchorText)[0]?.p;
+  if (!anchor) return null;
 
-  let candidates = loadPlaces().filter((p) => p.category === category);
-  if (zone) candidates = candidates.filter((p) => p.zone === zone);
-  if (!candidates.length) return null;
-  candidates = [...candidates].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+  const sameCategory = loadPlaces().filter((p) => p.category === category && p.id !== anchor.id);
 
-  return {
-    category,
-    zone,
-    places: candidates.slice(0, max).map(toContext),
-  };
+  if (anchor.lat != null && anchor.lng != null) {
+    const withDistance = sameCategory
+      .filter((p) => p.lat != null && p.lng != null)
+      .map((p) => ({ p, km: haversineKm(anchor.lat!, anchor.lng!, p.lat!, p.lng!) }));
+    for (const radiusKm of [5, 8, 15]) {
+      const within = withDistance.filter((x) => x.km <= radiusKm).sort((a, b) => a.km - b.km);
+      if (within.length) {
+        return {
+          category,
+          zone: anchor.zone,
+          places: within.slice(0, max).map(({ p, km }) => toContext(p, km)),
+        };
+      }
+    }
+  }
+
+  // Fallback: same zone label (coarser, but still better than no filter).
+  if (anchor.zone) {
+    const sameZone = sameCategory
+      .filter((p) => p.zone === anchor.zone)
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+    if (sameZone.length) {
+      return { category, zone: anchor.zone, places: sameZone.slice(0, max).map((p) => toContext(p)) };
+    }
+  }
+
+  return null;
 }

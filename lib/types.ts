@@ -7,6 +7,8 @@ export interface Place {
   category: Category;
   area: string;
   zone?: string;            // geographic zone for routing: south, bandra, central, andheri_w, borivali, thane, vasai, karjat, kolad, gorai, multiple
+  lat?: number;             // geocoded coordinates, for real-distance "nearby" search
+  lng?: number;
   moods: string[];        // birthday, romantic, chill, adventure, celebrate
   vibes: string[];        // queen, adventure, peaceful, foodie, culture, playful
   cuisines: string[];     // for food/dessert: lebanese, chinese, dessert, icecream, indian...

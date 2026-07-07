@@ -35,7 +35,9 @@
       "bowling",
       "vr",
       "playful"
-    ]
+    ],
+    "lat": 19.004683,
+    "lng": 72.82582339999999
   },
   {
     "id": "sgnp-kanheri",
@@ -75,7 +77,9 @@
       "monsoon",
       "picnic"
     ],
-    "safety": "Monsoon trails are slippery and leech-prone. Closed-toe shoes, poncho, go early, skip after heavy rain."
+    "safety": "Monsoon trails are slippery and leech-prone. Closed-toe shoes, poncho, go early, skip after heavy rain.",
+    "lat": 19.207860399999998,
+    "lng": 72.9048071
   },
   {
     "id": "sgnp-lake-borivali",
@@ -117,7 +121,9 @@
       "peaceful",
       "lowcrowd",
       "picnic"
-    ]
+    ],
+    "lat": 19.2289821,
+    "lng": 72.8691669
   },
   {
     "id": "sgnp-deer-park",
@@ -157,7 +163,9 @@
       "peaceful",
       "lowcrowd",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.2289821,
+    "lng": 72.8691669
   },
   {
     "id": "borivali-shimpoli-cafe",
@@ -204,7 +212,9 @@
       "tandoori platter",
       "butter naan",
       "paneer tikka"
-    ]
+    ],
+    "lat": 18.9182944,
+    "lng": 72.8308737
   },
   {
     "id": "thane-hiranandani-food",
@@ -248,7 +258,9 @@
     ],
     "topDishes": [
       "whatever the day calls for"
-    ]
+    ],
+    "lat": 19.251551499999998,
+    "lng": 72.9794754
   },
   {
     "id": "yeoor-hills",
@@ -284,7 +296,9 @@
       "monsoon",
       "instagrammable"
     ],
-    "safety": "Forest checkpost has timings. Slippery and leech-prone in rain; go early, avoid after heavy downpour."
+    "safety": "Forest checkpost has timings. Slippery and leech-prone in rain; go early, avoid after heavy downpour.",
+    "lat": 19.2449922,
+    "lng": 72.92470340000001
   },
   {
     "id": "tungareshwar-falls",
@@ -319,7 +333,9 @@
       "monsoon",
       "lowcrowd"
     ],
-    "safety": "Not advisable in July: flash flow and slippery rock cause real accidents. Better in Sep-Feb."
+    "safety": "Not advisable in July: flash flow and slippery rock cause real accidents. Better in Sep-Feb.",
+    "lat": 19.4180633,
+    "lng": 72.9032876
   },
   {
     "id": "bhivpuri-falls",
@@ -353,7 +369,9 @@
       "lowcrowd",
       "monsoon"
     ],
-    "safety": "Strong current in peak monsoon is dangerous. Go with locals who know the water, or visit post-monsoon."
+    "safety": "Strong current in peak monsoon is dangerous. Go with locals who know the water, or visit post-monsoon.",
+    "lat": 18.9583829,
+    "lng": 73.324058
   },
   {
     "id": "karjat-river-pool",
@@ -389,7 +407,9 @@
       "lowcrowd",
       "adventure"
     ],
-    "safety": "River level rises quickly after rain. Get out immediately if the flow increases — don't wade into deep pools."
+    "safety": "River level rises quickly after rain. Get out immediately if the flow increases — don't wade into deep pools.",
+    "lat": 19.009464100000002,
+    "lng": 73.3269856
   },
   {
     "id": "karjat-dhaba-lunch",
@@ -430,7 +450,9 @@
       "Veg thali",
       "Bhaji-pav",
       "Chai"
-    ]
+    ],
+    "lat": 18.9182867,
+    "lng": 73.31642269999999
   },
   {
     "id": "kolad-lake",
@@ -468,7 +490,9 @@
       "lowcrowd",
       "monsoon"
     ],
-    "safety": "Long drive; better suited to a full day or overnight than a tight schedule."
+    "safety": "Long drive; better suited to a full day or overnight than a tight schedule.",
+    "lat": 18.410947399999998,
+    "lng": 73.2819645
   },
   {
     "id": "marine-drive-walk",
@@ -509,7 +533,9 @@
       "sunset",
       "picnic"
     ],
-    "safety": "Waves splash over the promenade at monsoon high tide. Check the tide; keep a backup indoor plan."
+    "safety": "Waves splash over the promenade at monsoon high tide. Check the tide; keep a backup indoor plan.",
+    "lat": 18.9302074,
+    "lng": 72.8218856
   },
   {
     "id": "sequel-brunch",
@@ -557,7 +583,9 @@
       "Dragon fruit smoothie bowl",
       "Big Sequel breakfast"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0653938,
+    "lng": 72.8305678
   },
   {
     "id": "kitchen-garden-brunch",
@@ -600,7 +628,9 @@
       "Chicken sausage breakfast",
       "Quinoa salad bowl",
       "Cold-pressed juice"
-    ]
+    ],
+    "lat": 18.995191,
+    "lng": 72.8239979
   },
   {
     "id": "ramashray-dosa",
@@ -644,7 +674,9 @@
       "Rava dosa",
       "Filter coffee",
       "Soft idli"
-    ]
+    ],
+    "lat": 19.0279267,
+    "lng": 72.851789
   },
   {
     "id": "bayroute-lebanese",
@@ -694,7 +726,9 @@
       "Mezze platter",
       "Grilled chicken shish"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0548541,
+    "lng": 72.85040029999999
   },
   {
     "id": "royal-china",
@@ -738,7 +772,9 @@
       "Steamed fish in ginger",
       "Veg crispy lotus stem"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0534857,
+    "lng": 72.8241659
   },
   {
     "id": "olive-italian",
@@ -783,7 +819,9 @@
       "Handmade ravioli",
       "Tiramisu"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0717251,
+    "lng": 72.8252916
   },
   {
     "id": "jamjar-pasta",
@@ -825,7 +863,9 @@
       "Baked lasagna",
       "Mac and cheese",
       "Thin-crust pizza"
-    ]
+    ],
+    "lat": 19.1329101,
+    "lng": 72.8123159
   },
   {
     "id": "yoko-sizzlers",
@@ -868,7 +908,9 @@
       "Chicken Hawaiian sizzler",
       "Fish sizzler",
       "Veg satay sizzler"
-    ]
+    ],
+    "lat": 19.077719,
+    "lng": 72.83802709999999
   },
   {
     "id": "bombay-sweet-shop",
@@ -911,7 +953,9 @@
       "Ghevar",
       "Mishti doi",
       "Sustainable chocolate barfi"
-    ]
+    ],
+    "lat": 18.9809043,
+    "lng": 72.8375411
   },
   {
     "id": "le15-patisserie",
@@ -954,7 +998,9 @@
       "Celebration cake (pre-order)",
       "Chocolate hazelnut tart"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0625613,
+    "lng": 72.8308292
   },
   {
     "id": "k-rustom",
@@ -996,7 +1042,9 @@
       "Classic vanilla sandwich",
       "Mawa malai",
       "Roasted almond crunch"
-    ]
+    ],
+    "lat": 18.933139099999998,
+    "lng": 72.8248995
   },
   {
     "id": "rest-home",
@@ -1031,7 +1079,9 @@
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Marol+Andheri+East",
     "summary": "A real break in the middle so the evening still feels good. Change, nap, reset.",
     "veg": true,
-    "tags": []
+    "tags": [],
+    "lat": 19.1182442,
+    "lng": 72.8800727
   },
   {
     "id": "kala-ghoda-art",
@@ -1076,7 +1126,9 @@
       "workshop",
       "artsy"
     ],
-    "safety": "Most galleries (incl. Jehangir) shut on Mondays. Good rainy-day pick otherwise."
+    "safety": "Most galleries (incl. Jehangir) shut on Mondays. Good rainy-day pick otherwise.",
+    "lat": 18.9282243,
+    "lng": 72.8317835
   },
   {
     "id": "colaba-causeway",
@@ -1115,7 +1167,9 @@
       "street",
       "instagrammable"
     ],
-    "safety": "Open-air stalls; a downpour shuts it down. Keep nearby cafes as cover."
+    "safety": "Open-air stalls; a downpour shuts it down. Keep nearby cafes as cover.",
+    "lat": 18.920717,
+    "lng": 72.830649
   },
   {
     "id": "hill-road-bandra",
@@ -1151,7 +1205,9 @@
       "street",
       "instagrammable"
     ],
-    "safety": "Mostly open-air; pivot to Bandra's indoor stores if it pours."
+    "safety": "Mostly open-air; pivot to Bandra's indoor stores if it pours.",
+    "lat": 19.0653716,
+    "lng": 72.834428
   },
   {
     "id": "chor-bazaar-thrift",
@@ -1194,7 +1250,9 @@
       "vintage"
     ],
     "safety": "Really only worth it on Fridays. Bargain hard and watch your bag in the crowd.",
-    "restroom": "Cleanest nearby: a café near Crawford Market or the Starbucks at CSMT."
+    "restroom": "Cleanest nearby: a café near Crawford Market or the Starbucks at CSMT.",
+    "lat": 18.9590354,
+    "lng": 72.8299277
   },
   {
     "id": "bombay-closet-cleanse",
@@ -1228,7 +1286,9 @@
       "shopping",
       "thrift",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.061992,
+    "lng": 72.8347004
   },
   {
     "id": "kamala-nehru-park",
@@ -1271,7 +1331,9 @@
       "peaceful",
       "city-view"
     ],
-    "restroom": "Cleanest nearby: the café at Hanging Gardens next door, or head to a Kemps Corner café."
+    "restroom": "Cleanest nearby: the café at Hanging Gardens next door, or head to a Kemps Corner café.",
+    "lat": 18.9550248,
+    "lng": 72.8049726
   },
   {
     "id": "jehangir-art-gallery",
@@ -1313,7 +1375,9 @@
       "culture",
       "artsy",
       "heritage"
-    ]
+    ],
+    "lat": 18.9273983,
+    "lng": 72.83168560000001
   },
   {
     "id": "fashion-street",
@@ -1353,7 +1417,9 @@
       "free",
       "window shopping",
       "browse"
-    ]
+    ],
+    "lat": 18.9389419,
+    "lng": 72.83010689999999
   },
   {
     "id": "csmt-heritage-walk",
@@ -1395,7 +1461,9 @@
       "free",
       "culture",
       "historic"
-    ]
+    ],
+    "lat": 18.9404273,
+    "lng": 72.8354207
   },
   {
     "id": "pali-hill-walk",
@@ -1438,7 +1506,9 @@
       "free",
       "bungalows",
       "trees"
-    ]
+    ],
+    "lat": 19.068406200000002,
+    "lng": 72.8226413
   },
   {
     "id": "linking-road-browse",
@@ -1480,7 +1550,9 @@
       "window shopping",
       "browse",
       "bandra"
-    ]
+    ],
+    "lat": 19.0653716,
+    "lng": 72.834428
   },
   {
     "id": "aarey-colony-walk",
@@ -1522,7 +1594,9 @@
       "green",
       "peaceful",
       "trekking"
-    ]
+    ],
+    "lat": 19.1400592,
+    "lng": 72.8710397
   },
   {
     "id": "chor-bazaar-walk",
@@ -1565,7 +1639,9 @@
       "heritage",
       "market"
     ],
-    "restroom": "Cleanest nearby: a café near Crawford Market or the Starbucks at CSMT."
+    "restroom": "Cleanest nearby: a café near Crawford Market or the Starbucks at CSMT.",
+    "lat": 18.9590354,
+    "lng": 72.8299277
   },
   {
     "id": "hanging-gardens",
@@ -1607,7 +1683,9 @@
       "nature",
       "peaceful"
     ],
-    "restroom": "Cleanest nearby: a café at Kemps Corner (5 min away) — the park itself has basic public toilets only."
+    "restroom": "Cleanest nearby: a café at Kemps Corner (5 min away) — the park itself has basic public toilets only.",
+    "lat": 18.9565598,
+    "lng": 72.80498659999999
   },
   {
     "id": "gateway-of-india",
@@ -1649,7 +1727,9 @@
       "waterfront",
       "free",
       "views"
-    ]
+    ],
+    "lat": 18.9219,
+    "lng": 72.834653
   },
   {
     "id": "bandra-fort",
@@ -1690,7 +1770,9 @@
       "free",
       "romantic",
       "fort"
-    ]
+    ],
+    "lat": 19.0418892,
+    "lng": 72.81835939999999
   },
   {
     "id": "shivaji-park-walk",
@@ -1728,7 +1810,9 @@
       "free",
       "nature",
       "peaceful"
-    ]
+    ],
+    "lat": 19.0268002,
+    "lng": 72.8382281
   },
   {
     "id": "banganga-tank",
@@ -1767,7 +1851,9 @@
       "lowcrowd",
       "instagrammable"
     ],
-    "safety": "Temple site: dress modestly (covered shoulders and knees). Stone steps are slippery in rain."
+    "safety": "Temple site: dress modestly (covered shoulders and knees). Stone steps are slippery in rain.",
+    "lat": 18.945410199999998,
+    "lng": 72.7937891
   },
   {
     "id": "vipassana-pagoda",
@@ -1801,7 +1887,9 @@
       "lowcrowd",
       "instagrammable"
     ],
-    "safety": "Reached by ferry: check timings, and the crossing can be rough in heavy monsoon. Dress modestly."
+    "safety": "Reached by ferry: check timings, and the crossing can be rough in heavy monsoon. Dress modestly.",
+    "lat": 19.228203399999998,
+    "lng": 72.8058891
   },
   {
     "id": "cafe-arabia",
@@ -1847,7 +1935,9 @@
       "Hummus with lamb (or veg)",
       "Arabic coffee and dates"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0598743,
+    "lng": 72.8341039
   },
   {
     "id": "kunafa-arabic-sweets",
@@ -1892,7 +1982,9 @@
       "Cheese kunafa",
       "Baklava",
       "Medjool dates"
-    ]
+    ],
+    "lat": 19.0651208,
+    "lng": 72.8312153
   },
   {
     "id": "bandstand-promenade",
@@ -1934,7 +2026,9 @@
       "sunset",
       "lowcrowd",
       "picnic"
-    ]
+    ],
+    "lat": 19.0495707,
+    "lng": 72.8207302
   },
   {
     "id": "carter-road",
@@ -1974,7 +2068,9 @@
       "sunset",
       "instagrammable",
       "picnic"
-    ]
+    ],
+    "lat": 19.0606384,
+    "lng": 72.8224881
   },
   {
     "id": "mount-mary-basilica",
@@ -2014,7 +2110,9 @@
       "lowcrowd",
       "instagrammable"
     ],
-    "safety": "Dress modestly: covered shoulders and knees. Often packed on the 8th of each month."
+    "safety": "Dress modestly: covered shoulders and knees. Often packed on the 8th of each month.",
+    "lat": 19.0465581,
+    "lng": 72.8224747
   },
   {
     "id": "bombay-canteen",
@@ -2061,7 +2159,9 @@
       "Local fish of the day",
       "Masala chai panna cotta"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.003245,
+    "lng": 72.827576
   },
   {
     "id": "cafe-mondegar",
@@ -2108,7 +2208,9 @@
       "Cheese omelette",
       "Caramel custard",
       "Chicken tikka masala"
-    ]
+    ],
+    "lat": 18.924050299999998,
+    "lng": 72.8321547
   },
   {
     "id": "bastian-bandra",
@@ -2153,7 +2255,9 @@
       "Crab fried rice",
       "Fish and chips"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0635251,
+    "lng": 72.8348721
   },
   {
     "id": "versova-beach",
@@ -2191,7 +2295,9 @@
       "sunset",
       "picnic"
     ],
-    "safety": "No swimming in monsoon: rough surf and undertow. Fine for a seaside walk."
+    "safety": "No swimming in monsoon: rough surf and undertow. Fine for a seaside walk.",
+    "lat": 19.1284791,
+    "lng": 72.8144052
   },
   {
     "id": "haji-ali-dargah",
@@ -2231,7 +2337,9 @@
       "instagrammable",
       "lowcrowd"
     ],
-    "safety": "The causeway floods at high tide. Go 2-3 hours after high tide. Dress modestly."
+    "safety": "The causeway floods at high tide. Go 2-3 hours after high tide. Dress modestly.",
+    "lat": 18.9827935,
+    "lng": 72.80900009999999
   },
   {
     "id": "worli-sea-face",
@@ -2269,7 +2377,9 @@
       "instagrammable",
       "sunset",
       "lowcrowd"
-    ]
+    ],
+    "lat": 19.002991599999998,
+    "lng": 72.81076879999999
   },
   {
     "id": "todi-mill-social",
@@ -2316,7 +2426,9 @@
       "Loaded fries",
       "Social tikka pizza",
       "Kokum shrub cocktail"
-    ]
+    ],
+    "lat": 18.999233699999998,
+    "lng": 72.83030409999999
   },
   {
     "id": "quan-spa",
@@ -2352,7 +2464,9 @@
       "spa",
       "lowcrowd"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.101865099999998,
+    "lng": 72.8261595
   },
   {
     "id": "juhu-beach",
@@ -2390,7 +2504,9 @@
       "picnic"
     ],
     "safety": "Rough surf in peak monsoon, no swimming. Fine for the golden-hour stroll and beach snacks.",
-    "restroom": "Cleanest nearby: JW Marriott lobby right on the beachfront, or a café on Juhu Tara Road."
+    "restroom": "Cleanest nearby: JW Marriott lobby right on the beachfront, or a café on Juhu Tara Road.",
+    "lat": 19.0977745,
+    "lng": 72.82623579999999
   },
   {
     "id": "kitab-khana",
@@ -2433,7 +2549,9 @@
       "books",
       "workshop",
       "bookstore"
-    ]
+    ],
+    "lat": 18.9319103,
+    "lng": 72.8318537
   },
   {
     "id": "elephanta-caves",
@@ -2474,7 +2592,9 @@
       "lowcrowd"
     ],
     "safety": "Ferry service gets rough in heavy monsoon, sometimes suspended. Check MTDC schedule the morning before.",
-    "restroom": "Use the Taj lobby or a Colaba café before boarding at Gateway of India — facilities on Elephanta Island are very basic."
+    "restroom": "Use the Taj lobby or a Colaba café before boarding at Gateway of India — facilities on Elephanta Island are very basic.",
+    "lat": 18.9471271,
+    "lng": 72.83579379999999
   },
   {
     "id": "upvan-lake-thane",
@@ -2511,7 +2631,9 @@
       "nature",
       "lowcrowd",
       "picnic"
-    ]
+    ],
+    "lat": 19.2214322,
+    "lng": 72.9585788
   },
   {
     "id": "powai-lake-walk",
@@ -2550,7 +2672,9 @@
       "lowcrowd",
       "instagrammable",
       "picnic"
-    ]
+    ],
+    "lat": 19.124121600000002,
+    "lng": 72.89765729999999
   },
   {
     "id": "yeoor-hills-trek",
@@ -2584,7 +2708,9 @@
       "nature",
       "lowcrowd"
     ],
-    "safety": "Slippery in heavy monsoon. Wear proper shoes and carry water."
+    "safety": "Slippery in heavy monsoon. Wear proper shoes and carry water.",
+    "lat": 19.224419299999997,
+    "lng": 72.9495151
   },
   {
     "id": "hiranandani-cafe",
@@ -2629,7 +2755,9 @@
       "Chocolate brownie",
       "Pain au chocolat",
       "Cold coffee"
-    ]
+    ],
+    "lat": 19.1162743,
+    "lng": 72.90894209999999
   },
   {
     "id": "elco-market-bandra",
@@ -2676,7 +2804,9 @@
       "Pani puri",
       "Pav bhaji"
     ],
-    "safety": "Open-air — pivot to a nearby café if it rains heavily."
+    "safety": "Open-air — pivot to a nearby café if it rains heavily.",
+    "lat": 19.0558826,
+    "lng": 72.8332005
   },
   {
     "id": "juhu-chaat",
@@ -2721,7 +2851,9 @@
       "Pav bhaji",
       "Kulfi"
     ],
-    "safety": "Rough surf in peak monsoon; stay back from the water."
+    "safety": "Rough surf in peak monsoon; stay back from the water.",
+    "lat": 19.1136643,
+    "lng": 72.8346519
   },
   {
     "id": "mohammed-ali-road-iftar",
@@ -2770,7 +2902,9 @@
       "Nalli nihari",
       "Seekh kebab",
       "Sheer khurma"
-    ]
+    ],
+    "lat": 18.9549091,
+    "lng": 72.8331089
   },
   {
     "id": "chowpatty-beach-chaat",
@@ -2818,7 +2952,9 @@
       "Sev puri",
       "Kulfi falooda"
     ],
-    "safety": "Sea is rough in monsoon, stay back from the waterline."
+    "safety": "Sea is rough in monsoon, stay back from the waterline.",
+    "lat": 18.9537767,
+    "lng": 72.8145684
   },
   {
     "id": "thai-funjabi-bandra",
@@ -2861,7 +2997,9 @@
       "Pad Thai",
       "Green curry",
       "Chicken satay"
-    ]
+    ],
+    "lat": 19.0586712,
+    "lng": 72.83421779999999
   },
   {
     "id": "mizu-japanese-bkc",
@@ -2906,7 +3044,9 @@
       "Salmon sashimi",
       "Tonkotsu ramen",
       "Robata chicken"
-    ]
+    ],
+    "lat": 19.0659009,
+    "lng": 72.8327499
   },
   {
     "id": "suzette-crepes",
@@ -2952,7 +3092,9 @@
       "Buckwheat crêpe",
       "Grain bowl",
       "Café au lait"
-    ]
+    ],
+    "lat": 19.061695999999998,
+    "lng": 72.82903999999999
   },
   {
     "id": "pizza-by-the-bay",
@@ -2997,7 +3139,9 @@
       "Wood-fired margherita",
       "Garlic bread",
       "Pasta arrabiata"
-    ]
+    ],
+    "lat": 18.9333915,
+    "lng": 72.82388209999999
   },
   {
     "id": "blue-tokai-coffee",
@@ -3043,7 +3187,9 @@
       "Filter coffee",
       "Pour-over single origin",
       "Cold brew"
-    ]
+    ],
+    "lat": 19.0603995,
+    "lng": 72.8243282
   },
   {
     "id": "anticlockwise-workshop",
@@ -3082,7 +3228,9 @@
       "instagrammable",
       "lowcrowd"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0732903,
+    "lng": 72.8284261
   },
   {
     "id": "juhu-beach-streetfood",
@@ -3124,7 +3272,9 @@
       "chaat",
       "beach",
       "outdoor"
-    ]
+    ],
+    "lat": 19.1136643,
+    "lng": 72.8346519
   },
   {
     "id": "bandra-pav-bhaji",
@@ -3167,7 +3317,9 @@
       "chaat",
       "pav bhaji",
       "outdoor"
-    ]
+    ],
+    "lat": 19.0706889,
+    "lng": 72.8229834
   },
   {
     "id": "birdsong-cafe-bandra",
@@ -3218,7 +3370,9 @@
       "veg-friendly",
       "relaxed",
       "quiet"
-    ]
+    ],
+    "lat": 19.0539599,
+    "lng": 72.82764039999999
   },
   {
     "id": "canvas-laugh-club",
@@ -3259,7 +3413,9 @@
       "nightlife",
       "live music"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.1051359,
+    "lng": 72.8399075
   },
   {
     "id": "habitat-comedy",
@@ -3300,7 +3456,9 @@
       "nightlife",
       "artsy"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0703423,
+    "lng": 72.8398745
   },
   {
     "id": "bluefrog-music-venue",
@@ -3339,7 +3497,9 @@
       "nightlife",
       "instagrammable"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0006876,
+    "lng": 72.8297669
   },
   {
     "id": "pvr-directors-cut-bkc",
@@ -3383,7 +3543,9 @@
       "movie"
     ],
     "mustBook": true,
-    "safety": "Check BookMyShow for showtimes before building the day around it."
+    "safety": "Check BookMyShow for showtimes before building the day around it.",
+    "lat": 19.0536756,
+    "lng": 72.8516635
   },
   {
     "id": "inox-phoenix-lower-parel",
@@ -3426,7 +3588,9 @@
       "movie"
     ],
     "mustBook": true,
-    "safety": "Check BookMyShow for showtimes before building the day around it."
+    "safety": "Check BookMyShow for showtimes before building the day around it.",
+    "lat": 18.994459,
+    "lng": 72.825031
   },
   {
     "id": "pvr-icon-infinity-andheri",
@@ -3469,7 +3633,9 @@
       "movie"
     ],
     "mustBook": true,
-    "safety": "Check BookMyShow for showtimes before building the day around it."
+    "safety": "Check BookMyShow for showtimes before building the day around it.",
+    "lat": 19.1413756,
+    "lng": 72.83108419999999
   },
   {
     "id": "inox-nariman-south",
@@ -3512,7 +3678,9 @@
       "movie"
     ],
     "mustBook": true,
-    "safety": "Check BookMyShow for showtimes before building the day around it."
+    "safety": "Check BookMyShow for showtimes before building the day around it.",
+    "lat": 18.9266401,
+    "lng": 72.8225072
   },
   {
     "id": "bhau-daji-lad-museum",
@@ -3557,7 +3725,9 @@
       "instagrammable",
       "lowcrowd"
     ],
-    "safety": "Closed on Wednesdays."
+    "safety": "Closed on Wednesdays.",
+    "lat": 18.978988899999997,
+    "lng": 72.8348153
   },
   {
     "id": "csmvs-museum-south",
@@ -3598,7 +3768,9 @@
       "artsy",
       "instagrammable",
       "lowcrowd"
-    ]
+    ],
+    "lat": 18.9269015,
+    "lng": 72.83269159999999
   },
   {
     "id": "theobroma-colaba",
@@ -3646,7 +3818,9 @@
       "Chocolate brownie",
       "Pain au chocolat",
       "Cold coffee"
-    ]
+    ],
+    "lat": 18.9192158,
+    "lng": 72.8291701
   },
   {
     "id": "kala-ghoda-cafe",
@@ -3695,7 +3869,9 @@
       "Filter coffee",
       "Avocado sandwich",
       "Banana bread"
-    ]
+    ],
+    "lat": 18.9284954,
+    "lng": 72.8322067
   },
   {
     "id": "pantry-fort",
@@ -3744,7 +3920,9 @@
       "Ricotta hotcakes",
       "Shakshuka",
       "Cold brew coffee"
-    ]
+    ],
+    "lat": 18.9311959,
+    "lng": 72.8334234
   },
   {
     "id": "candies-bandra",
@@ -3793,7 +3971,9 @@
       "New York cheesecake",
       "Quiche",
       "Café latte"
-    ]
+    ],
+    "lat": 19.0609551,
+    "lng": 72.8269148
   },
   {
     "id": "yoga-house-cafe",
@@ -3838,7 +4018,9 @@
       "Acai bowl",
       "Green smoothie",
       "Multigrain toast"
-    ]
+    ],
+    "lat": 19.0656361,
+    "lng": 72.8247035
   },
   {
     "id": "pali-village-cafe",
@@ -3885,7 +4067,9 @@
       "Eggs Benedict",
       "Freshly squeezed juices",
       "Waffles"
-    ]
+    ],
+    "lat": 19.0621954,
+    "lng": 72.82939
   },
   {
     "id": "prithvi-cafe-juhu",
@@ -3934,7 +4118,9 @@
       "Irani chai",
       "Bun maska",
       "Samosa"
-    ]
+    ],
+    "lat": 19.106129199999998,
+    "lng": 72.8257094
   },
   {
     "id": "birdsong-organic",
@@ -3980,7 +4166,9 @@
       "Organic smoothie bowl",
       "Avocado toast",
       "Cold brew"
-    ]
+    ],
+    "lat": 19.0539599,
+    "lng": 72.82764039999999
   },
   {
     "id": "magazine-street-kitchen",
@@ -4028,7 +4216,9 @@
       "Eggs on toast",
       "Pancakes",
       "Cold coffee"
-    ]
+    ],
+    "lat": 18.9747132,
+    "lng": 72.8481971
   },
   {
     "id": "cafe-zoe-parel",
@@ -4076,7 +4266,9 @@
       "French toast",
       "Shakshuka",
       "Cappuccino"
-    ]
+    ],
+    "lat": 19.0012553,
+    "lng": 72.8293676
   },
   {
     "id": "gelato-italiano-bandra",
@@ -4120,7 +4312,9 @@
       "Pistachio gelato",
       "Salted caramel",
       "Stracciatella"
-    ]
+    ],
+    "lat": 19.054026699999998,
+    "lng": 72.8285537
   },
   {
     "id": "papacream-bandra",
@@ -4165,7 +4359,9 @@
       "Nutella popcorn",
       "Mango tango",
       "Salted choc brownie"
-    ]
+    ],
+    "lat": 19.0539165,
+    "lng": 72.85142739999999
   },
   {
     "id": "bachelorrs-juhu",
@@ -4212,7 +4408,9 @@
       "Alphonso mango special",
       "Chikoo milkshake",
       "Fruit cream"
-    ]
+    ],
+    "lat": 18.954261,
+    "lng": 72.815356
   },
   {
     "id": "la-folie-colaba",
@@ -4257,7 +4455,9 @@
       "Dark chocolate entremet",
       "Salted caramel eclair",
       "Raspberry tart"
-    ]
+    ],
+    "lat": 18.9218849,
+    "lng": 72.8332576
   },
   {
     "id": "haagen-dazs-lower-parel",
@@ -4302,7 +4502,9 @@
       "Chocolate fondue",
       "Belgian Chocolate sundae",
       "Pralines and Cream"
-    ]
+    ],
+    "lat": 18.9970589,
+    "lng": 72.8261672
   },
   {
     "id": "momo-i-am-bandra",
@@ -4347,7 +4549,9 @@
       "Strawberry mochi",
       "Taro bubble tea",
       "Matcha roll cake"
-    ]
+    ],
+    "lat": 19.056319300000002,
+    "lng": 72.8342065
   },
   {
     "id": "choc-o-lot-bandra",
@@ -4391,7 +4595,9 @@
       "Chocolate fondue for two",
       "Single origin hot cocoa",
       "Belgian truffle box"
-    ]
+    ],
+    "lat": 19.065120099999998,
+    "lng": 72.83106459999999
   },
   {
     "id": "naturals-juhu",
@@ -4436,7 +4642,9 @@
       "Tender coconut",
       "Alphonso mango",
       "Sitaphal (custard apple)"
-    ]
+    ],
+    "lat": 19.1104464,
+    "lng": 72.82750419999999
   },
   {
     "id": "naturals-bandra",
@@ -4481,7 +4689,9 @@
       "Tender coconut",
       "Alphonso mango",
       "Sitaphal (custard apple)"
-    ]
+    ],
+    "lat": 19.055051499999998,
+    "lng": 72.8266429
   },
   {
     "id": "naturals-colaba",
@@ -4526,7 +4736,9 @@
       "Tender coconut",
       "Alphonso mango",
       "Sitaphal (custard apple)"
-    ]
+    ],
+    "lat": 18.9111102,
+    "lng": 72.8206833
   },
   {
     "id": "belgian-waffle-co",
@@ -4570,7 +4782,9 @@
       "Nutella banana waffle",
       "Blueberry cheesecake waffle",
       "Lotus Biscoff waffle"
-    ]
+    ],
+    "lat": 19.0545813,
+    "lng": 72.82500759999999
   },
   {
     "id": "swati-snacks",
@@ -4619,7 +4833,9 @@
       "Sev khamani",
       "Panki",
       "Handvo"
-    ]
+    ],
+    "lat": 18.924450699999998,
+    "lng": 72.8245618
   },
   {
     "id": "britannia-fort",
@@ -4670,7 +4886,9 @@
       "Berry pulao",
       "Dhansak",
       "Caramel custard"
-    ]
+    ],
+    "lat": 18.9345684,
+    "lng": 72.8402979
   },
   {
     "id": "the-table-colaba",
@@ -4716,7 +4934,9 @@
       "Handmade pasta",
       "Seasonal tasting menu"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 18.9240005,
+    "lng": 72.8333078
   },
   {
     "id": "o-pedro-bkc",
@@ -4765,7 +4985,9 @@
       "Chicken cafreal",
       "Bebinca"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.059362999999998,
+    "lng": 72.864943
   },
   {
     "id": "trishna-fort",
@@ -4813,7 +5035,9 @@
       "Koliwada prawns",
       "Bombil fry"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 18.9286299,
+    "lng": 72.8324035
   },
   {
     "id": "smoke-house-deli-worli",
@@ -4861,7 +5085,9 @@
       "Pasta arrabiata",
       "Smoked chicken sandwich",
       "Tiramisu"
-    ]
+    ],
+    "lat": 18.9945314,
+    "lng": 72.8251136
   },
   {
     "id": "mamagoto-bandra",
@@ -4909,7 +5135,9 @@
       "Prawn dumplings",
       "Dragon roll sushi",
       "Pad Thai"
-    ]
+    ],
+    "lat": 19.0549244,
+    "lng": 72.8285184
   },
   {
     "id": "toast-and-tonic-bandra",
@@ -4959,7 +5187,9 @@
       "T&T burger",
       "Burrata salad"
     ],
-    "mustBook": true
+    "mustBook": true,
+    "lat": 19.0593198,
+    "lng": 72.864856
   },
   {
     "id": "burma-burma-fort",
@@ -5006,7 +5236,9 @@
       "Khow suey",
       "Tea leaf salad",
       "Mohinga soup"
-    ]
+    ],
+    "lat": 18.929523,
+    "lng": 72.8319814
   },
   {
     "id": "indigo-deli-bandra",
@@ -5054,7 +5286,9 @@
       "Eggs florentine",
       "Cheese platter",
       "Pulled pork burger"
-    ]
+    ],
+    "lat": 19.054134899999998,
+    "lng": 72.8512571
   },
   {
     "id": "bandra-reclamation-walk",
@@ -5092,7 +5326,9 @@
       "instagrammable",
       "romantic",
       "lowcrowd"
-    ]
+    ],
+    "lat": 19.0491875,
+    "lng": 72.8370625
   },
   {
     "id": "sealink-sunset-drive",
@@ -5130,7 +5366,9 @@
       "sunset",
       "instagrammable",
       "romantic"
-    ]
+    ],
+    "lat": 19.0338561,
+    "lng": 72.816723
   },
   {
     "id": "malabar-hill-walk",
@@ -5171,7 +5409,9 @@
       "nature",
       "free"
     ],
-    "restroom": "Cleanest nearby: a café at Kemps Corner or the Hanging Gardens area (both within 5 min)."
+    "restroom": "Cleanest nearby: a café at Kemps Corner or the Hanging Gardens area (both within 5 min).",
+    "lat": 18.9540158,
+    "lng": 72.8046822
   },
   {
     "id": "madh-island-beach",
@@ -5213,7 +5453,9 @@
       "instagrammable"
     ],
     "safety": "No swimming in monsoon — surf is rough. Great for walks and photography.",
-    "restroom": "Facilities are very basic at Madh Island — use a beachside shack or the resort restroom when you arrive."
+    "restroom": "Facilities are very basic at Madh Island — use a beachside shack or the resort restroom when you arrive.",
+    "lat": 19.1484913,
+    "lng": 72.7891606
   },
   {
     "id": "gorai-beach-walk",
@@ -5254,7 +5496,9 @@
       "lowcrowd",
       "sunrise"
     ],
-    "safety": "Ferry timings vary; check before going. Rough surf in heavy monsoon, no swimming."
+    "safety": "Ferry timings vary; check before going. Rough surf in heavy monsoon, no swimming.",
+    "lat": 19.2534678,
+    "lng": 72.7827954
   },
   {
     "id": "aksa-beach",
@@ -5296,7 +5540,9 @@
       "free"
     ],
     "safety": "No swimming in monsoon. Good for morning walks year-round.",
-    "restroom": "Basic facilities at the beach; stop at a café near Aksa Road or Marve Road before heading to the sand."
+    "restroom": "Basic facilities at the beach; stop at a café near Aksa Road or Marve Road before heading to the sand.",
+    "lat": 19.1759612,
+    "lng": 72.7953513
   },
   {
     "id": "iit-powai-walk",
@@ -5335,7 +5581,9 @@
       "peaceful",
       "lowcrowd",
       "free"
-    ]
+    ],
+    "lat": 19.1286979,
+    "lng": 72.9135336
   },
   {
     "id": "phoenix-palladium-shopping",
@@ -5375,7 +5623,9 @@
       "luxe",
       "instagrammable",
       "nightlife"
-    ]
+    ],
+    "lat": 18.994459,
+    "lng": 72.825031
   },
   {
     "id": "infiniti-mall-andheri",
@@ -5411,7 +5661,9 @@
     "tags": [
       "shopping",
       "nightlife"
-    ]
+    ],
+    "lat": 19.141289999999998,
+    "lng": 72.8311659
   },
   {
     "id": "inorbit-malad",
@@ -5447,7 +5699,9 @@
     "tags": [
       "shopping",
       "nightlife"
-    ]
+    ],
+    "lat": 19.1729281,
+    "lng": 72.8359056
   },
   {
     "id": "viviana-mall-thane",
@@ -5483,7 +5737,9 @@
     "tags": [
       "shopping",
       "nightlife"
-    ]
+    ],
+    "lat": 19.2088139,
+    "lng": 72.97133869999999
   },
   {
     "id": "lokhandwala-market",
@@ -5523,7 +5779,9 @@
       "street",
       "browse",
       "free"
-    ]
+    ],
+    "lat": 19.145628,
+    "lng": 72.8229763
   },
   {
     "id": "bandra-flea-market",
@@ -5562,7 +5820,9 @@
       "browse",
       "street",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.0653716,
+    "lng": 72.834428
   },
   {
     "id": "khar-social-street",
@@ -5600,7 +5860,9 @@
       "browse",
       "fashion",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.068207299999997,
+    "lng": 72.8381179
   },
   {
     "id": "fort-art-design-shops",
@@ -5640,7 +5902,9 @@
       "browse",
       "heritage",
       "instagrammable"
-    ]
+    ],
+    "lat": 18.930336999999998,
+    "lng": 72.83229469999999
   },
   {
     "id": "chinmayananda-ashram-powai",
@@ -5681,7 +5945,9 @@
       "lowcrowd",
       "free"
     ],
-    "safety": "Dress modestly. Timings may vary — check before visiting."
+    "safety": "Dress modestly. Timings may vary — check before visiting.",
+    "lat": 19.1330554,
+    "lng": 72.898622
   },
   {
     "id": "iskcon-juhu",
@@ -5725,7 +5991,9 @@
     "safety": "Dress modestly: covered shoulders and knees. Remove footwear at entrance.",
     "topDishes": [
       "Prasadam thali (in-temple restaurant)"
-    ]
+    ],
+    "lat": 19.113016,
+    "lng": 72.826576
   },
   {
     "id": "sadbhakti-mandir-jogeshwari",
@@ -5764,7 +6032,9 @@
       "lowcrowd",
       "free"
     ],
-    "safety": "Dress modestly. Best visited early morning for the aarti."
+    "safety": "Dress modestly. Best visited early morning for the aarti.",
+    "lat": 19.1292792,
+    "lng": 72.8498687
   },
   {
     "id": "dadar-flower-market",
@@ -5804,7 +6074,9 @@
       "culture",
       "free",
       "romantic"
-    ]
+    ],
+    "lat": 19.017494499999998,
+    "lng": 72.8415978
   },
   {
     "id": "vasai-fort-ruins",
@@ -5847,7 +6119,9 @@
       "historic",
       "ruins",
       "nature"
-    ]
+    ],
+    "lat": 19.330556599999998,
+    "lng": 72.8155747
   },
   {
     "id": "kelva-beach",
@@ -5890,7 +6164,9 @@
       "lowcrowd",
       "free",
       "sunset"
-    ]
+    ],
+    "lat": 19.6131697,
+    "lng": 72.7299079
   },
   {
     "id": "kelva-seafood-shack",
@@ -5931,7 +6207,9 @@
       "nature",
       "simple",
       "rustic"
-    ]
+    ],
+    "lat": 19.6131697,
+    "lng": 72.7299079
   },
   {
     "id": "indigo-colaba",
@@ -5976,7 +6254,9 @@
       "romantic",
       "luxe",
       "instagrammable"
-    ]
+    ],
+    "lat": 18.965432,
+    "lng": 72.82226159999999
   },
   {
     "id": "gateway-harbour-cruise",
@@ -6020,7 +6300,9 @@
       "outdoors",
       "unique",
       "views"
-    ]
+    ],
+    "lat": 18.922034600000003,
+    "lng": 72.8337949
   },
   {
     "id": "matheran-viewpoints",
@@ -6066,7 +6348,9 @@
       "hill",
       "sunrise",
       "sunset"
-    ]
+    ],
+    "lat": 18.988636,
+    "lng": 73.2703781
   },
   {
     "id": "khyber-fort",
@@ -6110,7 +6394,9 @@
       "historic",
       "romantic",
       "grandeur"
-    ]
+    ],
+    "lat": 18.9283774,
+    "lng": 72.8316863
   },
   {
     "id": "mahesh-lunch-home",
@@ -6156,7 +6442,9 @@
       "coastal",
       "luxe",
       "romantic"
-    ]
+    ],
+    "lat": 18.9339032,
+    "lng": 72.83364999999999
   },
   {
     "id": "taj-palace-afternoon-tea",
@@ -6202,7 +6490,9 @@
       "sea-view",
       "colaba",
       "instagrammable"
-    ]
+    ],
+    "lat": 18.921601900000002,
+    "lng": 72.83328999999999
   },
   {
     "id": "kolad-adventure-rafting",
@@ -6244,7 +6534,9 @@
       "unique",
       "water",
       "rafting"
-    ]
+    ],
+    "lat": 18.410947399999998,
+    "lng": 73.2819645
   },
   {
     "id": "kamshet-paragliding",
@@ -6285,7 +6577,9 @@
       "unique",
       "thrilling",
       "sky"
-    ]
+    ],
+    "lat": 18.7614858,
+    "lng": 73.5582301
   },
   {
     "id": "rajmachi-rappelling",
@@ -6327,7 +6621,9 @@
       "nature",
       "fort",
       "thrilling"
-    ]
+    ],
+    "lat": 18.8246018,
+    "lng": 73.40077529999999
   },
   {
     "id": "tamhini-waterfall-trek",
@@ -6369,7 +6665,9 @@
       "outdoors",
       "trek",
       "adrenaline"
-    ]
+    ],
+    "lat": 18.4234177,
+    "lng": 73.4046967
   },
   {
     "id": "della-adventure-park",
@@ -6411,7 +6709,9 @@
       "outdoors",
       "bungee",
       "zipline"
-    ]
+    ],
+    "lat": 18.7814023,
+    "lng": 73.38906
   },
   {
     "id": "murud-kayaking",
@@ -6454,7 +6754,9 @@
       "sea",
       "nature",
       "thrilling"
-    ]
+    ],
+    "lat": 18.3371696,
+    "lng": 72.9515584
   },
   {
     "id": "pa-pa-ya-bandra",
@@ -6503,7 +6805,9 @@
       "luxe",
       "nightlife",
       "dinner"
-    ]
+    ],
+    "lat": 19.0548723,
+    "lng": 72.8505383
   },
   {
     "id": "bandra-boutique-shopping",
@@ -6544,7 +6848,9 @@
       "designer",
       "instagrammable",
       "bandra"
-    ]
+    ],
+    "lat": 19.0653716,
+    "lng": 72.834428
   },
   {
     "id": "jw-marriott-spa",
@@ -6587,7 +6893,9 @@
       "romantic",
       "instagrammable",
       "couples"
-    ]
+    ],
+    "lat": 19.101865099999998,
+    "lng": 72.8261595
   },
   {
     "id": "jw-kitchen-continental",
@@ -6632,7 +6940,9 @@
       "romantic",
       "instagrammable",
       "dinner"
-    ]
+    ],
+    "lat": 19.102037,
+    "lng": 72.825914
   },
   {
     "id": "kolad-river-rafting",
@@ -6676,7 +6986,9 @@
       "outdoors",
       "nature",
       "rafting"
-    ]
+    ],
+    "lat": 18.410947399999998,
+    "lng": 73.2819645
   },
   {
     "id": "kondana-caves",
@@ -6720,7 +7032,9 @@
       "lowcrowd",
       "waterfall",
       "outdoors"
-    ]
+    ],
+    "lat": 18.8393811,
+    "lng": 73.3839653
   },
   {
     "id": "thane-creek-flamingo",
@@ -6759,7 +7073,9 @@
       "lowcrowd",
       "instagrammable",
       "unique"
-    ]
+    ],
+    "lat": 19.1477753,
+    "lng": 72.9817357
   },
   {
     "id": "ghodbunder-fort",
@@ -6799,7 +7115,9 @@
       "instagrammable",
       "nature",
       "history"
-    ]
+    ],
+    "lat": 19.2961054,
+    "lng": 72.8883326
   },
   {
     "id": "ovalekar-butterfly-garden",
@@ -6839,7 +7157,9 @@
       "instagrammable",
       "morning",
       "unique"
-    ]
+    ],
+    "lat": 19.270073399999998,
+    "lng": 72.9553997
   },
   {
     "id": "masunda-talao",
@@ -6879,7 +7199,9 @@
       "instagrammable",
       "evening",
       "heritage"
-    ]
+    ],
+    "lat": 19.1982854,
+    "lng": 72.97073809999999
   },
   {
     "id": "kachrali-lake",
@@ -6915,7 +7237,9 @@
       "peaceful",
       "evening",
       "lowcrowd"
-    ]
+    ],
+    "lat": 19.196078,
+    "lng": 72.9678326
   },
   {
     "id": "st-john-church-thane",
@@ -6955,7 +7279,9 @@
       "romantic",
       "instagrammable",
       "history"
-    ]
+    ],
+    "lat": 19.1948003,
+    "lng": 72.9757746
   },
   {
     "id": "kopineshwar-mandir-thane",
@@ -6992,7 +7318,9 @@
       "temple",
       "culture",
       "peaceful"
-    ]
+    ],
+    "lat": 19.1931002,
+    "lng": 72.9773122
   },
   {
     "id": "palm-beach-road-nm",
@@ -7031,7 +7359,9 @@
       "harbour-view",
       "instagrammable",
       "lowcrowd"
-    ]
+    ],
+    "lat": 19.0497278,
+    "lng": 73.00854559999999
   },
   {
     "id": "sagar-vihar-vashi",
@@ -7070,7 +7400,9 @@
       "romantic",
       "lakeside",
       "evening"
-    ]
+    ],
+    "lat": 19.0761523,
+    "lng": 72.9881305
   },
   {
     "id": "kharghar-hills-trek",
@@ -7109,7 +7441,9 @@
       "morning",
       "sunrise",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.0230469,
+    "lng": 73.0481071
   },
   {
     "id": "pandavkada-falls",
@@ -7148,7 +7482,9 @@
       "lowcrowd",
       "instagrammable"
     ],
-    "safety": "Monsoon-only stop — falls are dry from October to May. Trail gets slippery; closed-toe shoes essential. Skip after very heavy overnight rain when access is restricted."
+    "safety": "Monsoon-only stop — falls are dry from October to May. Trail gets slippery; closed-toe shoes essential. Skip after very heavy overnight rain when access is restricted.",
+    "lat": 19.0623132,
+    "lng": 73.0477849
   },
   {
     "id": "belapur-fort-nm",
@@ -7187,7 +7523,9 @@
       "lowcrowd",
       "history",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.0048618,
+    "lng": 73.0283372
   },
   {
     "id": "karnala-bird-sanctuary",
@@ -7227,7 +7565,9 @@
       "wildlife",
       "history"
     ],
-    "safety": "Trail can be slippery in monsoon. Start by 7 AM for birding and to finish before the afternoon heat."
+    "safety": "Trail can be slippery in monsoon. Start by 7 AM for birding and to finish before the afternoon heat.",
+    "lat": 18.8933462,
+    "lng": 73.1128677
   },
   {
     "id": "gadeshwar-dam-panvel",
@@ -7265,7 +7605,9 @@
       "peaceful",
       "instagrammable",
       "monsoon"
-    ]
+    ],
+    "lat": 19.0321091,
+    "lng": 73.2461668
   },
   {
     "id": "utsav-chowk-kharghar",
@@ -7304,7 +7646,9 @@
       "street-food",
       "romantic",
       "unique"
-    ]
+    ],
+    "lat": 19.0364234,
+    "lng": 73.0615238
   },
   {
     "id": "rain-forest-bar-belapur",
@@ -7347,7 +7691,9 @@
       "bar",
       "romantic",
       "evening"
-    ]
+    ],
+    "lat": 19.017562599999998,
+    "lng": 73.0437053
   },
   {
     "id": "central-park-kharghar",
@@ -7385,7 +7731,9 @@
       "picnic",
       "lowcrowd",
       "garden"
-    ]
+    ],
+    "lat": 19.0558013,
+    "lng": 73.0657219
   },
   {
     "id": "arnala-fort-virar",
@@ -7427,7 +7775,9 @@
       "history",
       "instagrammable"
     ],
-    "safety": "Ferry runs from Arnala village (near Virar station W). Tide-dependent — confirm timing with the boatmen. Monsoon seas can be rough; avoid in heavy weather."
+    "safety": "Ferry runs from Arnala village (near Virar station W). Tide-dependent — confirm timing with the boatmen. Monsoon seas can be rough; avoid in heavy weather.",
+    "lat": 19.4659461,
+    "lng": 72.7322521
   },
   {
     "id": "vajreshwari-hot-springs",
@@ -7466,7 +7816,9 @@
       "offbeat",
       "peaceful",
       "unique"
-    ]
+    ],
+    "lat": 19.4953583,
+    "lng": 73.0349851
   },
   {
     "id": "naturals-borivali",
@@ -7501,7 +7853,9 @@
       "icecream",
       "dessert",
       "local"
-    ]
+    ],
+    "lat": 19.236991,
+    "lng": 72.85371490000001
   },
   {
     "id": "aarey-dairy-cafe",
@@ -7540,7 +7894,9 @@
       "lowcrowd",
       "unique",
       "peaceful"
-    ]
+    ],
+    "lat": 19.1395344,
+    "lng": 72.8802813
   },
   {
     "id": "borivali-ic-colony-food",
@@ -7578,7 +7934,9 @@
       "local",
       "casual",
       "foodie"
-    ]
+    ],
+    "lat": 19.2465303,
+    "lng": 72.85093359999999
   },
   {
     "id": "cafe-by-masunda-thane",
@@ -7623,7 +7981,9 @@
       "morning",
       "nature",
       "romantic"
-    ]
+    ],
+    "lat": 19.1924556,
+    "lng": 72.97686259999999
   },
   {
     "id": "theobroma-thane",
@@ -7665,7 +8025,9 @@
       "cozy",
       "bakery",
       "instagrammable"
-    ]
+    ],
+    "lat": 19.254978299999998,
+    "lng": 72.98440740000001
   },
   {
     "id": "palm-beach-cafe-nm",
@@ -7709,7 +8071,9 @@
       "morning",
       "peaceful",
       "promenade"
-    ]
+    ],
+    "lat": 19.0579721,
+    "lng": 73.00212440000001
   },
   {
     "id": "naturals-vashi",
@@ -7744,6 +8108,8 @@
       "icecream",
       "dessert",
       "local"
-    ]
+    ],
+    "lat": 19.087616999999998,
+    "lng": 73.0040013
   }
 ]

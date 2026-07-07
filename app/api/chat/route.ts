@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     const contextParts: string[] = [];
     if (places.length) {
       contextParts.push("Curated spots:\n" + places.map((p) =>
-        `- ${p.name} (${p.area}): ${p.summary}${p.bestTime ? ` Best time of day: ${p.bestTime}.` : ""}${p.monsoonRisk ? ` Monsoon: ${p.monsoonRisk}.` : ""}${p.safety ? ` Note: ${p.safety}` : ""}`
+        `- ${p.name} (${p.area}${p.distanceKm !== undefined ? `, ~${p.distanceKm} km away` : ""}): ${p.summary}${p.bestTime ? ` Best time of day: ${p.bestTime}.` : ""}${p.monsoonRisk ? ` Monsoon: ${p.monsoonRisk}.` : ""}${p.safety ? ` Note: ${p.safety}` : ""}`
       ).join("\n"));
     }
     if (venueReviews) {
