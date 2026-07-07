@@ -14,7 +14,7 @@ const PLACES = placesData as Place[];
 // ─── Zones ────────────────────────────────────────────────────────────────────
 type Zone = "home" | "bandra" | "south" | "central" | "andheri_w" | "borivali" | "thane" | "vasai" | "navi_mumbai" | "karjat" | "kolad" | "gorai" | "multiple";
 
-const TRAVEL_BASE: Record<string, number> = {
+export const TRAVEL_BASE: Record<string, number> = {
   "andheri_w-bandra":   20,
   "andheri_w-borivali": 35,
   "andheri_w-central":  40,

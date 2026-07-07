@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { findRelevantPlaces, findVenueReviews, isFoodQuestion, liveSearchSnippets, needsLiveSearch } from "@/lib/chat";
+import { findNearby, findRelevantPlaces, findVenueReviews, isFoodQuestion, isTravelQuestion, liveSearchSnippets, needsLiveSearch, travelAdvice } from "@/lib/chat";
 
 export const runtime = "nodejs";
 
@@ -21,8 +21,12 @@ export async function POST(req: NextRequest) {
     const history: ChatMessage[] = Array.isArray(body.history) ? body.history.slice(-8) : [];
     if (!message) return NextResponse.json({ ok: false, reply: "Ask me something about a Mumbai spot or activity!" });
 
-    const places = findRelevantPlaces(message);
     const isFoodQ = isFoodQuestion(message);
+    const isTravelQ = isTravelQuestion(message);
+
+    // "N good <category> places near X" — zone-aware, not just word overlap.
+    const nearby = findNearby(message);
+    const places = nearby?.places.length ? nearby.places : findRelevantPlaces(message);
 
     // Food/menu questions ("what to order at X") are answered from real Google
     // review excerpts for the named venue — a generic web search mostly surfaces
@@ -31,13 +35,18 @@ export async function POST(req: NextRequest) {
     const venueReviews = isFoodQ ? await findVenueReviews(message) : null;
     const liveSnippets = needsLiveSearch(message) && !venueReviews ? await liveSearchSnippets(`${message} Mumbai`) : [];
 
+    // "How do I get there" — grounds in the app's own real drive-time data
+    // instead of letting the model invent bus numbers or transit specifics.
+    const travel = isTravelQ ? travelAdvice(message) : null;
+
     const sys = [
       "You are the Date Quest assistant — a friendly, concise guide inside a Mumbai day-planning app.",
       "Answer questions about specific activities, restaurants, and locations in and around Mumbai.",
       "If 'Curated spots' context is given, ground venue-specific facts (area, vibe, monsoon suitability, cost) in that data — never invent an address, price, or opening hours for a place listed there.",
       "If 'Recent Google reviews' are given, use them to name specific dishes/drinks reviewers actually praised — mention 1-3 by name if they come up, and say it's based on recent reviews, not an official menu.",
       "If 'Live search results' are given, use them for anything time-sensitive (movie showtimes, current events, weather) and note that it can change — don't state it as a certain fact.",
-      "If asked something time-sensitive and no live results or reviews are provided, say you don't have live data for that right now and suggest where to check (Zomato/Google reviews for dishes, BookMyShow for movies).",
+      "If 'Travel info' is given, use ONLY that for drive time and transport modes — never invent a specific bus number, train line, or fare you weren't given. If no drive time is given, just share the general transport options and the maps link.",
+      "If asked something time-sensitive and no live results, reviews, or travel info are provided, say you don't have that data right now and suggest where to check (Zomato/Google reviews for dishes, BookMyShow for movies, Google Maps for live transit).",
       "For general knowledge (best season for butterflies, typical Mumbai monsoon months, etc.) answer normally from what you know.",
       "Keep answers short: 2-4 sentences, conversational, no markdown headers or bullet lists unless truly needed.",
     ].join(" ");
@@ -56,6 +65,15 @@ export async function POST(req: NextRequest) {
     }
     if (liveSnippets.length) {
       contextParts.push("Live search results:\n" + liveSnippets.map((s) => `- ${s.title}: ${s.snippet}`).join("\n"));
+    }
+    if (travel) {
+      contextParts.push(
+        `Travel info to ${travel.venueName} (${travel.venueArea}), from home in ${travel.homeArea}:\n` +
+        (travel.mins ? `- Approx drive time: ${travel.mins} min${travel.minsIsExact ? " (real map data)" : " (rough estimate)"}.\n` : "") +
+        `- Public transport: ${travel.transport.publicOption}\n` +
+        `- Private transport: ${travel.transport.privateOption}\n` +
+        `- Directions: ${travel.directionsUrl}`
+      );
     }
 
     const messages = [

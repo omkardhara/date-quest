@@ -7,6 +7,11 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { Place } from "./types";
 import { searchPlaceReviews } from "./google";
+import { TRAVEL_BASE } from "./engine";
+import { PROFILE } from "./profile";
+import travelMatrixData from "@/data/travel-matrix.json";
+
+const TRAVEL_MATRIX = travelMatrixData as Record<string, number>;
 
 const STOP_WORDS = new Set([
   "the", "a", "an", "is", "are", "to", "of", "in", "on", "at", "for", "what",
@@ -44,10 +49,19 @@ export interface PlaceContext {
   costPerPerson?: number;
 }
 
-// Finds curated places whose name/area/tags overlap with words in the question,
-// so the model grounds venue-specific facts in our own data instead of guessing.
-export function findRelevantPlaces(message: string, max = 4): PlaceContext[] {
-  const qWords = new Set(words(message));
+function toContext(p: Place): PlaceContext {
+  return {
+    name: p.name, area: p.area, category: p.category, summary: p.summary,
+    tags: p.tags, bestTime: p.bestTime, monsoonRisk: p.monsoonRisk,
+    safety: p.safety, costPerPerson: p.costPerPerson,
+  };
+}
+
+// Scores every curated place by word overlap with the query text (name/area/
+// tags vs. question words). Shared by place lookup, travel, and nearby search
+// so "which place is this question about" is answered consistently everywhere.
+function scorePlaces(text: string): { p: Place; score: number }[] {
+  const qWords = new Set(words(text));
   if (!qWords.size) return [];
   const scored = loadPlaces().map((p) => {
     const hay = words([p.name, p.area, ...(p.tags ?? [])].join(" "));
@@ -55,11 +69,13 @@ export function findRelevantPlaces(message: string, max = 4): PlaceContext[] {
     return { p, score };
   }).filter((s) => s.score > 0);
   scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, max).map(({ p }) => ({
-    name: p.name, area: p.area, category: p.category, summary: p.summary,
-    tags: p.tags, bestTime: p.bestTime, monsoonRisk: p.monsoonRisk,
-    safety: p.safety, costPerPerson: p.costPerPerson,
-  }));
+  return scored;
+}
+
+// Finds curated places whose name/area/tags overlap with words in the question,
+// so the model grounds venue-specific facts in our own data instead of guessing.
+export function findRelevantPlaces(message: string, max = 4): PlaceContext[] {
+  return scorePlaces(message).slice(0, max).map(({ p }) => toContext(p));
 }
 
 const SERP_KEY = process.env.SERP_API_KEY;
@@ -106,7 +122,7 @@ export async function liveSearchSnippets(query: string, max = 4): Promise<Search
 }
 
 const FOOD_HINT = /\b(order|dish|dishes|menu|must[- ]try|specialt|what to eat|signature|popular (dish|food|item)|recommend)\b/i;
-const OTHER_LIVE_HINT = /\b(movie|movies|showtime|showtimes|now showing|cinema|theatre|theater|showing today|event|events|happening|concert|weather|forecast|rain|open now|open today|hours today|timings today)\b/i;
+const OTHER_LIVE_HINT = /\b(movie|movies|showtime|showtimes|now showing|cinema|theatre|theater|showing today|event|events|happening|concert|weather|forecast|rain|open now|open today|hours today|timings today|best time (of year|to visit)|when (should|to) visit|which (month|season))\b/i;
 
 export function isFoodQuestion(message: string): boolean {
   return FOOD_HINT.test(message);
@@ -148,5 +164,95 @@ export async function findVenueReviews(message: string): Promise<VenueReviews | 
     rating: res.rating,
     userRatings: res.userRatings,
     reviews: res.reviews.map((r) => (r.length > 300 ? r.slice(0, 300) + "…" : r)),
+  };
+}
+
+// ── Travel / "how do I get there" ───────────────────────────────────────────
+
+const TRAVEL_HINT = /\b(reach|get there|get here|travel time|how far|distance|commute|directions?|way to (reach|get)|travel option|how do i get|best way to (reach|get)|transport option|how long (does it|will it) take)\b/i;
+
+export function isTravelQuestion(message: string): boolean {
+  return TRAVEL_HINT.test(message);
+}
+
+export interface TravelInfo {
+  venueName: string;
+  venueArea: string;
+  homeArea: string;
+  mins?: number;
+  minsIsExact: boolean; // true = real Google-computed drive time, false = rough zone estimate
+  directionsUrl: string;
+  transport: typeof PROFILE.transport;
+}
+
+// Grounds "how do I get there" questions in the app's own real travel data
+// (a precomputed Google Maps drive-time matrix keyed by place id, same data
+// the day-plan engine uses) instead of letting the model invent bus numbers
+// or made-up transit specifics.
+export function travelAdvice(message: string): TravelInfo | null {
+  const best = scorePlaces(message)[0];
+  if (!best) return null;
+  const p = best.p;
+
+  const exact = TRAVEL_MATRIX[`home|${p.id}`];
+  const zoneMins = p.zone ? TRAVEL_BASE[["home", p.zone].sort().join("-")] : undefined;
+  const mins = exact ?? zoneMins;
+
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(`${PROFILE.homeArea}, Mumbai`)}&destination=${encodeURIComponent(`${p.name}, ${p.area}, Mumbai`)}&travelmode=driving`;
+
+  return {
+    venueName: p.name,
+    venueArea: p.area,
+    homeArea: PROFILE.homeArea,
+    mins,
+    minsIsExact: exact !== undefined,
+    directionsUrl,
+    transport: PROFILE.transport,
+  };
+}
+
+// ── "N good <category> places near <venue>" ─────────────────────────────────
+
+const CATEGORY_WORDS: Record<string, Place["category"]> = {
+  shopping: "shopping", shop: "shopping", shops: "shopping", boutique: "shopping", boutiques: "shopping",
+  food: "food", restaurant: "food", restaurants: "food", dining: "food", lunch: "food", dinner: "food", eat: "food",
+  cafe: "cafe", cafes: "cafe", coffee: "cafe",
+  dessert: "dessert", desserts: "dessert", sweet: "dessert", sweets: "dessert",
+  activity: "activity", activities: "activity",
+  experience: "experience", experiences: "experience",
+};
+
+function detectCategory(message: string): Place["category"] | null {
+  const lower = message.toLowerCase();
+  for (const [word, category] of Object.entries(CATEGORY_WORDS)) {
+    if (new RegExp(`\\b${word}\\b`).test(lower)) return category;
+  }
+  return null;
+}
+
+export interface NearbyResult { category: string; zone?: string; places: PlaceContext[] }
+
+// Handles "3 good shopping places near X" style questions: detects the
+// category asked for, resolves the anchor venue's zone, and filters curated
+// places by both — rather than the generic word-overlap search, which has no
+// concept of "near" and would happily return a shopping spot on the other
+// side of the city.
+export function findNearby(message: string, max = 4): NearbyResult | null {
+  const category = detectCategory(message);
+  if (!category) return null;
+
+  const anchorText = message.match(/near\s+(.+)$/i)?.[1] ?? message;
+  const anchor = scorePlaces(anchorText)[0];
+  const zone = anchor?.p.zone;
+
+  let candidates = loadPlaces().filter((p) => p.category === category);
+  if (zone) candidates = candidates.filter((p) => p.zone === zone);
+  if (!candidates.length) return null;
+  candidates = [...candidates].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+
+  return {
+    category,
+    zone,
+    places: candidates.slice(0, max).map(toContext),
   };
 }
