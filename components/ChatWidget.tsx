@@ -10,6 +10,24 @@ const STARTERS = [
   "Any good rain-friendly spots?",
 ];
 
+// Crops the full-body chibi art down to just the face, since /public/chibi/*.png
+// is a portrait meant for a tall hero area, not a small round avatar.
+function ChibiAvatar({ size }: { size: number }) {
+  return (
+    <div
+      className="shrink-0 overflow-hidden rounded-full bg-white/10"
+      style={{
+        height: size,
+        width: size,
+        backgroundImage: "url(/chibi/happy.png)",
+        backgroundSize: "250% auto",
+        backgroundPosition: "center 10%",
+        backgroundRepeat: "no-repeat",
+      }}
+    />
+  );
+}
+
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -47,10 +65,14 @@ export function ChatWidget() {
     <>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="btn-primary fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full text-2xl shadow-lg"
+        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg ring-2 ring-white/20"
         aria-label={open ? "Close chat" : "Ask about a spot"}
       >
-        {open ? "✕" : "💬"}
+        {open ? (
+          <span className="btn-primary flex h-full w-full items-center justify-center rounded-full text-2xl">✕</span>
+        ) : (
+          <ChibiAvatar size={56} />
+        )}
       </button>
 
       <AnimatePresence>
@@ -62,9 +84,12 @@ export function ChatWidget() {
             transition={{ duration: 0.18 }}
             className="glass fixed bottom-24 right-5 z-50 flex h-[min(70vh,520px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl"
           >
-            <div className="border-b border-white/10 px-4 py-3">
-              <p className="font-display text-sm font-semibold hero-text">Ask about a spot</p>
-              <p className="text-xs text-white/45">Movies, best times to visit, what's nearby…</p>
+            <div className="flex items-center gap-2.5 border-b border-white/10 px-4 py-3">
+              <ChibiAvatar size={36} />
+              <div>
+                <p className="font-display text-sm font-semibold hero-text">Ask about a spot</p>
+                <p className="text-xs text-white/45">Movies, best times to visit, what's nearby…</p>
+              </div>
             </div>
 
             <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
