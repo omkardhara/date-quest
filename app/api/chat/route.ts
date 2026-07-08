@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     // "N good <category> places near X" — zone-aware, not just word overlap. Live-searches
     // the exact locality named (e.g. Powai) when curated data there is thin, rather than
     // silently answering with a different neighbourhood.
-    const nearby = await findNearby(message);
+    const nearby = await findNearby(message, itinerary);
     const places = nearby?.places.length ? nearby.places : findRelevantPlaces(message);
 
     // Food/menu questions ("what to order at X") are answered from real Google

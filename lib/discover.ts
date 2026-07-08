@@ -50,8 +50,14 @@ function catFromTypes(types: string[] = []): Category {
 // Pick a realistic bestTime for a live place so the time-band gate works properly.
 function bestTimeFor(category: Category): import("./types").TimeBand {
   if (category === "cafe") return "morning";
-  if (category === "food") return "afternoon"; // prevents live restaurants showing up at 8am
-  if (category === "dessert") return "afternoon";
+  // Food and dessert are only ever requested by pick() from the lunch/dinner/dessert
+  // slots (never the morning-only activity block), so there's no dawn-suggestion risk to
+  // guard against here — but "afternoon" caps at 7pm (see timeAllowed() in engine.ts),
+  // which was silently excluding every live restaurant/dessert place from any dinner or
+  // dessert stop that fell later than 7pm (extremely common on a normal 10am-10pm day),
+  // starving the plan of food even when real, well-priced options existed in the pool.
+  if (category === "food") return "any";
+  if (category === "dessert") return "any";
   if (category === "activity") return "afternoon"; // prevents dawn suggestions (water parks at 6am etc.)
   return "afternoon"; // experience, shopping
 }
@@ -144,21 +150,30 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
     if (!vegDay) {
       for (const c of (ans.foods ?? []).slice(0, 3)) {
         const cLabel = c === "icecream" ? "ice cream" : c;
-        tasks.push(searchPlaces(`best ${cLabel} restaurants in ${area}`, 4).then(rs => rs.map(r => toPlace(r, zone, foodCat(c), mood, c))));
+        tasks.push(searchPlaces(`best ${cLabel} restaurants in ${area}`, 8).then(rs => rs.map(r => toPlace(r, zone, foodCat(c), mood, c))));
       }
       // Pass personality vibes so live restaurants score properly for luxe/romantic/etc.
       const restVibes = personality.filter(p => ["luxe","romantic","cozy","artsy","nightlife"].includes(p));
-      tasks.push(searchPlaces(restaurantQuery(personality, area), 3).then(rs => rs.map(r => toPlace(r, zone, "food", mood, undefined, false, restVibes))));
+      tasks.push(searchPlaces(restaurantQuery(personality, area), 8).then(rs => rs.map(r => toPlace(r, zone, "food", mood, undefined, false, restVibes))));
     }
 
     // Personality-aware activity + experience search — pass matching vibes through.
     const actVibes = personality.filter(p => ["adventure","artsy","culture","nightlife","nature","spiritual","luxe","queen","cozy","romantic"].includes(p));
-    tasks.push(searchPlaces(activityQuery(personality, area), 4).then(rs => rs.map(r => {
+    tasks.push(searchPlaces(activityQuery(personality, area), 10).then(rs => rs.map(r => {
       const cat = catFromTypes(r.types);
       const outdoor = (r.types ?? []).some(t => ["park", "tourist_attraction", "hiking_area", "beach"].includes(t)) && !(r.types ?? []).includes("museum");
       return toPlace(r, zone, cat, mood, undefined, outdoor, actVibes);
     })));
-    tasks.push(searchPlaces(`best cafes in ${area}`, 3).then(rs => rs.map(r => toPlace(r, zone, "cafe", mood, "cafe", false, ["cozy"]))));
+    tasks.push(searchPlaces(`best cafes in ${area}`, 8).then(rs => rs.map(r => toPlace(r, zone, "cafe", mood, "cafe", false, ["cozy"]))));
+    // Dedicated dessert search, unconditional (previously only surfaced if activityQuery's
+    // personality-driven text happened to return a dessert-typed venue) — a zone with no
+    // "shopper"/dessert-leaning personality selected would otherwise get zero live dessert
+    // options at all, forcing the picker to reach into a different zone for that slot.
+    tasks.push(searchPlaces(`best dessert shops ice cream parlours in ${area}`, 8).then(rs => rs.map(r => toPlace(r, zone, "dessert", mood, "dessert", false, ["playful"]))));
+    // Dedicated shopping search, unconditional for the same reason — previously only
+    // fired for the "shopper" personality branch of activityQuery, so most plans got
+    // almost no live shopping options at all.
+    tasks.push(searchPlaces(`best shopping markets malls boutiques in ${area}`, 8).then(rs => rs.map(r => toPlace(r, zone, "shopping", mood, undefined, false, ["shopper"]))));
   }
 
   const all = (await Promise.all(tasks)).flat();

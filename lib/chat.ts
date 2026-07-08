@@ -9,7 +9,7 @@ import { Place } from "./types";
 import { searchPlaceReviews, searchPlaces } from "./google";
 import { TRAVEL_BASE } from "./engine";
 import { PROFILE } from "./profile";
-import { extractLocalityFromText } from "./areas";
+import { extractLocalityFromText, resolveZone } from "./areas";
 import travelMatrixData from "@/data/travel-matrix.json";
 
 const TRAVEL_MATRIX = travelMatrixData as Record<string, number>;
@@ -23,6 +23,37 @@ const STOP_WORDS = new Set([
 function words(s: string): string[] {
   return s.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/)
     .filter((w) => w.length >= 3 && !STOP_WORDS.has(w));
+}
+
+interface ItineraryStop { name: string; area?: string }
+
+// Itinerary lines look like "12:00 PM–1:00 PM: Vivi All Day Bistro (Thane) — ₹1200"
+// (see PlanView.tsx / GetawayView.tsx onItineraryChange) — pull name + area out of each.
+function parseItineraryStops(itinerary: string): ItineraryStop[] {
+  const stops: ItineraryStop[] = [];
+  const lineRe = /:\s*(.+?)(?:\s*\(([^)]+)\))?\s*—\s*₹/g;
+  let m: RegExpExecArray | null;
+  while ((m = lineRe.exec(itinerary))) stops.push({ name: m[1].trim(), area: m[2]?.trim() });
+  return stops;
+}
+
+// Finds a stop from the user's OWN current itinerary that the question is about (e.g.
+// "shopping near Vivi All Day Bistro"). Itinerary stops are very often live-discovered
+// places that were never in the curated dataset to begin with, so scorePlaces() alone
+// (which only searches data/places.json) can never resolve them as an anchor — without
+// this, a question about a real place on the user's own screen falls through to a
+// generic, ungrounded, often wrong-city-area answer.
+function findItineraryAnchor(message: string, itinerary: string): ItineraryStop | undefined {
+  const stops = parseItineraryStops(itinerary);
+  if (!stops.length) return undefined;
+  const qWords = new Set(words(message));
+  if (!qWords.size) return undefined;
+  let best: { stop: ItineraryStop; score: number } | undefined;
+  for (const stop of stops) {
+    const score = words(stop.name).reduce((s, w) => s + (qWords.has(w) ? 1 : 0), 0);
+    if (score > 0 && (!best || score > best.score)) best = { stop, score };
+  }
+  return best?.stop;
 }
 
 let _places: Place[] | null = null;
@@ -304,11 +335,14 @@ async function liveNearby(
 // Khar...), live-search THAT locality first — a big zone like "andheri_w" spans Powai,
 // Juhu, Versova etc, and a loose-radius curated match would happily substitute a
 // same-zone neighbourhood 8-10 km away, which is exactly the "closest I have is Juhu"
-// non-answer this is meant to avoid; (2) a tight-radius curated match near a resolved
-// anchor venue, for venue-anchored questions with no named locality; (3) live search
-// around that anchor's own area, for the same case when curated data is thin; (4) only
-// as a genuine last resort, curated places anywhere in the same broad zone.
-export async function findNearby(message: string, max = 4): Promise<NearbyResult | null> {
+// non-answer this is meant to avoid; (1.5) the venue named is on the user's OWN current
+// itinerary (often live-discovered, never in curated data at all — e.g. "shopping near
+// Vivi All Day Bistro" when Vivi is a live pick shown on screen) — use ITS real area;
+// (2) a tight-radius curated match near a resolved curated-data anchor venue, for
+// venue-anchored questions about a well-known place; (3) live search around that
+// anchor's own area, for the same case when curated data is thin; (4) only as a genuine
+// last resort, curated places anywhere in the same broad zone.
+export async function findNearby(message: string, itinerary: string, max = 4): Promise<NearbyResult | null> {
   const match = detectCategory(message);
   if (!match) return null;
   const { category } = match;
@@ -322,6 +356,15 @@ export async function findNearby(message: string, max = 4): Promise<NearbyResult
   if (textLocality) {
     const live = await liveNearby(match, textLocality.label, textLocality.zone, max);
     if (live) return live;
+  }
+
+  // 1.5. The question is about a venue on the user's own current itinerary.
+  if (itinerary) {
+    const itinAnchor = findItineraryAnchor(message, itinerary);
+    if (itinAnchor?.area) {
+      const live = await liveNearby(match, itinAnchor.area, resolveZone(itinAnchor.area), max);
+      if (live) return live;
+    }
   }
 
   // 2. No named locality (or its live search came up empty): tight-radius curated
