@@ -166,10 +166,19 @@ export async function liveSearchSnippets(query: string, max = 4): Promise<Search
 }
 
 const FOOD_HINT = /\b(order|dish|dishes|menu|must[- ]try|specialt|what to eat|signature|popular (dish|food|item)|recommend)\b/i;
+// "What do the reviews say" is its own intent, distinct from a food/menu question — it
+// applies to ANY venue (a dam, a temple, a viewpoint), not just restaurants. Previously
+// only isFoodQuestion() gated the review lookup, so a question like "what do reviews say
+// about Gadeshwar Dam" never even tried to fetch real review text.
+const REVIEW_HINT = /\b(review|reviews|what (do|does) people say|what people (are saying|think)|feedback|top comments|people('?s)? (opinion|opinions))\b/i;
 const OTHER_LIVE_HINT = /\b(movie|movies|showtime|showtimes|now showing|cinema|theatre|theater|showing today|event|events|happening|concert|weather|forecast|rain|open now|open today|hours today|timings today|best time (of year|to visit)|when (should|to) visit|which (month|season))\b/i;
 
 export function isFoodQuestion(message: string): boolean {
   return FOOD_HINT.test(message);
+}
+
+export function isReviewQuestion(message: string): boolean {
+  return REVIEW_HINT.test(message);
 }
 
 export function needsLiveSearch(message: string): boolean {
@@ -177,14 +186,17 @@ export function needsLiveSearch(message: string): boolean {
 }
 
 // Question words to strip so what's left is (hopefully) just the venue name,
-// e.g. "whats the best 2 things to order in italianoz bandra" -> "italianoz bandra".
+// e.g. "whats the best 2 things to order in italianoz bandra" -> "italianoz bandra",
+// or "tell me what the reviews say on gadeshwar dam" -> "gadeshwar dam".
 const VENUE_QUESTION_WORDS = new Set([
   "the", "a", "an", "is", "are", "to", "of", "in", "on", "at", "for", "what",
   "whats", "best", "top", "good", "great", "things", "thing", "order", "dish",
   "dishes", "menu", "must", "try", "specialty", "specialties", "recommend",
   "recommendation", "recommendations", "popular", "item", "items", "eat",
   "should", "get", "and", "or", "you", "your", "i", "we", "can", "two",
-  "three", "one",
+  "three", "one", "tell", "me", "say", "says", "review", "reviews", "give",
+  "ones", "from", "all", "perspectives", "people", "feedback", "comments",
+  "comment", "opinion", "opinions", "about", "does", "do", "think", "know",
 ]);
 
 function extractVenueQuery(message: string): string {

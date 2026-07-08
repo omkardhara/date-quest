@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { findNearby, findRelevantPlaces, findVenueReviews, isFoodQuestion, isTravelQuestion, liveSearchSnippets, needsLiveSearch, travelAdvice } from "@/lib/chat";
+import { findNearby, findRelevantPlaces, findVenueReviews, isFoodQuestion, isReviewQuestion, isTravelQuestion, liveSearchSnippets, needsLiveSearch, travelAdvice } from "@/lib/chat";
 
 export const runtime = "nodejs";
 
@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     if (!message) return NextResponse.json({ ok: false, reply: "Ask me something about a Mumbai spot or activity!" });
 
     const isFoodQ = isFoodQuestion(message);
+    const isReviewQ = isReviewQuestion(message);
     const isTravelQ = isTravelQuestion(message);
 
     // "N good <category> places near X" — zone-aware, not just word overlap. Live-searches
@@ -31,11 +32,12 @@ export async function POST(req: NextRequest) {
     const nearby = await findNearby(message, itinerary);
     const places = nearby?.places.length ? nearby.places : findRelevantPlaces(message);
 
-    // Food/menu questions ("what to order at X") are answered from real Google
-    // review excerpts for the named venue — a generic web search mostly surfaces
-    // "10 best X restaurants" listicles rather than anything about the specific
-    // place asked about, especially for small/lightly-reviewed spots.
-    const venueReviews = isFoodQ ? await findVenueReviews(message) : null;
+    // Food/menu questions ("what to order at X") AND general "what do the reviews say"
+    // questions (about ANY venue, not just restaurants — a dam, a temple, a viewpoint)
+    // are answered from real Google review excerpts for the named venue — a generic web
+    // search mostly surfaces "10 best X" listicles rather than anything about the
+    // specific place asked about, especially for small/lightly-reviewed spots.
+    const venueReviews = (isFoodQ || isReviewQ) ? await findVenueReviews(message) : null;
     const liveSnippets = needsLiveSearch(message) && !venueReviews ? await liveSearchSnippets(`${message} Mumbai`) : [];
 
     // "How do I get there" — grounds in the app's own real drive-time data
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest) {
       "If 'Spots found' context is given, ground venue-specific facts (area, vibe, monsoon suitability, cost, top dishes) STRICTLY in that data — never invent an address, price, opening hours, or dish for a place listed there. These are real places — some from curated data, some pulled live from Google just now — treat both the same way: state them confidently as real options, don't caveat live-sourced ones as less certain. Check ALL the entries given, not just the first: if two entries share a similar name (different branches of the same place), each is a real, separate location — match the user's question to whichever entry's area fits what they asked, and answer using that one directly. Only tell the user their stated area is wrong if NONE of the given entries for that name are in the area they mentioned.",
       "When the user asks for a category of place in a specific area (e.g. 'dessert places in Powai', 'a sizzler restaurant in Thane') and 'Spots found' lists real options, ANSWER WITH THOSE — never say the data doesn't cover that area or tell them to go check Zomato/Google themselves; that data was just pulled live for exactly this question, so refusing defeats the point of asking. Only say you don't have something specific if 'Spots found' is genuinely empty for that question.",
       "Never state a specific dish, drink, or menu item for a venue unless it's explicitly named in that venue's curated summary/topDishes or in 'Recent Google reviews' context below — don't infer plausible-sounding specifics from the cuisine type or your general knowledge. If you don't have named specifics, describe it at the level of detail the given data actually supports (e.g. 'known for mezze and grills' rather than naming dishes that aren't listed).",
-      "If 'Recent Google reviews' are given, use them to name specific dishes/drinks reviewers actually praised — mention 1-3 by name if they come up, and say it's based on recent reviews, not an official menu.",
+      "If 'Recent Google reviews' are given, use them directly to answer — quote or paraphrase 2-3 specific points reviewers actually made (dishes/drinks for a restaurant, or whatever real reviewers actually mentioned for a non-food place like a dam, temple, or viewpoint — crowd levels, best time to visit, safety, views, cleanliness), and say it's based on recent Google reviews, not an official source. Don't say you lack review detail when this context is given — that's the review text itself.",
       "If 'Live search results' are given, use them for anything time-sensitive (movie showtimes, current events, weather) and note that it can change — don't state it as a certain fact.",
       "If 'Travel info' is given, use ONLY that for drive time and transport modes — never invent a specific bus number, train line, or fare you weren't given. If no drive time is given, just share the general transport options and the maps link.",
       "Only say you don't have data and suggest checking elsewhere (Zomato/Google reviews for dishes, BookMyShow for movies, Google Maps for live transit) as a genuine last resort — after 'Spots found' truly has nothing relevant. Don't default to this for questions 'Spots found' already answers.",
