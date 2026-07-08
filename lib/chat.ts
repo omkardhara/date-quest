@@ -48,13 +48,14 @@ export interface PlaceContext {
   safety?: string;
   costPerPerson?: number;
   distanceKm?: number;
+  topDishes?: string[];
 }
 
 function toContext(p: Place, distanceKm?: number): PlaceContext {
   return {
     name: p.name, area: p.area, category: p.category, summary: p.summary,
     tags: p.tags, bestTime: p.bestTime, monsoonRisk: p.monsoonRisk,
-    safety: p.safety, costPerPerson: p.costPerPerson,
+    safety: p.safety, costPerPerson: p.costPerPerson, topDishes: p.topDishes,
     distanceKm: distanceKm !== undefined ? Math.round(distanceKm * 10) / 10 : undefined,
   };
 }
