@@ -78,15 +78,40 @@ function travelMins(from: Zone, to: Zone, atMin: number): number {
   return base;
 }
 
-// Per-place accurate lookup using the precomputed Google Maps matrix.
-// Falls back to zone-based travelMins when a pair is not in the matrix
-// (out-of-city places, or the home→home self-trip).
-function travelMinsById(fromId: string, from: Zone, toId: string, to: Zone, atMin: number): number {
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+type LatLng = { lat: number; lng: number };
+
+// Per-place accurate lookup using the precomputed Google Maps matrix. Falls back to a
+// haversine-distance estimate when both places have geocoded coordinates (the common case
+// for live-discovered places, which are never in the precomputed matrix) — without this,
+// two places that just happen to share a broad zone (e.g. Madh Island and Powai, both
+// "andheri_w" but ~20km apart) were scored as a flat 10-minute same-zone hop, so the picker
+// had no signal to avoid pairing them on the same day. Only falls back further to the crude
+// zone-level travelMins when neither coordinate nor matrix data is available.
+function travelMinsById(
+  fromId: string, from: Zone, toId: string, to: Zone, atMin: number,
+  fromLatLng?: LatLng, toLatLng?: LatLng,
+): number {
   const base = TRAVEL_MATRIX[`${fromId}|${toId}`];
   if (base !== undefined) {
     if (atMin >= 1020 && atMin < 1200) return Math.round(base * 1.4);
     if (atMin >= 720  && atMin < 900)  return Math.round(base * 1.2);
     return base;
+  }
+  if (fromLatLng && toLatLng) {
+    const roadKm = haversineKm(fromLatLng.lat, fromLatLng.lng, toLatLng.lat, toLatLng.lng) * 1.35;
+    const est = Math.max(8, Math.round(roadKm / 24 * 60)); // ~24km/h effective Mumbai traffic speed
+    if (atMin >= 1020 && atMin < 1200) return Math.round(est * 1.4);
+    if (atMin >= 720  && atMin < 900)  return Math.round(est * 1.2);
+    return est;
   }
   return travelMins(from, to, atMin);
 }
@@ -292,7 +317,7 @@ function environment(p: Place): string {
 
 function pick(
   pool: Place[], ans: Answers, band: string, cats: Category[],
-  used: Set<string>, currentZone: Zone, corridorZones: Zone[],
+  used: Set<string>, currentZone: Zone, currentPlaceId: string, currentLatLng: LatLng | undefined, corridorZones: Zone[],
   atMin: number, remainingBudget: number, usedCuisines: Set<string>,
   pendingRequests: string[] = [],
   cuisineFilter?: string[],
@@ -369,9 +394,43 @@ function pick(
   const FAR_ZONES = new Set<Zone>(["borivali", "thane", "south", "vasai", "navi_mumbai", "karjat", "kolad", "gorai"]);
   const primaryFarZone = corridorZones.find(z => FAR_ZONES.has(z as Zone)) as Zone | undefined;
 
+  // Same-day distance cap: a "zone" can be geographically huge (andheri_w spans Madh
+  // Island to Powai; vasai stretches up to Kelva/Palghar) — a candidate that's technically
+  // in-zone but a 90+ minute detour from where the day already is shouldn't out-rank a
+  // closer option just because it scores a bit higher on vibes. Narrows only if it leaves
+  // something; skipped entirely for the day's first stop (currentLatLng unset), since that
+  // "get to the destination zone" leg from home is expected to be long for far zones.
+  if (currentLatLng) {
+    const capMin = FAR_ZONES.has(currentZone) ? 75 : 55;
+    const withTrip = cand.map(p => {
+      const z = (p.zone ?? "multiple") as Zone;
+      const trip = travelMinsById(
+        currentPlaceId, currentZone, p.id, z, atMin,
+        currentLatLng, p.lat != null && p.lng != null ? { lat: p.lat, lng: p.lng } : undefined,
+      );
+      return { p, trip };
+    });
+    const tier1 = withTrip.filter(x => x.trip <= capMin);
+    // Second, wider tier before giving up entirely — some thin/sprawling zones (e.g. Vasai,
+    // which spans Vasai proper to Kelva/Palghar) genuinely have nothing within the normal
+    // cap for a given category; better to try a looser 100-min tier than to jump straight
+    // from "under an hour" to "no cap at all".
+    const tier2 = withTrip.filter(x => x.trip <= 100);
+    if (tier1.length) cand = tier1.map(x => x.p);
+    else if (tier2.length) cand = tier2.map(x => x.p);
+    // else: leave cand uncapped — every remaining option for this slot is genuinely this far.
+  }
+
   const rank = (p: Place) => {
     const z = (p.zone ?? "multiple") as Zone;
-    const tripCost = travelMins(currentZone, z, atMin);
+    // Same lookup add() uses for the real block (matrix -> haversine -> zone-level), so a
+    // pick that "looks cheap" during ranking can't turn out to be an 80-minute surprise once
+    // the actual leg is computed — matters most within a single wide zone (andheri_w spans
+    // Madh Island to Powai, ~20km) where the flat same-zone estimate used to read as 10 min.
+    const tripCost = travelMinsById(
+      currentPlaceId, currentZone, p.id, z, atMin,
+      currentLatLng, p.lat != null && p.lng != null ? { lat: p.lat, lng: p.lng } : undefined,
+    );
     // Strong geographic penalty: /8 makes long trips (55+ min) very costly vs short ones (10-20 min).
     let v = score(p, ans, band, remainingBudget) - tripCost / 8;
     // Same-zone bonus only rewards places that actually match the personality — otherwise a
@@ -452,6 +511,7 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   let cursor         = ans.startMin;
   let currentZone:   Zone = "home";
   let currentPlaceId = "home";
+  let currentLatLng: LatLng | undefined; // no fixed lat/lng for home; picked up once the first stop lands
   let prevName       = `Home (${PROFILE.homeArea})`;
   let prevArea       = PROFILE.homeArea;
   let runningCost    = 0;
@@ -482,7 +542,10 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     if (!result || cursor >= end) return;
     const { place: p, zone } = result;
 
-    const tripMins   = travelMinsById(currentPlaceId, currentZone, p.id, zone, cursor);
+    const tripMins   = travelMinsById(
+      currentPlaceId, currentZone, p.id, zone, cursor,
+      currentLatLng, p.lat != null && p.lng != null ? { lat: p.lat, lng: p.lng } : undefined,
+    );
     const arrivalMin = cursor + tripMins;
     if (arrivalMin + 20 > end) return; // no time left after travel
 
@@ -546,8 +609,13 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     for (let i = pendingRequests.length - 1; i >= 0; i--) {
       if (matchesRequest(p, [pendingRequests[i]])) pendingRequests.splice(i, 1);
     }
+    const wasFarReturn = zone === "multiple" && !!FAR_RETURN[currentZone];
     if (zone !== "multiple") { currentZone = zone; currentPlaceId = p.id; }
-    else if (FAR_RETURN[currentZone]) { currentZone = "home"; currentPlaceId = "home"; }
+    else if (wasFarReturn) { currentZone = "home"; currentPlaceId = "home"; }
+    // Track real coordinates (not just the zone) so the next leg's travel estimate can use
+    // haversine distance instead of a flat same-zone guess. Reset only on the explicit
+    // "back to home" fallback, since home's precise coordinates aren't tracked.
+    currentLatLng = wasFarReturn ? undefined : (p.lat != null && p.lng != null ? { lat: p.lat, lng: p.lng } : currentLatLng);
     // Track environment for consecutive-diversity penalty (food slots vary naturally, skip them)
     if (!FULL_MEALS.includes(p.category) && p.category !== "rest") {
       recentEnvs.push(environment(p));
@@ -587,22 +655,22 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   // Morning activity + café (early starts only).
   // Café budget is capped at 20% of total so an expensive brunch doesn't starve the rest of the day.
   if (ans.startMin < 660) {
-    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
     const cafeBudget = Math.min(remaining(), Math.max(800, Math.round(ans.budget * 0.20)));
-    add(pick(pool, ans, b(), ["cafe"], used, currentZone, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "cafe");
+    add(pick(pool, ans, b(), ["cafe"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, cafeBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "cafe");
   }
 
   // Lunch — reserve dinner + pendingRes so a must-include isn't starved by an expensive lunch.
   if (cursor < 960 && end > 780) {
     const hadFood = blocks.some(bl => FULL_MEALS.includes(bl.kind as Category));
     const lunchBudget = hadFood ? remaining() : actBudget();
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, lunchBudget, usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
   }
 
   // Afternoon / first-half experience or shopping.
   // Always reserve dinner budget so afternoon picks can't starve dinner.
   if (end > 840) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Second lunch opportunity — fires when the first food slot was blocked by meal spacing
@@ -613,19 +681,19 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   // lunch, whatever "no food places" would look like to the day it's for.
   // cursor≥600 catches adventure (end=1080) days where the first activity still runs before noon.
   if (cursor >= 600 && cursor < 1050 && end > 900 && !blocks.some(bl => ["food"].includes(bl.kind))) {
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
   }
 
   // Second afternoon slot: fills the pre-evening gap on long days (noon–midnight, 4pm–midnight).
   // No "cafe" here — morning cafés score high but fail meal spacing and cascade-block the slot.
   if (end - ans.startMin >= 360 && cursor < 1080 && end > 960) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
   }
 
   // Extra afternoon slot for very long days (6am–midnight etc.) — bridges the gap between
   // morning stops and the 6pm evening window, especially on tight budgets with free places.
   if (end - ans.startMin >= 720 && cursor < 1020 && end > 1080) {
-    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Mid-day rest — only near home, genuinely long day (12 h+), good budget left,
@@ -642,39 +710,39 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   // end-160 ensures at least 160 min remain: enough for travel + dinner.
   for (let _pi = 0; _pi < 3 && pendingRequests.length > 0 && cursor >= 1080 && end > 1200 && cursor < end - 160; _pi++) {
     const _prevCursor = cursor;
-    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
     if (cursor === _prevCursor) break;
   }
 
   // Evening activity / shopping — no cafe here (morning cafés always fail meal spacing at this hour)
   // Skip if dinner will fire and there's not enough room for both (~180 min: activity + travel + dinner).
   if (end > 1080 && !(end > 1140 && (end - cursor) < 180)) {
-    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
+    add(pick(pool, ans, b(), ["activity", "experience", "shopping"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "activity");
   }
 
   // Pre-dinner must-include loop (attempt 2): catches plans where cursor was <1080 before evening.
   // After evening fires, cursor is reliably ≥1080 so comedy/gaming can land before dinner consumes budget.
   for (let _pi = 0; _pi < 3 && pendingRequests.length > 0 && cursor >= 1080 && end > 1200 && cursor < end - 160; _pi++) {
     const _prevCursor = cursor;
-    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
     if (cursor === _prevCursor) break;
   }
 
   // Dinner
   if (end > 1140) {
-    add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
+    add(pick(pool, ans, b(), ["food"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, freshFoodFilter(ans.foods), recentEnvs, spiritualUsed), "food");
   }
 
   // Post-dinner experience: honours explicit requests that need a late slot — standup comedy,
   // live music, gaming etc. that are gated to bestTime "night" (≥ 6 pm) and never get picked
   // in afternoon slots. Only fires when requests are still unfulfilled and there's room.
   if (pendingRequests.length > 0 && end > 1200 && cursor < end - 90) {
-    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
+    add(pick(pool, ans, b(), ["experience", "activity"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
   // Dessert (20-min minimum to avoid a 5-minute dessert block)
   if (end - cursor > 20) {
-    add(pick(pool, ans, b(), ["dessert"], used, currentZone, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs, spiritualUsed), "dessert");
+    add(pick(pool, ans, b(), ["dessert"], used, currentZone, currentPlaceId, currentLatLng, corridorZones, cursor, remaining(), usedCuisines, pendingRequests, ans.foods, recentEnvs, spiritualUsed), "dessert");
   }
 
   // Bonus suggestions: cheap activities/experiences not in the plan, ranked by score.
