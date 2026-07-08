@@ -156,6 +156,7 @@ function detectCorridor(ans: Answers): Corridor {
 
 // Real zones (for live discovery) the day will actually draw from.
 export function zonesForAnswers(ans: Answers): Zone[] {
+  if (ans.areas?.length) return ans.areas as Zone[];
   return CORRIDOR_ZONES[detectCorridor(ans)].filter(z => z !== "multiple" && z !== "home");
 }
 
@@ -450,7 +451,12 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
   const vegDay       = ans.dayOfWeek !== undefined && PROFILE.vegDays.includes(ans.dayOfWeek);
 
   const corridor      = detectCorridor(ans);
-  const corridorZones = CORRIDOR_ZONES[corridor];
+  // A user-picked set of areas (e.g. Bandra + Andheri) hard-confines the whole day to those
+  // zones instead of letting the corridor heuristic pick one; "multiple" stays allowed so
+  // flexible-location picks (cinemas, live/discovered places) still work.
+  const corridorZones: Zone[] = ans.areas?.length
+    ? Array.from(new Set<Zone>([...(ans.areas as Zone[]), "multiple"]))
+    : CORRIDOR_ZONES[corridor];
   const recentEnvs:   string[] = []; // last 2 non-food environments for diversity scoring
 
   const toAlt = (p: Place): AltPlace => ({

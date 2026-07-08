@@ -10,9 +10,9 @@ interface ChatMessage { role: "user" | "assistant"; content: string }
 // for time-sensitive questions (showtimes, current events), and otherwise lets
 // the model answer from general knowledge (e.g. seasonal advice).
 export async function POST(req: NextRequest) {
-  const key = process.env.GROQ_API_KEY;
+  const key = process.env.DEEPSEEK_API_KEY;
   if (!key) {
-    return NextResponse.json({ ok: false, reply: "Chat isn't set up yet — GROQ_API_KEY is missing." });
+    return NextResponse.json({ ok: false, reply: "Chat isn't set up yet — DEEPSEEK_API_KEY is missing." });
   }
 
   try {
@@ -90,13 +90,14 @@ export async function POST(req: NextRequest) {
     ];
 
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 12000);
-    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    // DeepSeek doesn't have Groq's LPU-speed inference — give it more room before aborting.
+    const t = setTimeout(() => ctrl.abort(), 20000);
+    const r = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
       signal: ctrl.signal,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "deepseek-chat",
         temperature: 0.4,
         messages,
       }),
