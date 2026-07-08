@@ -306,6 +306,23 @@ function detectCategory(message: string): CategoryMatch | null {
   return null;
 }
 
+// Extra filler stripped only when building a live-search phrase (kept in STOP_WORDS-driven
+// word() results elsewhere, since those still need to score against curated tags/areas).
+const SEARCH_FILLER = new Set(["good", "any", "options", "option", "spot", "spots", "place", "places", "there", "some"]);
+
+// CATEGORY_WORDS is necessarily a finite list (sizzler, rooftop, dessert...) and anything
+// not on it — gaming, bowling, arcades, escape rooms, treks, whatever's asked next — used
+// to fall straight through to the ungrounded curated-only path with no live search at all.
+// This builds a live-search phrase directly from the question itself (locality words
+// stripped out, since that's appended separately) so an unrecognised activity type still
+// gets a real, geography-aware search instead of silently giving up.
+function extractSearchPhrase(message: string, locality?: string): string {
+  const localityWords = new Set(locality ? words(locality) : []);
+  return message.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/)
+    .filter((w) => w.length >= 3 && !STOP_WORDS.has(w) && !SEARCH_FILLER.has(w) && !localityWords.has(w))
+    .join(" ");
+}
+
 function titleCase(s: string): string {
   return s.replace(/\b\w/g, (c) => c.toUpperCase());
 }
@@ -343,23 +360,33 @@ async function liveNearby(
 // anchor's own area, for the same case when curated data is thin; (4) only as a genuine
 // last resort, curated places anywhere in the same broad zone.
 export async function findNearby(message: string, itinerary: string, max = 4): Promise<NearbyResult | null> {
-  const match = detectCategory(message);
-  if (!match) return null;
+  const textLocality = extractLocalityFromText(message);
+  const detected = detectCategory(message);
+  // CATEGORY_WORDS is a finite list — anything not on it (gaming, bowling, arcades, treks,
+  // whatever's asked next) used to fall straight through to the curated-only path below
+  // with zero live search. Build a generic phrase from the question itself as a fallback so
+  // an unrecognised activity type still gets a real, geography-aware search.
+  const match: CategoryMatch = detected ?? {
+    category: "activity",
+    queryPhrase: extractSearchPhrase(message, textLocality?.label),
+  };
   const { category } = match;
+  const hasUsableFallback = !!detected || match.queryPhrase.length > 0;
 
   const anchorText = message.match(/near\s+(.+)$/i)?.[1] ?? message;
   const anchor = scorePlaces(anchorText)[0]?.p;
-  const textLocality = extractLocalityFromText(message);
   const sameCategory = loadPlaces().filter((p) => p.category === category && p.id !== anchor?.id);
 
+  if (!hasUsableFallback && !anchor) return null;
+
   // 1. An explicit locality was named — answer for THAT place, not "closest I have".
-  if (textLocality) {
+  if (hasUsableFallback && textLocality) {
     const live = await liveNearby(match, textLocality.label, textLocality.zone, max);
     if (live) return live;
   }
 
   // 1.5. The question is about a venue on the user's own current itinerary.
-  if (itinerary) {
+  if (hasUsableFallback && itinerary) {
     const itinAnchor = findItineraryAnchor(message, itinerary);
     if (itinAnchor?.area) {
       const live = await liveNearby(match, itinAnchor.area, resolveZone(itinAnchor.area), max);
@@ -388,7 +415,7 @@ export async function findNearby(message: string, itinerary: string, max = 4): P
 
   // 3. Live search around the anchor's own area (venue-anchored question, no named
   // locality, and curated data nearby was too thin).
-  if (anchor?.area) {
+  if (hasUsableFallback && anchor?.area) {
     const live = await liveNearby(match, anchor.area, anchor.zone, max);
     if (live) return live;
   }
