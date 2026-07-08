@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPlan } from "@/lib/engine";
-import { Answers, MovieInfo } from "@/lib/types";
+import { Answers, MovieInfo, Place } from "@/lib/types";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -12,11 +12,15 @@ function loadMovies(): MovieInfo[] {
   } catch { return []; }
 }
 
+// Debug/test-only endpoint (used by scripts/test-plans.mjs). Optionally pass `extra`
+// (the array /api/discover returns) so it can be tested with live places included, not
+// just curated data.
 export async function POST(req: NextRequest) {
   try {
-    const ans: Answers = await req.json();
-    const plan = buildPlan(ans, [], loadMovies());
-    return NextResponse.json({ blocks: plan.blocks, totalCost: plan.totalCost, budget: plan.budget });
+    const body = await req.json();
+    const { extra, ...ans } = body as Answers & { extra?: Place[] };
+    const plan = buildPlan(ans, Array.isArray(extra) ? extra : [], loadMovies());
+    return NextResponse.json({ blocks: plan.blocks, totalCost: plan.totalCost, budget: plan.budget, flags: plan.flags });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }

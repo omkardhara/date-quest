@@ -311,8 +311,11 @@ function pick(
 
   // mustInclude escape hatch: if none of the corridor-filtered candidates match a
   // pending request, widen to the full pool so a requested place is never silently dropped.
+  // Skipped when the user explicitly confined the day to specific areas — geography they
+  // picked on purpose should win over a request that simply has no match there, rather
+  // than silently pulling in an out-of-area place to satisfy it.
   let extendedBase = base;
-  if (pendingRequests.length > 0 && !base.some(p => matchesRequest(p, pendingRequests))) {
+  if (pendingRequests.length > 0 && !ans.areas?.length && !base.some(p => matchesRequest(p, pendingRequests))) {
     const wider = pool.filter(p =>
       cats.includes(p.category) && !used.has(p.id) && !blocked(p, ans) &&
       timeAllowed(p, atMin) && p.costPerPerson * 2 <= remainingBudget &&
@@ -602,9 +605,14 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
     add(pick(pool, ans, b(), ["experience", "activity", "shopping"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "experience");
   }
 
-  // Second lunch opportunity — fires when the first food slot was blocked by meal spacing.
+  // Second lunch opportunity — fires when the first food slot was blocked by meal spacing
+  // (very common on early-start days: the morning café counts as a "full meal" for the
+  // 90-min spacing rule, so lunch fired right after it almost always gets rejected).
+  // Not gated to short days (`end <= 1140`) — a full evening plan (e.g. 10am-10pm) needs
+  // this recovery just as much, otherwise the day ends up with only a dinner and zero
+  // lunch, whatever "no food places" would look like to the day it's for.
   // cursor≥600 catches adventure (end=1080) days where the first activity still runs before noon.
-  if (cursor >= 600 && cursor < 1050 && end > 900 && end <= 1140 && !blocks.some(bl => ["food"].includes(bl.kind))) {
+  if (cursor >= 600 && cursor < 1050 && end > 900 && !blocks.some(bl => ["food"].includes(bl.kind))) {
     add(pick(pool, ans, b(), ["food"], used, currentZone, corridorZones, cursor, actBudget(), usedCuisines, pendingRequests, undefined, recentEnvs, spiritualUsed), "food");
   }
 

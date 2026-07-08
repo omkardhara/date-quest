@@ -6,9 +6,10 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 import { Place } from "./types";
-import { searchPlaceReviews } from "./google";
+import { searchPlaceReviews, searchPlaces } from "./google";
 import { TRAVEL_BASE } from "./engine";
 import { PROFILE } from "./profile";
+import { extractLocalityFromText } from "./areas";
 import travelMatrixData from "@/data/travel-matrix.json";
 
 const TRAVEL_MATRIX = travelMatrixData as Record<string, number>;
@@ -225,45 +226,112 @@ export function travelAdvice(message: string): TravelInfo | null {
 
 // ── "N good <category> places near <venue>" ─────────────────────────────────
 
-const CATEGORY_WORDS: Record<string, Place["category"]> = {
-  shopping: "shopping", shop: "shopping", shops: "shopping", boutique: "shopping", boutiques: "shopping",
-  food: "food", restaurant: "food", restaurants: "food", dining: "food", lunch: "food", dinner: "food", eat: "food",
-  cafe: "cafe", cafes: "cafe", coffee: "cafe",
-  dessert: "dessert", desserts: "dessert", sweet: "dessert", sweets: "dessert",
-  activity: "activity", activities: "activity",
-  experience: "experience", experiences: "experience",
+// Order is priority, not just a lookup table: specific terms are listed first so they
+// win even when a generic term also literally appears in the same phrase (e.g. "sizzler
+// restaurant" contains both "sizzler" and "restaurant" — sizzler must win, or the live
+// search silently loses the one thing that was actually asked for).
+const CATEGORY_WORDS: [string, Place["category"]][] = [
+  ["sizzler", "food"], ["ice cream", "dessert"], ["bakery", "dessert"],
+  ["rooftop", "experience"], ["bar", "experience"], ["pub", "experience"],
+  ["spa", "experience"], ["lounge", "experience"],
+  ["boutique", "shopping"], ["boutiques", "shopping"], ["market", "shopping"], ["mall", "shopping"],
+  ["park", "activity"], ["garden", "activity"],
+  ["thing to do", "activity"], ["things to do", "activity"],
+  ["shopping", "shopping"], ["shop", "shopping"], ["shops", "shopping"],
+  ["food", "food"], ["restaurant", "food"], ["restaurants", "food"], ["dining", "food"],
+  ["lunch", "food"], ["dinner", "food"], ["eat", "food"],
+  ["cafe", "cafe"], ["cafes", "cafe"], ["coffee", "cafe"],
+  ["dessert", "dessert"], ["desserts", "dessert"], ["sweet", "dessert"], ["sweets", "dessert"],
+  ["activity", "activity"], ["activities", "activity"],
+  ["experience", "experience"], ["experiences", "experience"],
+];
+
+// Search-query phrase per trigger keyword — deliberately more specific than the broad
+// Place category where possible, e.g. "sizzler" must search for sizzler places, not
+// just any restaurant, or the live search silently loses the one thing that was asked for.
+const KEYWORD_QUERY: Record<string, string> = {
+  shopping: "shopping spots", shop: "shopping spots", shops: "shopping spots",
+  boutique: "boutiques", boutiques: "boutiques", market: "markets", mall: "malls",
+  food: "restaurants", restaurant: "restaurants", restaurants: "restaurants",
+  dining: "restaurants", lunch: "restaurants", dinner: "restaurants", eat: "restaurants",
+  sizzler: "sizzler restaurants",
+  cafe: "cafes", cafes: "cafes", coffee: "cafes",
+  dessert: "dessert places", desserts: "dessert places", sweet: "dessert places", sweets: "dessert places",
+  "ice cream": "ice cream places", bakery: "bakeries",
+  activity: "things to do", activities: "things to do",
+  "thing to do": "things to do", "things to do": "things to do",
+  park: "parks", garden: "gardens",
+  experience: "experiences", experiences: "experiences",
+  rooftop: "rooftop bars", bar: "bars", pub: "pubs", spa: "spas", lounge: "lounges",
 };
 
-function detectCategory(message: string): Place["category"] | null {
+interface CategoryMatch { category: Place["category"]; queryPhrase: string }
+
+function detectCategory(message: string): CategoryMatch | null {
   const lower = message.toLowerCase();
-  for (const [word, category] of Object.entries(CATEGORY_WORDS)) {
-    if (new RegExp(`\\b${word}\\b`).test(lower)) return category;
+  for (const [word, category] of CATEGORY_WORDS) {
+    if (new RegExp(`\\b${word}\\b`).test(lower)) return { category, queryPhrase: KEYWORD_QUERY[word] ?? word };
   }
   return null;
 }
 
+function titleCase(s: string): string {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export interface NearbyResult { category: string; zone?: string; places: PlaceContext[] }
 
-// Handles "3 good shopping places near X" style questions: detects the
-// category asked for, resolves the anchor venue, and filters curated places
-// by real distance (haversine over geocoded lat/lng) when available — falling
-// back to the coarser zone label otherwise. Zone alone isn't precise enough:
-// Powai and Vile Parle are both "andheri_w" but 8+ km apart.
-export function findNearby(message: string, max = 4): NearbyResult | null {
-  const category = detectCategory(message);
-  if (!category) return null;
+async function liveNearby(
+  match: CategoryMatch, localityLabel: string, zone: string | undefined, max: number,
+): Promise<NearbyResult | null> {
+  const areaLabel = titleCase(localityLabel);
+  const live = await searchPlaces(`best ${match.queryPhrase} in ${areaLabel}, Mumbai`, max);
+  if (!live.length) return null;
+  return {
+    category: match.category,
+    zone,
+    places: live.map((p): PlaceContext => ({
+      name: p.name,
+      area: p.address?.split(",").slice(0, 2).join(",").trim() || areaLabel,
+      category: match.category,
+      summary: p.summary || (p.rating ? `${p.rating}★ on Google, ${p.userRatings ?? 0} reviews.` : `A real spot in ${areaLabel}, found live.`),
+    })),
+  };
+}
+
+// Handles "3 good shopping places near X" / "dessert places in Powai" style questions.
+// Priority order matters: (1) when the question explicitly names a locality (Powai,
+// Khar...), live-search THAT locality first — a big zone like "andheri_w" spans Powai,
+// Juhu, Versova etc, and a loose-radius curated match would happily substitute a
+// same-zone neighbourhood 8-10 km away, which is exactly the "closest I have is Juhu"
+// non-answer this is meant to avoid; (2) a tight-radius curated match near a resolved
+// anchor venue, for venue-anchored questions with no named locality; (3) live search
+// around that anchor's own area, for the same case when curated data is thin; (4) only
+// as a genuine last resort, curated places anywhere in the same broad zone.
+export async function findNearby(message: string, max = 4): Promise<NearbyResult | null> {
+  const match = detectCategory(message);
+  if (!match) return null;
+  const { category } = match;
 
   const anchorText = message.match(/near\s+(.+)$/i)?.[1] ?? message;
   const anchor = scorePlaces(anchorText)[0]?.p;
-  if (!anchor) return null;
+  const textLocality = extractLocalityFromText(message);
+  const sameCategory = loadPlaces().filter((p) => p.category === category && p.id !== anchor?.id);
 
-  const sameCategory = loadPlaces().filter((p) => p.category === category && p.id !== anchor.id);
+  // 1. An explicit locality was named — answer for THAT place, not "closest I have".
+  if (textLocality) {
+    const live = await liveNearby(match, textLocality.label, textLocality.zone, max);
+    if (live) return live;
+  }
 
-  if (anchor.lat != null && anchor.lng != null) {
+  // 2. No named locality (or its live search came up empty): tight-radius curated
+  // match near the resolved anchor venue. Kept tight (not the old 15 km tier) so a
+  // same-zone-but-different-neighbourhood curated entry doesn't masquerade as local.
+  if (anchor?.lat != null && anchor?.lng != null) {
     const withDistance = sameCategory
       .filter((p) => p.lat != null && p.lng != null)
       .map((p) => ({ p, km: haversineKm(anchor.lat!, anchor.lng!, p.lat!, p.lng!) }));
-    for (const radiusKm of [5, 8, 15]) {
+    for (const radiusKm of [3, 6]) {
       const within = withDistance.filter((x) => x.km <= radiusKm).sort((a, b) => a.km - b.km);
       if (within.length) {
         return {
@@ -275,13 +343,22 @@ export function findNearby(message: string, max = 4): NearbyResult | null {
     }
   }
 
-  // Fallback: same zone label (coarser, but still better than no filter).
-  if (anchor.zone) {
+  // 3. Live search around the anchor's own area (venue-anchored question, no named
+  // locality, and curated data nearby was too thin).
+  if (anchor?.area) {
+    const live = await liveNearby(match, anchor.area, anchor.zone, max);
+    if (live) return live;
+  }
+
+  // 4. Last resort — only reached once live search has genuinely come up empty:
+  // widen to curated places anywhere in the same broad zone.
+  const zone = textLocality?.zone ?? anchor?.zone;
+  if (zone) {
     const sameZone = sameCategory
-      .filter((p) => p.zone === anchor.zone)
+      .filter((p) => p.zone === zone)
       .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
     if (sameZone.length) {
-      return { category, zone: anchor.zone, places: sameZone.slice(0, max).map((p) => toContext(p)) };
+      return { category, zone, places: sameZone.slice(0, max).map((p) => toContext(p)) };
     }
   }
 

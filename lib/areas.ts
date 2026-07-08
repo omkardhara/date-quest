@@ -47,3 +47,16 @@ export function resolveZone(label: string): string | undefined {
   }
   return undefined;
 }
+
+// Finds a known Mumbai locality named in free text (e.g. "any good dessert spots in
+// Powai?" -> "powai"), so the chat assistant can scope a live search to the exact
+// place asked about instead of just the broader zone or, worse, a different one.
+// Longer aliases are checked first so "pali hill" wins over a shorter overlapping match.
+const SORTED_ALIASES = Object.keys(AREA_ALIASES).sort((a, b) => b.length - a.length);
+export function extractLocalityFromText(text: string): { label: string; zone: string } | undefined {
+  const lower = text.toLowerCase();
+  for (const alias of SORTED_ALIASES) {
+    if (lower.includes(alias)) return { label: alias, zone: AREA_ALIASES[alias] };
+  }
+  return undefined;
+}

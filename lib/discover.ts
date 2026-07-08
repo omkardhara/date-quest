@@ -6,16 +6,17 @@ import { PROFILE } from "./profile";
 
 // Zone → a Google-friendly search area string.
 const ZONE_AREA: Record<string, string> = {
-  bandra:    "Bandra West, Mumbai",
-  south:     "Colaba and Fort, South Mumbai",
-  central:   "Lower Parel and Byculla, Mumbai",
-  andheri_w: "Andheri West, Mumbai",
-  borivali:  "Borivali, Mumbai",
-  thane:     "Thane West",
-  vasai:     "Vasai, Maharashtra",
-  karjat:    "Karjat, Maharashtra",
-  kolad:     "Kolad, Raigad, Maharashtra",
-  gorai:     "Gorai, Borivali West, Mumbai",
+  bandra:      "Bandra West, Mumbai",
+  south:       "Colaba and Fort, South Mumbai",
+  central:     "Lower Parel and Byculla, Mumbai",
+  andheri_w:   "Andheri West, Mumbai",
+  borivali:    "Borivali, Mumbai",
+  thane:       "Thane West",
+  vasai:       "Vasai, Maharashtra",
+  karjat:      "Karjat, Maharashtra",
+  kolad:       "Kolad, Raigad, Maharashtra",
+  gorai:       "Gorai, Borivali West, Mumbai",
+  navi_mumbai: "Vashi, Navi Mumbai",
 };
 
 const PRICE: Record<string, number> = {
