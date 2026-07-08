@@ -52,6 +52,7 @@ export interface Answers {
   mustInclude?: string[]; // specific activities the user already wants in the day
   outingDate?: string;    // ISO "YYYY-MM-DD" — used in greeting/outfit so they reflect the planned day
   areas?: string[];       // zone keys to confine the whole day to (bandra, andheri_w, south...); empty/undefined = engine picks the corridor
+  areaLabels?: string[];  // raw locality labels behind `areas` (e.g. "Powai"), used to narrow within a zone to the actual named place
 }
 
 export interface TravelFromPrev {

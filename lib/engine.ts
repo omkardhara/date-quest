@@ -331,6 +331,17 @@ function pick(
     if (filtered.length) cand = filtered;
   }
 
+  // Locality narrowing: a zone (e.g. "andheri_w") can span several distinct named places
+  // (Andheri West, Juhu, Versova, Powai...). If the user picked/typed a specific locality,
+  // prefer places whose area string actually names it, so "Powai" doesn't silently resolve
+  // to a Juhu or Andheri West stop just because they share a zone. Falls back to the wider
+  // zone-filtered set if narrowing would leave nothing (e.g. no Powai food option at dinner).
+  if (ans.areaLabels?.length) {
+    const labels = ans.areaLabels.map(l => l.trim().toLowerCase()).filter(Boolean);
+    const localityMatched = cand.filter(p => labels.some(l => (p.area ?? "").toLowerCase().includes(l)));
+    if (localityMatched.length) cand = localityMatched;
+  }
+
   // Hard-exclude a second shopping trip or a second sea/waterfront stop — both are repetitive.
   if (recentEnvs.includes("shopping")) {
     const noShop = cand.filter(p => environment(p) !== "shopping");
@@ -660,14 +671,19 @@ export function buildPlan(ans: Answers, extra: Place[] = [], movies: MovieInfo[]
 
   // Bonus suggestions: cheap activities/experiences not in the plan, ranked by score.
   // These surface in the UI when a swap frees up meaningful budget.
-  const bonusSuggestions: AltPlace[] = pool
-    .filter(p =>
-      !used.has(p.id) &&
-      !blocked(p, ans) &&
-      p.costPerPerson * 2 <= Math.min(ans.budget * 0.25, 1200) &&
-      (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple") &&
-      ["activity", "experience", "dessert", "cafe"].includes(p.category)
-    )
+  let bonusPool = pool.filter(p =>
+    !used.has(p.id) &&
+    !blocked(p, ans) &&
+    p.costPerPerson * 2 <= Math.min(ans.budget * 0.25, 1200) &&
+    (corridorZones.includes((p.zone ?? "multiple") as Zone) || (p.zone ?? "multiple") === "multiple") &&
+    ["activity", "experience", "dessert", "cafe"].includes(p.category)
+  );
+  if (ans.areaLabels?.length) {
+    const labels = ans.areaLabels.map(l => l.trim().toLowerCase()).filter(Boolean);
+    const localityMatched = bonusPool.filter(p => labels.some(l => (p.area ?? "").toLowerCase().includes(l)));
+    if (localityMatched.length) bonusPool = localityMatched;
+  }
+  const bonusSuggestions: AltPlace[] = bonusPool
     .map(p => ({ p, v: score(p, ans, "afternoon", ans.budget) + overlap(p.vibes, ans.personality) }))
     .sort((a, b) => b.v - a.v)
     .slice(0, 5)

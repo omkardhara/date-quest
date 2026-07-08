@@ -10,55 +10,12 @@ import { GetawayView } from "@/components/GetawayView";
 import { Memories } from "@/components/Memories";
 import { ChatWidget } from "@/components/ChatWidget";
 import { PROFILE, randomNickname } from "@/lib/profile";
+import { AREA_OPTIONS, resolveZone } from "@/lib/areas";
 
 const MOODS = ["Birthday", "Anniversary", "Romantic", "Date night", "Chill", "Celebrate", "Adventure", "Group outing", "Proposal", "Reunion", "Just because"];
 const PERSONALITY = ["Queen", "Adventure", "Peaceful", "Foodie", "Shopper", "Spiritual", "Playful", "Culture", "Nature", "Artsy", "Nightlife", "Cozy", "Luxe", "Romantic"];
 const FOODS = ["Lebanese", "Arabic", "Chinese", "Italian", "Sizzler", "Dessert", "Ice cream", "Brunch", "Indian", "Mediterranean", "Continental", "Asian", "Thai", "Japanese", "Seafood", "Street food", "Healthy", "Cafe", "Pizza", "Coffee"];
 const ACTIVITIES = ["Watch a movie", "Spa or massage", "Long drive", "Beach time", "Live music", "Stand up comedy", "Art gallery", "Boat ride", "Arcade or gaming", "Workshop", "Sunset point", "Bookstore café", "Picnic"];
-const AREAS: [string, string][] = [
-  ["Bandra", "bandra"],
-  ["Andheri", "andheri_w"],
-  ["Powai", "andheri_w"],
-  ["South Mumbai", "south"],
-  ["Central Mumbai", "central"],
-  ["Borivali / Aarey", "borivali"],
-  ["Thane", "thane"],
-  ["Navi Mumbai", "navi_mumbai"],
-  ["Vasai", "vasai"],
-  ["Gorai", "gorai"],
-];
-const AREA_ZONE: Record<string, string> = Object.fromEntries(AREAS);
-// Locality aliases for freely-typed area names, so "Khar" or "Juhu" resolve to the right
-// zone even though only the broader zone names are offered as chips.
-const AREA_ALIASES: Record<string, string> = {
-  bandra: "bandra", khar: "bandra", "pali hill": "bandra", "carter road": "bandra",
-  bandstand: "bandra", "linking road": "bandra", "hill road": "bandra",
-  andheri: "andheri_w", juhu: "andheri_w", versova: "andheri_w", powai: "andheri_w",
-  "vile parle": "andheri_w", "madh island": "andheri_w", "seven bungalows": "andheri_w",
-  colaba: "south", fort: "south", churchgate: "south", "nariman point": "south",
-  "marine lines": "south", "marine drive": "south", "kala ghoda": "south", "malabar hill": "south",
-  walkeshwar: "south", girgaum: "south", "ballard estate": "south", cst: "south",
-  "mumbai central": "south", "cuffe parade": "south", "grant road": "south",
-  "lower parel": "central", worli: "central", dadar: "central", byculla: "central",
-  parel: "central", matunga: "central", tardeo: "central", "opera house": "central",
-  bkc: "central", "bandra kurla": "central", prabhadevi: "central", mahalaxmi: "central",
-  borivali: "borivali", malad: "borivali", goregaon: "borivali", aarey: "borivali",
-  kandivali: "borivali",
-  thane: "thane", mulund: "thane", ghatkopar: "thane",
-  vasai: "vasai", virar: "vasai", nallasopara: "vasai",
-  "navi mumbai": "navi_mumbai", vashi: "navi_mumbai", nerul: "navi_mumbai",
-  kharghar: "navi_mumbai", belapur: "navi_mumbai", panvel: "navi_mumbai",
-  karjat: "karjat", kolad: "kolad", gorai: "gorai",
-};
-// Resolves a chip label (exact) or a freely-typed area name (best-effort substring match) to a zone key.
-function resolveZone(label: string): string | undefined {
-  if (AREA_ZONE[label]) return AREA_ZONE[label];
-  const key = label.trim().toLowerCase();
-  for (const [alias, zone] of Object.entries(AREA_ALIASES)) {
-    if (key.includes(alias)) return zone;
-  }
-  return undefined;
-}
 const BUDGETS = [0, 1000, 2000, 5000, 10000, 20000];
 const BUDGET_LABELS: Record<number, string> = { 0: "Free 🌊" };
 // "Free 🌊" maps to ₹400 in the engine — just enough for 1-2 street food stops, nothing else.
@@ -146,6 +103,9 @@ export default function Page() {
       areas: areas.length
         ? Array.from(new Set(areas.map(resolveZone).filter((z): z is string => Boolean(z))))
         : undefined,
+      // Raw typed/picked labels (e.g. "Powai"), so the engine can narrow within a zone to
+      // the actual named locality instead of any place sharing that zone's broad code.
+      areaLabels: areas.length ? areas : undefined,
       budget: BUDGET_ENGINE_VALUE[budget] ?? (budget != null ? budget : 5000),
       startMin: startMin || 600,
       endMin: endMin || 1320,
@@ -476,7 +436,7 @@ export default function Page() {
               <Chibi mood="neutral" />
               <Q>Stick to any particular part of Mumbai?</Q>
               <Hint>Optional. Pick one or more, or type an area (like Khar or Colaba) — the whole day will stay within those areas. Leave blank and I will pick the best fit for the mood.</Hint>
-              <ChipsInput options={AREAS.map((a) => a[0])} selected={areas} onToggle={(v) => toggle(areas, v, setAreas)} placeholder="Type an area, e.g. Khar, Colaba…" />
+              <ChipsInput options={AREA_OPTIONS.map((a) => a[0])} selected={areas} onToggle={(v) => toggle(areas, v, setAreas)} placeholder="Type an area, e.g. Khar, Colaba…" />
               <Nav onBack={() => setStep("activities")} onNext={() => setStep("budget")} canNext nextLabel={areas.length ? "Next" : "Skip"} />
             </Screen>
           )}

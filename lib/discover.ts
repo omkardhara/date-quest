@@ -1,6 +1,7 @@
 import { Answers, Place, Category } from "./types";
 import { searchPlaces, LivePlace } from "./google";
 import { zonesForAnswers } from "./engine";
+import { resolveZone } from "./areas";
 import { PROFILE } from "./profile";
 
 // Zone → a Google-friendly search area string.
@@ -132,7 +133,11 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
 
   const tasks: Promise<Place[]>[] = [];
   for (const zone of zones) {
-    const area = ZONE_AREA[zone];
+    // Prefer the specific locality the user picked/typed (e.g. "Powai") over the zone's
+    // broad canonical text (e.g. "Andheri West, Mumbai") so live search surfaces places
+    // actually in that named neighbourhood, not just anywhere sharing its zone code.
+    const areaLabel = ans.areaLabels?.find(l => resolveZone(l) === zone);
+    const area = areaLabel ?? ZONE_AREA[zone];
 
     // Restaurants by cuisine — skipped on veg days since live veg status is unknown.
     if (!vegDay) {
