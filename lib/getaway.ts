@@ -181,31 +181,6 @@ function block(startMin: number, durMin: number, kind: Category | "buffer", titl
   return { startMin, endMin: startMin + durMin, title, place, why, cost: place?.costPerPerson ? place.costPerPerson * 2 : 0, kind, backup };
 }
 
-// Shared by curated highlights and live "things to do" results, so a well-reviewed live
-// find (e.g. Garbett Plateau for Karjat + "Trekking & hikes") competes on the same terms as
-// curated data instead of always losing to it — see scoreHighlight below.
-function scoreByText(text: string, prefs: string[]): number {
-  if (!prefs.length) return 0;
-  const t = text.toLowerCase();
-  let s = 0;
-  if (prefs.includes("Trekking & hikes")   && /trek|trail|climb|hike|fort|rappel|plateau|peak|ghat/.test(t)) s += 5;
-  if (prefs.includes("Water spots")        && /water|fall|river|lake|dam|rafting|kayak|pool|stream/.test(t)) s += 5;
-  if (prefs.includes("Scenic photography") && /view|point|sunrise|sunset|valley|cliff|vista|scenic|panoram/.test(t)) s += 5;
-  if (prefs.includes("History & culture")  && /temple|cave|fort|heritage|historic|church|ruin|buddhist|ancient/.test(t)) s += 5;
-  if (prefs.includes("Wildlife & nature")  && /forest|bird|wildlife|flamingo|nature|jungle|animal|sanctuary/.test(t)) s += 5;
-  if (prefs.includes("Camping & bonfire")  && /camp|bonfire|night|firefly|star/.test(t)) s += 5;
-  return s;
-}
-
-function scoreHighlight(h: Highlight, prefs: string[]): number {
-  if (!prefs.length) return 0;
-  let s = scoreByText(h.name + " " + h.note, prefs);
-  if (prefs.includes("Relaxed resort")     && !h.outdoor) s += 4;
-  if (prefs.includes("Relaxed resort")     && h.outdoor && h.monsoonRisk === "ok") s += 1;
-  if (prefs.includes("Wine & food")        && h.kind === "food") s += 5;
-  return s;
-}
-
 // Same idea as engine.ts's scoreHighlight() keyword sets, but for the live search query
 // itself — previously the "things to do" search was always generic ("top things to do in
 // X"), completely ignoring the preferences the user picked (Trekking & hikes selected for
@@ -220,9 +195,46 @@ const PREF_QUERY_KEYWORDS: Record<string, string> = {
   "Camping & bonfire":   "camping sites bonfire spots",
   "Wine & food":         "wineries vineyards food experiences",
 };
+// Preferences beyond the preset chips (typed in via the "What kind of trip?" free-text
+// field) aren't in PREF_QUERY_KEYWORDS — use the user's own words as the search phrase
+// directly rather than silently dropping them.
 function thingsToDoQuery(name: string, preferences: string[]): string {
-  const kws = preferences.map(p => PREF_QUERY_KEYWORDS[p]).filter(Boolean);
+  const kws = preferences.map(p => PREF_QUERY_KEYWORDS[p] ?? p);
   return kws.length ? `${kws.join(" ")} in ${name}` : `top things to do in ${name}`;
+}
+
+// Shared by curated highlights and live "things to do" results, so a well-reviewed live
+// find (e.g. Garbett Plateau for Karjat + "Trekking & hikes") competes on the same terms as
+// curated data instead of always losing to it — see scoreHighlight below.
+const KNOWN_VIBES = new Set(Object.keys(PREF_QUERY_KEYWORDS));
+
+function scoreByText(text: string, prefs: string[]): number {
+  if (!prefs.length) return 0;
+  const t = text.toLowerCase();
+  let s = 0;
+  if (prefs.includes("Trekking & hikes")   && /trek|trail|climb|hike|fort|rappel|plateau|peak|ghat/.test(t)) s += 5;
+  if (prefs.includes("Water spots")        && /water|fall|river|lake|dam|rafting|kayak|pool|stream/.test(t)) s += 5;
+  if (prefs.includes("Scenic photography") && /view|point|sunrise|sunset|valley|cliff|vista|scenic|panoram/.test(t)) s += 5;
+  if (prefs.includes("History & culture")  && /temple|cave|fort|heritage|historic|church|ruin|buddhist|ancient/.test(t)) s += 5;
+  if (prefs.includes("Wildlife & nature")  && /forest|bird|wildlife|flamingo|nature|jungle|animal|sanctuary/.test(t)) s += 5;
+  if (prefs.includes("Camping & bonfire")  && /camp|bonfire|night|firefly|star/.test(t)) s += 5;
+  // Free-typed custom preferences (not one of the preset chips) — score by direct word
+  // overlap with the highlight's own text, since there's no curated keyword set for them.
+  for (const p of prefs) {
+    if (KNOWN_VIBES.has(p)) continue;
+    const words = p.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+    if (words.some(w => t.includes(w))) s += 5;
+  }
+  return s;
+}
+
+function scoreHighlight(h: Highlight, prefs: string[]): number {
+  if (!prefs.length) return 0;
+  let s = scoreByText(h.name + " " + h.note, prefs);
+  if (prefs.includes("Relaxed resort")     && !h.outdoor) s += 4;
+  if (prefs.includes("Relaxed resort")     && h.outdoor && h.monsoonRisk === "ok") s += 1;
+  if (prefs.includes("Wine & food")        && h.kind === "food") s += 5;
+  return s;
 }
 
 export async function buildGetaway(

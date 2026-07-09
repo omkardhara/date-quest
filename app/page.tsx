@@ -358,7 +358,7 @@ export default function Page() {
               </div>
 
               <p className="mt-5 text-sm text-white/50">What kind of trip? (optional)</p>
-              <Chips options={GETAWAY_VIBES} selected={getawayVibes} onTap={(v) => toggle(getawayVibes, v, setGetawayVibes)} />
+              <ChipsInput options={GETAWAY_VIBES} selected={getawayVibes} onToggle={(v) => toggle(getawayVibes, v, setGetawayVibes)} placeholder="e.g. photography walks, wine tasting…" />
 
               {nights > 0 && (
                 <>
