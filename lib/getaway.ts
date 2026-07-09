@@ -257,18 +257,43 @@ export async function buildGetaway(
 
   const days: GetawayDay[] = [];
 
-  // Day 1 — getting there.
+  // Every other destination is a 1.5-4.5h Western Ghats drive; Goa alone is an 11h haul.
+  // Templating it the same way (arrival lunch + highlight + check-in + highlight + dinner
+  // on arrival day; breakfast + highlight + lunch before the drive on departure day) pushed
+  // blocks well past midnight on both ends. Long-haul destinations skip the same-day
+  // arrival/departure activities entirely, since there's no realistic time for them.
+  const isLongHaul = d.driveFromMumbaiMins > 400;
+
+  // Day 1 — getting there (+ heading back same day if this is a day trip).
   {
     const blocks: PlanBlock[] = [];
     let cur = 480; // leave 8:00 AM
-    blocks.push(block(cur, d.driveFromMumbaiMins, "buffer", `Drive to ${d.name}`, `About ${hrs(d.driveFromMumbaiMins)} from Mumbai (${d.driveFromMumbaiKm} km). Leave early to beat weekend traffic.`));
+    blocks.push(block(cur, d.driveFromMumbaiMins, "buffer", `Drive to ${d.name}`, `About ${hrs(d.driveFromMumbaiMins)} from Mumbai (${d.driveFromMumbaiKm} km). ${isLongHaul ? "That's a long haul for one day of driving — flying is worth considering instead." : "Leave early to beat weekend traffic."}`));
     cur += d.driveFromMumbaiMins;
-    blocks.push(nextEat(cur, "Lunch on arrival")); cur += 75 + 15;
-    const h1 = nextHi(cur); if (h1) { blocks.push(h1); cur = h1.endMin + 15; }
-    if (nights >= 1) { blocks.push(block(cur, 60, "rest", `Check in & freshen up — ${stayName}`, "Settle in, breathe, change for the evening.", syntheticPlace(stayName, d.name, "rest"))); cur += 60 + 10; }
-    const h2 = nextHi(cur, 90); if (h2) { blocks.push(h2); cur = h2.endMin + 15; }
-    blocks.push(nextEat(Math.max(cur, 1170), "Dinner"));
-    days.push({ label: "Day 1", subtitle: "Getting there & settling in", blocks });
+    if (isLongHaul) {
+      if (nights >= 1) { blocks.push(block(cur, 60, "rest", `Check in & freshen up — ${stayName}`, "Long day of driving — settle in and rest before dinner.", syntheticPlace(stayName, d.name, "rest"))); cur += 60 + 10; }
+      blocks.push(nextEat(Math.max(cur, 1170), "Dinner")); cur = Math.max(cur, 1170) + 75;
+    } else {
+      blocks.push(nextEat(cur, "Lunch on arrival")); cur += 75 + 15;
+      const h1 = nextHi(cur); if (h1) { blocks.push(h1); cur = h1.endMin + 15; }
+      if (nights >= 1) { blocks.push(block(cur, 60, "rest", `Check in & freshen up — ${stayName}`, "Settle in, breathe, change for the evening.", syntheticPlace(stayName, d.name, "rest"))); cur += 60 + 10; }
+      const h2 = nextHi(cur, 90); if (h2) { blocks.push(h2); cur = h2.endMin + 15; }
+      // On a day trip, only stay for dinner if there's still enough drive-home time left
+      // afterwards to arrive at a sane hour — a 3.5-4.5h destination (Mulshi, Mahabaleshwar,
+      // Bhandardara) plus an on-site 7:30pm dinner plus the drive back was landing well
+      // past midnight. Staying overnight has no such constraint (no drive left that night).
+      const dinnerThenHomeBy = Math.max(cur, 1170) + 75 + (nights === 0 ? d.driveFromMumbaiMins : 0);
+      if (nights >= 1 || dinnerThenHomeBy <= 1380) {
+        blocks.push(nextEat(Math.max(cur, 1170), "Dinner")); cur = Math.max(cur, 1170) + 75;
+      }
+    }
+    // A day trip (0 nights) has no "final day" section to carry the drive home — it
+    // has to happen today, or the itinerary just strands the reader at the destination.
+    if (nights === 0) {
+      const skippedDinner = cur < 1170;
+      blocks.push(block(cur, d.driveFromMumbaiMins, "buffer", "Drive back to Mumbai", `About ${hrs(d.driveFromMumbaiMins)} home. ${skippedDinner ? "Grab dinner on the way back or once you're home — staying on for dinner here would get you back very late." : "Easy pace after a full day out."}`));
+    }
+    days.push({ label: "Day 1", subtitle: isLongHaul ? "The long drive down" : "Getting there & settling in", blocks });
   }
 
   // Middle nights (2-night trips get a full day).
@@ -288,9 +313,16 @@ export async function buildGetaway(
     const blocks: PlanBlock[] = [];
     let cur = 540;
     blocks.push(block(cur, 45, "cafe", `Breakfast at ${stayName}`, "One last slow morning before the drive.")); cur += 45 + 15;
-    const a = nextHi(cur, 90); if (a) { blocks.push(a); cur = a.endMin + 15; }
-    blocks.push(nextEat(Math.max(cur, 780), "Lunch before you leave")); cur = Math.max(cur, 780) + 90;
-    blocks.push(block(cur, d.driveFromMumbaiMins, "buffer", "Drive back to Mumbai", `About ${hrs(d.driveFromMumbaiMins)} home. Easy pace, you have memories to replay.`));
+    if (isLongHaul) {
+      // Skip the highlight + lunch-before-you-leave that a normal departure day gets —
+      // an 11h drive needs to start right after breakfast, not mid-afternoon, or it lands
+      // well past midnight.
+      blocks.push(block(cur, d.driveFromMumbaiMins, "buffer", "Drive back to Mumbai", `About ${hrs(d.driveFromMumbaiMins)} home — best to leave straight after breakfast so the long drive is done in daylight.`));
+    } else {
+      const a = nextHi(cur, 90); if (a) { blocks.push(a); cur = a.endMin + 15; }
+      blocks.push(nextEat(Math.max(cur, 780), "Lunch before you leave")); cur = Math.max(cur, 780) + 90;
+      blocks.push(block(cur, d.driveFromMumbaiMins, "buffer", "Drive back to Mumbai", `About ${hrs(d.driveFromMumbaiMins)} home. Easy pace, you have memories to replay.`));
+    }
     days.push({ label: `Day ${nights + 1}`, subtitle: "Heading home", blocks });
   }
 
@@ -305,10 +337,14 @@ export async function buildGetaway(
   } else if (monsoon && d.monsoon === "poor") {
     flags.push({ icon: "🌧️", text: `${d.name} is better outside the monsoon (${d.bestMonths}). In the rains, lean on the indoor and sheltered stops.` });
   }
-  if (hotelBooked === "booked") {
-    flags.push({ icon: "🏨", text: `Stay is sorted — nice. Just confirm your check-in time ahead of the drive so you're not waiting around after a long road.` });
-  } else {
-    flags.push({ icon: "🏨", text: `Book the stay ahead — ${stayName} and similar fill up on weekends. See the suggestions below.` });
+  // No stay to book on a day trip — this flag was firing regardless of `nights`, telling
+  // 0-night day-trippers to "book the stay ahead" for a hotel they were never getting.
+  if (nights >= 1) {
+    if (hotelBooked === "booked") {
+      flags.push({ icon: "🏨", text: `Stay is sorted — nice. Just confirm your check-in time ahead of the drive so you're not waiting around after a long road.` });
+    } else {
+      flags.push({ icon: "🏨", text: `Book the stay ahead — ${stayName} and similar fill up on weekends. See the suggestions below.` });
+    }
   }
 
   const allPlaces = days.flatMap(dy => dy.blocks.map(b => b.place).filter(Boolean)) as Place[];

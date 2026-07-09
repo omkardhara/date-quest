@@ -9,7 +9,12 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const destId: string = body.destId;
-    const nights: number = Math.max(0, Math.min(2, Number(body.nights) || 1));
+    // `Number(body.nights) || 1` looked like a safe "default to 1 night" fallback, but
+    // 0 is a legitimate, explicit choice (the "Day trip" option) and 0 is falsy in JS —
+    // so every day-trip request was silently getting a 1-night itinerary (hotel check-in,
+    // a full second day, the works) instead of the single day the user actually picked.
+    const rawNights = Number(body.nights);
+    const nights: number = Math.max(0, Math.min(2, Number.isFinite(rawNights) ? rawNights : 1));
 
     // Live forecast for the destination; fall back to the season hint.
     let wet = !!body.monsoon;
