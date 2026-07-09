@@ -33,6 +33,10 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): nu
 async function buildCustomDest(name: string): Promise<Dest | null> {
   const geo = await searchPlace(`${name}, India`);
   if (!geo.found || geo.lat == null || geo.lng == null) return null;
+  // Google's Places search is typo-tolerant (e.g. "Divyaghar" still resolves to the real
+  // Diveagar) — use its corrected canonical name for display and for every downstream
+  // search query, rather than echoing back whatever the user actually typed.
+  const displayName = geo.name ?? name;
   const kmFromMumbai = haversineKm(MUMBAI_COORD.lat, MUMBAI_COORD.lng, geo.lat, geo.lng) * 1.3;
   const kmFromPune = haversineKm(PUNE_COORD.lat, PUNE_COORD.lng, geo.lat, geo.lng) * 1.3;
   // ~45km/h effective speed for highway/ghat driving outside the city, matching the kind
@@ -40,11 +44,11 @@ async function buildCustomDest(name: string): Promise<Dest | null> {
   const minsFromMumbai = Math.max(60, Math.round(kmFromMumbai / 45 * 60));
   const minsFromPune = Math.max(45, Math.round(kmFromPune / 45 * 60));
   return {
-    id: "custom", name, region: "your own pick",
+    id: "custom", name: displayName, region: "your own pick",
     driveFromMumbaiMins: minsFromMumbai, driveFromMumbaiKm: Math.round(kmFromMumbai),
     driveFromPuneMins: minsFromPune, driveFromPuneKm: Math.round(kmFromPune),
     monsoon: "caution", bestMonths: "check locally for the best season",
-    summary: `A getaway to ${name} — since this isn't one of our curated picks yet, distances are estimated and the highlights, food, and stays below come straight from live search.`,
+    summary: `A getaway to ${displayName} — since this isn't one of our curated picks yet, distances are estimated and the highlights, food, and stays below come straight from live search.`,
     vibes: [], highlights: [], stays: [], eat: [],
   };
 }
