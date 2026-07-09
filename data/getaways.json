@@ -7,6 +7,9 @@
     "driveFromMumbaiKm": 83,
     "driveFromPuneMins": 75,
     "driveFromPuneKm": 65,
+    "travelAlt": [
+      { "mode": "train", "note": "~2h by train from Mumbai CST/Dadar — the Deccan Queen/Express is a genuinely scenic Ghat-section ride, and Lonavala station is walkable to the town centre." }
+    ],
     "monsoon": "great",
     "bestMonths": "Jun–Sep for green and waterfalls, Oct–Feb for pleasant weather",
     "summary": "The classic monsoon hill station: misty ghats, waterfalls, lakes and chikki. About 2 hours from Mumbai on the Expressway, and barely an hour from your Pune house.",
@@ -70,6 +73,9 @@
     "driveFromMumbaiKm": 62,
     "driveFromPuneMins": 110,
     "driveFromPuneKm": 95,
+    "travelAlt": [
+      { "mode": "train", "note": "~1.5-2h by local/express from Mumbai CST or Dadar — Karjat is a well-connected commuter and leisure route on the Central Line." }
+    ],
     "monsoon": "great",
     "bestMonths": "Jun–Sep for rivers and green, year-round for farm stays",
     "summary": "Riverside and farm-stay country at the foot of the Sahyadris. Closest of the lot to Mumbai, lush and full of water in the monsoon.",
@@ -344,6 +350,9 @@
     "driveFromMumbaiKm": 170,
     "driveFromPuneMins": 210,
     "driveFromPuneKm": 210,
+    "travelAlt": [
+      { "mode": "train", "note": "~3.5-4h by express train (Panchavati/Godavari) from Mumbai to Nashik Road, then a short cab into town." }
+    ],
     "monsoon": "caution",
     "bestMonths": "Oct–Mar for harvest and pleasant weather; monsoon grapes don't need tourists",
     "summary": "India's wine country — Sula Vineyards, Grover Zampa, and a handful of boutique wineries scattered across the hills outside town. Add Trimbak temple and Panchvati for a fuller trip.",
@@ -458,6 +467,10 @@
     "driveFromMumbaiKm": 590,
     "driveFromPuneMins": 420,
     "driveFromPuneKm": 450,
+    "travelAlt": [
+      { "mode": "flight", "note": "~1h 20m by air from Mumbai to Goa (Dabolim or Manohar International/Mopa) — several daily flights, by far the easiest way in for a short trip." },
+      { "mode": "train", "note": "~10-12h via the Konkan Railway (Mandovi/Konkan Kanya Express) — one of India's most scenic train routes if you have the time and want the journey to be part of the trip." }
+    ],
     "monsoon": "caution",
     "bestMonths": "Nov–Feb for parties and sun; Oct for quiet and green after the rains",
     "summary": "When you want to go bigger — Goa is a 2-night minimum. Fly in 1 hour, or drive the NH66 in a day from Mumbai. Old Goa churches, Anjuna flea market, North Goa beach cafés, seafood dinners.",

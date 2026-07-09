@@ -332,11 +332,20 @@ export default function Page() {
                 selected={dest === "random" ? ["Surprise me"] : dest ? [GETAWAYS.find((g) => g.id === dest)?.name ?? ""] : []}
                 onTap={(v) => {
                   if (v === "Surprise me") { setDest("random"); return; }
-                  setDest(GETAWAYS.find((g) => g.name === v)?.id ?? "");
+                  const id = GETAWAYS.find((g) => g.name === v)?.id ?? "";
+                  setDest(id);
+                  // Goa is an 11h drive (or a flight) each way — a day trip or single
+                  // night doesn't leave enough time there to be worth the journey.
+                  if (id === "goa") setNights(2);
                 }}
               />
               <p className="mt-4 text-sm text-white/50">How long?</p>
-              <Chips options={NIGHTS.map((n) => n[0])} selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])} onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])} />
+              <Chips
+                options={(dest === "goa" ? NIGHTS.filter((n) => n[1] === 2) : NIGHTS).map((n) => n[0])}
+                selected={NIGHTS.filter((n) => n[1] === nights).map((n) => n[0])}
+                onTap={(v) => setNights(NIGHTS.find((n) => n[0] === v)![1])}
+              />
+              {dest === "goa" && <p className="mt-1.5 text-xs text-white/40">Goa's a long way from Mumbai — worth a proper 2-night stay rather than a day trip.</p>}
               <p className="mt-4 text-sm text-white/50">When?</p>
               <div className="mt-2">
                 <input

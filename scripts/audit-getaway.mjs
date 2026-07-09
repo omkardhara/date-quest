@@ -37,8 +37,10 @@ for (const destId of DESTS) {
       continue;
     }
     // Expect nights+1 days (getting-there day + middle days + heading-home day, or just
-    // getting-there for a 0-night day trip).
-    const expectedDays = nights === 0 ? 1 : nights + 1;
+    // getting-there for a 0-night day trip). Goa always forces 2 nights server-side
+    // regardless of what's requested (an 11h-each-way trip isn't worth a day/1-night visit).
+    const effectiveNights = destId === "goa" ? 2 : nights;
+    const expectedDays = effectiveNights === 0 ? 1 : effectiveNights + 1;
     if (plan.days.length !== expectedDays) {
       findings.push(`[${destId} n=${nights}] expected ${expectedDays} days, got ${plan.days.length}`);
     }

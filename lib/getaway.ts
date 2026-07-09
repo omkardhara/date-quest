@@ -3,10 +3,12 @@ import { Place, PlanBlock, GetawayPlan, GetawayDay, AltPlace, Flag, Category } f
 import { searchPlaces, LivePlace } from "./google";
 
 interface Highlight { name: string; kind: string; outdoor?: boolean; monsoonRisk?: "ok" | "caution" | "avoid"; note: string; }
+interface TravelAlt { mode: "train" | "flight"; note: string; }
 interface Dest {
   id: string; name: string; region: string;
   driveFromMumbaiMins: number; driveFromMumbaiKm: number;
   driveFromPuneMins: number; driveFromPuneKm: number;
+  travelAlt?: TravelAlt[];
   monsoon: "great" | "caution" | "poor"; bestMonths: string; summary: string;
   vibes: string[]; highlights: Highlight[]; stays: string[]; eat: string[];
 }
@@ -332,6 +334,12 @@ export async function buildGetaway(
     flags.push({ icon: monsoon ? "🌧️" : "⛅", text: `Forecast for ${d.name}: ${weatherSummary}. ${monsoon ? "Rain likely, so keep the waterfall and viewpoint stops cautious and have indoor backups." : "Looking clear enough for the outdoor stops."}` });
   }
   flags.push({ icon: "🚗", text: `It's about ${hrs(d.driveFromMumbaiMins)} from Mumbai (${d.driveFromMumbaiKm} km). From your Pune house it's ~${hrs(d.driveFromPuneMins)}.` });
+  // Driving isn't the only way there for some destinations — surface flight/train as real
+  // alternatives (the itinerary itself still schedules around driving; this is informational
+  // so you can decide before you commit to the drive time above).
+  for (const alt of d.travelAlt ?? []) {
+    flags.push({ icon: alt.mode === "flight" ? "✈️" : "🚆", text: `Or ${alt.mode === "flight" ? "fly" : "take the train"}: ${alt.note}` });
+  }
   if (monsoon && d.highlights.some(h => h.outdoor && h.monsoonRisk !== "ok")) {
     flags.push({ icon: "🌧️", text: "Monsoon here means waterfalls and mist, but wet, slippery roads and viewpoints too. Drive slow and keep off fast water." });
   } else if (monsoon && d.monsoon === "poor") {

@@ -14,7 +14,12 @@ export async function POST(req: NextRequest) {
     // so every day-trip request was silently getting a 1-night itinerary (hotel check-in,
     // a full second day, the works) instead of the single day the user actually picked.
     const rawNights = Number(body.nights);
-    const nights: number = Math.max(0, Math.min(2, Number.isFinite(rawNights) ? rawNights : 1));
+    let nights: number = Math.max(0, Math.min(2, Number.isFinite(rawNights) ? rawNights : 1));
+    // Goa is a proper 8-11h trip each way (drive or flight+transfers) — a day trip or
+    // single night there doesn't leave enough time to be worth the journey. The UI
+    // already restricts this, but "Surprise me" can land on Goa after nights was set
+    // for a different, closer destination, so enforce it server-side too.
+    if (destId === "goa") nights = 2;
 
     // Live forecast for the destination; fall back to the season hint.
     let wet = !!body.monsoon;
