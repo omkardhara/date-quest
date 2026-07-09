@@ -56,9 +56,11 @@ export default function Page() {
   const [endMin, setEndMin] = useState(0);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [building, setBuilding] = useState(false);
-  const [buildError, setBuildError] = useState(false);
+  const [buildError, setBuildError] = useState("");
   const [lastAns, setLastAns] = useState<Answers | null>(null);
   const [dest, setDest] = useState("");
+  const [customDestName, setCustomDestName] = useState("");
+  const [customDestInput, setCustomDestInput] = useState("");
   const [nights, setNights] = useState(1);
   const [getaway, setGetaway] = useState<GetawayPlan | null>(null);
   const [itineraryLines, setItineraryLines] = useState<string[]>([]);
@@ -87,6 +89,14 @@ export default function Page() {
     if (!v || customStops.includes(v)) return;
     setCustomStops([...customStops, v]);
     setStopInput("");
+  }
+
+  function confirmCustomDest() {
+    const v = customDestInput.trim();
+    if (!v) return;
+    setDest("custom");
+    setCustomDestName(v);
+    setCustomDestInput("");
   }
 
   async function generate() {
@@ -187,9 +197,9 @@ export default function Page() {
   }
 
   async function generateGetaway() {
-    if (!dest || building) return;
+    if (!dest || (dest === "custom" && !customDestName) || building) return;
     setBuilding(true);
-    setBuildError(false);
+    setBuildError("");
     try {
       const destId = dest === "random"
         ? GETAWAYS[Math.floor(Math.random() * GETAWAYS.length)].id
@@ -197,13 +207,17 @@ export default function Page() {
       const res = await fetch("/api/getaway", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ destId, nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate, preferences: getawayVibes, hotelBooked, customStops }),
+        body: JSON.stringify({
+          destId, customDest: destId === "custom" ? customDestName : undefined,
+          nights, monsoon: [5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()), date: outingDate,
+          preferences: getawayVibes, hotelBooked, customStops,
+        }),
       });
       const d = await res.json();
       if (d.plan) { setGetaway(d.plan); setStep("getaway-plan"); }
-      else setBuildError(true);
+      else setBuildError(typeof d.error === "string" ? d.error : "Couldn't build the trip — check your connection and try again.");
     } catch {
-      setBuildError(true);
+      setBuildError("Couldn't build the trip — check your connection and try again.");
     } finally {
       setBuilding(false);
     }
@@ -329,8 +343,9 @@ export default function Page() {
               <Hint>Quick escapes from Mumbai. {[5,6,7,8].includes(new Date(outingDate+"T00:00:00").getMonth()) ? "It's monsoon, so the green hill spots shine right now." : ""}</Hint>
               <Chips
                 options={["Surprise me", ...GETAWAYS.map((g) => g.name)]}
-                selected={dest === "random" ? ["Surprise me"] : dest ? [GETAWAYS.find((g) => g.id === dest)?.name ?? ""] : []}
+                selected={dest === "random" ? ["Surprise me"] : dest && dest !== "custom" ? [GETAWAYS.find((g) => g.id === dest)?.name ?? ""] : []}
                 onTap={(v) => {
+                  setCustomDestName("");
                   if (v === "Surprise me") { setDest("random"); return; }
                   const id = GETAWAYS.find((g) => g.name === v)?.id ?? "";
                   setDest(id);
@@ -339,6 +354,22 @@ export default function Page() {
                   if (id === "goa") setNights(2);
                 }}
               />
+              <div className="mt-2 flex gap-2">
+                <input
+                  value={customDestInput}
+                  onChange={(e) => setCustomDestInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); confirmCustomDest(); } }}
+                  placeholder="Or type your own — e.g. Diveagar, Bilimora…"
+                  className="flex-1 rounded-xl bg-white/5 border border-white/15 px-4 py-2.5 text-sm outline-none focus:border-glow"
+                />
+                <button onClick={confirmCustomDest} className="rounded-xl bg-white/10 px-5 text-sm font-medium hover:bg-white/20">Use this</button>
+              </div>
+              {dest === "custom" && customDestName && (
+                <p className="mt-1.5 text-xs text-white/40">
+                  Planning for <span className="text-white/70 font-medium">{customDestName}</span> — it's not one of our curated picks, so distances and spots will come from live search.{" "}
+                  <button onClick={() => { setDest(""); setCustomDestName(""); }} className="underline hover:text-white/60">clear</button>
+                </p>
+              )}
               <p className="mt-4 text-sm text-white/50">How long?</p>
               <Chips
                 options={(dest === "goa" ? NIGHTS.filter((n) => n[1] === 2) : NIGHTS).map((n) => n[0])}
@@ -395,8 +426,8 @@ export default function Page() {
                 </div>
               )}
 
-              {buildError && <p className="mt-3 text-sm text-rose-400">Couldn't build the trip — check your connection and try again.</p>}
-              <Nav onBack={() => setStep("intro")} onNext={generateGetaway} canNext={!!dest} nextLabel="Plan the trip" />
+              {buildError && <p className="mt-3 text-sm text-rose-400">{buildError}</p>}
+              <Nav onBack={() => setStep("intro")} onNext={generateGetaway} canNext={!!dest && (dest !== "custom" || !!customDestName)} nextLabel="Plan the trip" />
             </Screen>
           )}
 

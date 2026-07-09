@@ -1,6 +1,6 @@
 import getawayData from "@/data/getaways.json";
 import { Place, PlanBlock, GetawayPlan, GetawayDay, AltPlace, Flag, Category } from "./types";
-import { searchPlaces, LivePlace } from "./google";
+import { searchPlaces, searchPlace, LivePlace } from "./google";
 
 interface Highlight { name: string; kind: string; outdoor?: boolean; monsoonRisk?: "ok" | "caution" | "avoid"; note: string; }
 interface TravelAlt { mode: "train" | "flight"; note: string; }
@@ -16,6 +16,38 @@ interface Dest {
 const DESTS = getawayData as Dest[];
 
 function rnd<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
+
+const MUMBAI_COORD = { lat: 19.07, lng: 72.88 };
+const PUNE_COORD = { lat: 18.52, lng: 73.86 };
+
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371, dLat = (lat2 - lat1) * Math.PI / 180, dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// A destination the user typed in themselves (e.g. "Diveagar", "Bilimora") that isn't one
+// of our curated picks. Geocodes it via Places, then estimates drive time from straight-line
+// distance the same way engine.ts does for Mumbai legs — everything else (highlights, eats,
+// stays) is left empty so buildGetaway falls through entirely to its own live-search paths.
+async function buildCustomDest(name: string): Promise<Dest | null> {
+  const geo = await searchPlace(`${name}, India`);
+  if (!geo.found || geo.lat == null || geo.lng == null) return null;
+  const kmFromMumbai = haversineKm(MUMBAI_COORD.lat, MUMBAI_COORD.lng, geo.lat, geo.lng) * 1.3;
+  const kmFromPune = haversineKm(PUNE_COORD.lat, PUNE_COORD.lng, geo.lat, geo.lng) * 1.3;
+  // ~45km/h effective speed for highway/ghat driving outside the city, matching the kind
+  // of routes our curated destinations are on.
+  const minsFromMumbai = Math.max(60, Math.round(kmFromMumbai / 45 * 60));
+  const minsFromPune = Math.max(45, Math.round(kmFromPune / 45 * 60));
+  return {
+    id: "custom", name, region: "your own pick",
+    driveFromMumbaiMins: minsFromMumbai, driveFromMumbaiKm: Math.round(kmFromMumbai),
+    driveFromPuneMins: minsFromPune, driveFromPuneKm: Math.round(kmFromPune),
+    monsoon: "caution", bestMonths: "check locally for the best season",
+    summary: `A getaway to ${name} — since this isn't one of our curated picks yet, distances are estimated and the highlights, food, and stays below come straight from live search.`,
+    vibes: [], highlights: [], stays: [], eat: [],
+  };
+}
 
 function getawayOutfitFor(d: Dest, highlights: Highlight[], isMonsoon: boolean, month?: number): string {
   const text = highlights.map(h => h.name + " " + h.note).join(" ").toLowerCase();
@@ -240,9 +272,12 @@ function scoreHighlight(h: Highlight, prefs: string[]): number {
 export async function buildGetaway(
   destId: string, nights: number, monsoon: boolean,
   weatherSummary?: string, month?: number,
-  preferences: string[] = [], hotelBooked: string = "", customStops: string[] = []
+  preferences: string[] = [], hotelBooked: string = "", customStops: string[] = [],
+  customDestName?: string
 ): Promise<GetawayPlan | null> {
-  const d = DESTS.find(x => x.id === destId);
+  const d = destId === "custom" && customDestName
+    ? await buildCustomDest(customDestName)
+    : DESTS.find(x => x.id === destId) ?? null;
   if (!d) return null;
 
   // Live augmentation for this destination.
@@ -252,7 +287,14 @@ export async function buildGetaway(
     searchPlaces(`resorts and stays in ${d.name}`, 5),
   ]);
 
-  const eatsRaw = liveEats.length ? liveEats.map(e => liveToPlace(e, d.name, "food")) : d.eat.map(n => syntheticPlace(n, d.name, "food", { costPerPerson: 600 }));
+  const eatsRaw = liveEats.length
+    ? liveEats.map(e => liveToPlace(e, d.name, "food"))
+    : d.eat.length
+      ? d.eat.map(n => syntheticPlace(n, d.name, "food", { costPerPerson: 600 }))
+      // Neither live search nor curated data found anything — a real (if rare) possibility
+      // for an obscure typed-in destination. nextEat() below indexes into this array
+      // unconditionally, so it must never be empty.
+      : [syntheticPlace(`Local restaurant in ${d.name}`, d.name, "food", { costPerPerson: 600, summary: "Ask locally for the best spot — we couldn't find listings for this destination yet." })];
   // Shuffle so meal assignments vary across regenerations and wrap-around varies order.
   const eats = [...eatsRaw].sort(() => Math.random() - 0.5);
   let eatIdx = 0;

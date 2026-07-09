@@ -34,8 +34,14 @@ export async function POST(req: NextRequest) {
     const preferences = Array.isArray(body.preferences) ? (body.preferences as string[]) : [];
     const hotelBooked = typeof body.hotelBooked === "string" ? body.hotelBooked : "";
     const customStops = Array.isArray(body.customStops) ? (body.customStops as string[]) : [];
-    const plan = await buildGetaway(destId, nights, wet, weatherSummary, month, preferences, hotelBooked, customStops);
-    if (!plan) return NextResponse.json({ error: "unknown destination" }, { status: 404 });
+    const customDest  = typeof body.customDest === "string" ? body.customDest.trim() : undefined;
+    const plan = await buildGetaway(destId, nights, wet, weatherSummary, month, preferences, hotelBooked, customStops, customDest);
+    if (!plan) {
+      const msg = destId === "custom"
+        ? "couldn't find that place — check the spelling and try again"
+        : "unknown destination";
+      return NextResponse.json({ error: msg }, { status: 404 });
+    }
 
     return NextResponse.json({ plan });
   } catch {
