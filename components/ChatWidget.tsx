@@ -45,6 +45,45 @@ function ChibiAvatar({ size }: { size: number }) {
   );
 }
 
+// ── Draggable positioning ───────────────────────────────────────────────────
+// The floating button used to be pinned to bottom-right always, which on a
+// phone can sit right over other controls (e.g. the swap/regenerate buttons
+// on a plan card). Repositionable via drag (mouse) or touch-drag, and the
+// chosen spot is remembered across visits.
+const BUTTON_SIZE = 56;
+const EDGE_MARGIN = 16;
+const PANEL_W_EST = 360;
+const PANEL_H_EST = 520;
+const POS_KEY = "dateQuest.chatWidgetPos";
+const DRAG_THRESHOLD = 6; // px of movement before a press counts as a drag, not a tap
+
+function clampPos(x: number, y: number): { x: number; y: number } {
+  const maxX = Math.max(EDGE_MARGIN, window.innerWidth - BUTTON_SIZE - EDGE_MARGIN);
+  const maxY = Math.max(EDGE_MARGIN, window.innerHeight - BUTTON_SIZE - EDGE_MARGIN);
+  return { x: Math.min(Math.max(EDGE_MARGIN, x), maxX), y: Math.min(Math.max(EDGE_MARGIN, y), maxY) };
+}
+
+function defaultPos(): { x: number; y: number } {
+  return clampPos(window.innerWidth - BUTTON_SIZE - EDGE_MARGIN, window.innerHeight - BUTTON_SIZE - EDGE_MARGIN);
+}
+
+// Where the chat panel should open relative to the (possibly relocated) button,
+// staying on-screen and preferring to open upward/leftward from the button
+// (matching the original bottom-right-anchored layout) but flipping when there
+// isn't room.
+function panelPos(btn: { x: number; y: number }): { left: number; top: number } {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const w = Math.min(vw * 0.92, PANEL_W_EST);
+  const h = Math.min(vh * 0.70, PANEL_H_EST);
+  let left = btn.x + BUTTON_SIZE - w;
+  let top = btn.y - h - 12;
+  if (top < EDGE_MARGIN) top = Math.min(btn.y + BUTTON_SIZE + 12, vh - h - EDGE_MARGIN);
+  if (left < EDGE_MARGIN) left = EDGE_MARGIN;
+  if (left + w > vw - EDGE_MARGIN) left = vw - w - EDGE_MARGIN;
+  if (top < EDGE_MARGIN) top = EDGE_MARGIN;
+  return { left, top };
+}
+
 export function ChatWidget({ plan, getaway, itineraryLines }: { plan?: Plan | null; getaway?: GetawayPlan | null; itineraryLines?: string[] }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -53,9 +92,57 @@ export function ChatWidget({ plan, getaway, itineraryLines }: { plan?: Plan | nu
   const scrollRef = useRef<HTMLDivElement>(null);
   const itinerary = useMemo(() => buildItinerarySummary(plan, getaway, itineraryLines), [plan, getaway, itineraryLines]);
 
+  // null until mounted — avoids an SSR/client mismatch (window isn't available on the server).
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const dragState = useRef({ pointerX: 0, pointerY: 0, startX: 0, startY: 0, moved: false });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(POS_KEY);
+      if (saved) { setPos(clampPos(...(JSON.parse(saved) as [number, number]))); return; }
+    } catch { /* ignore malformed saved position */ }
+    setPos(defaultPos());
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setPos((p) => (p ? clampPos(p.x, p.y) : p));
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading, open]);
+
+  function onPointerDown(e: React.PointerEvent<HTMLButtonElement>) {
+    if (!pos) return;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    dragState.current = { pointerX: e.clientX, pointerY: e.clientY, startX: pos.x, startY: pos.y, moved: false };
+    setDragging(true);
+  }
+
+  function onPointerMove(e: React.PointerEvent<HTMLButtonElement>) {
+    if (!dragging) return;
+    const dx = e.clientX - dragState.current.pointerX;
+    const dy = e.clientY - dragState.current.pointerY;
+    if (!dragState.current.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+    dragState.current.moved = true;
+    setPos(clampPos(dragState.current.startX + dx, dragState.current.startY + dy));
+  }
+
+  function onPointerUp() {
+    if (!dragging) return;
+    setDragging(false);
+    if (dragState.current.moved) {
+      setPos((p) => {
+        if (p) { try { localStorage.setItem(POS_KEY, JSON.stringify([p.x, p.y])); } catch { /* storage unavailable */ } }
+        return p;
+      });
+    } else {
+      setOpen((o) => !o); // no real movement — treat as a tap
+    }
+  }
 
   async function send(text?: string) {
     const content = (text ?? input).trim();
@@ -79,12 +166,20 @@ export function ChatWidget({ plan, getaway, itineraryLines }: { plan?: Plan | nu
     }
   }
 
+  if (!pos) return null; // wait for mount so we have real viewport dimensions
+
+  const panel = panelPos(pos);
+
   return (
     <>
       <button
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg ring-2 ring-white/20"
-        aria-label={open ? "Close chat" : "Ask about a spot"}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg ring-2 ring-white/20 touch-none select-none"
+        style={{ left: pos.x, top: pos.y, cursor: dragging ? "grabbing" : "grab" }}
+        aria-label={open ? "Close chat" : "Ask about a spot — drag to reposition"}
       >
         {open ? (
           <span className="btn-primary flex h-full w-full items-center justify-center rounded-full text-2xl">✕</span>
@@ -100,7 +195,8 @@ export function ChatWidget({ plan, getaway, itineraryLines }: { plan?: Plan | nu
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.18 }}
-            className="glass fixed bottom-24 right-5 z-50 flex h-[min(70vh,520px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl"
+            className="glass fixed z-50 flex h-[min(70vh,520px)] w-[min(92vw,360px)] flex-col overflow-hidden rounded-2xl"
+            style={{ left: panel.left, top: panel.top }}
           >
             <div className="flex items-center gap-2.5 border-b border-white/10 px-4 py-3">
               <ChibiAvatar size={36} />

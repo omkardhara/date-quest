@@ -19,6 +19,14 @@ const ZONE_AREA: Record<string, string> = {
   navi_mumbai: "Vashi, Navi Mumbai",
 };
 
+// Some zones are wide enough that a single search node misses real spots elsewhere in the
+// same zone — Navi Mumbai spans Vashi to Belapur (~15km); a "spiritual" search anchored
+// only on Vashi never surfaced Dhamma Vipula, a real, well-reviewed meditation centre in
+// Belapur. Searched as a second node alongside the primary one (below), merged in.
+const ZONE_SECONDARY_AREA: Record<string, string> = {
+  navi_mumbai: "Belapur, Navi Mumbai",
+};
+
 const PRICE: Record<string, number> = {
   PRICE_LEVEL_INEXPENSIVE: 300,
   PRICE_LEVEL_MODERATE: 700,
@@ -108,9 +116,15 @@ function foodCat(cuisine: string): Category {
 // Pick an activity/experience search query that actually reflects the user's personality.
 function activityQuery(personality: string[], area: string): string {
   const p = personality;
-  if (p.includes("adventure"))                    return `outdoor adventure activities parks in ${area}`;
+  // "outdoor adventure activities parks" alone skewed toward commercial adventure-park/
+  // camp venues (zip-lining outfits, rafting camps) and missed genuine trekking
+  // destinations like Garbett Plateau near Karjat — added explicit trekking/trail/
+  // viewpoint terms so those actually surface.
+  if (p.includes("adventure"))                    return `trekking trails viewpoints outdoor adventure activities in ${area}`;
   if (p.includes("artsy") || p.includes("culture")) return `art galleries museums creative spaces in ${area}`;
-  if (p.includes("spiritual"))                    return `temples heritage spiritual places in ${area}`;
+  // Broadened beyond "temples" so meditation/vipassana centers (e.g. Dhamma Vipula) —
+  // genuinely spiritual venues that aren't temples — also get picked up.
+  if (p.includes("spiritual"))                    return `temples ashrams meditation centers spiritual places in ${area}`;
   if (p.includes("nightlife"))                    return `bars live music rooftop venues in ${area}`;
   if (p.includes("luxe") || p.includes("queen"))  return `luxury upscale experiences fine dining in ${area}`;
   if (p.includes("nature"))                       return `parks gardens nature walks in ${area}`;
@@ -164,6 +178,16 @@ export async function discoverPlaces(ans: Answers): Promise<Place[]> {
       const outdoor = (r.types ?? []).some(t => ["park", "tourist_attraction", "hiking_area", "beach"].includes(t)) && !(r.types ?? []).includes("museum");
       return toPlace(r, zone, cat, mood, undefined, outdoor, actVibes);
     })));
+    // Second search node for zones known to be geographically wide — skipped when the
+    // user typed a specific locality themselves, since that should stay tightly scoped.
+    const secondaryArea = !areaLabel ? ZONE_SECONDARY_AREA[zone] : undefined;
+    if (secondaryArea) {
+      tasks.push(searchPlaces(activityQuery(personality, secondaryArea), 6).then(rs => rs.map(r => {
+        const cat = catFromTypes(r.types);
+        const outdoor = (r.types ?? []).some(t => ["park", "tourist_attraction", "hiking_area", "beach"].includes(t)) && !(r.types ?? []).includes("museum");
+        return toPlace(r, zone, cat, mood, undefined, outdoor, actVibes);
+      })));
+    }
     tasks.push(searchPlaces(`best cafes in ${area}`, 8).then(rs => rs.map(r => toPlace(r, zone, "cafe", mood, "cafe", false, ["cozy"]))));
     // Dedicated dessert search, unconditional (previously only surfaced if activityQuery's
     // personality-driven text happened to return a dessert-typed venue) — a zone with no

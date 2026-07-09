@@ -139,6 +139,12 @@ export interface LivePlace {
 
 const listCache = new Map<string, LivePlace[]>();
 
+// A handful of reviews isn't a trustworthy signal — a "5★" with 3 reviews is often just a
+// new or low-traffic listing, not actually a good pick. Filtered out below whenever there
+// are enough better-reviewed alternatives; falls back to the unfiltered set for genuinely
+// thin areas rather than returning nothing.
+const MIN_RELIABLE_REVIEWS = 10;
+
 // Multi-result Places text search for live discovery (restaurants, cafes, things to do).
 export async function searchPlaces(q: string, max = 5): Promise<LivePlace[]> {
   if (!KEY) return [];
@@ -147,6 +153,9 @@ export async function searchPlaces(q: string, max = 5): Promise<LivePlace[]> {
   if (hit) return hit;
 
   try {
+    // Over-fetch (Google Places Text Search bills per request, not per result) so that
+    // filtering out low-review listings below still leaves `max` genuinely good options.
+    const requestCount = Math.min(20, max * 3);
     const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
       method: "POST",
       headers: {
@@ -155,11 +164,11 @@ export async function searchPlaces(q: string, max = 5): Promise<LivePlace[]> {
         "X-Goog-FieldMask":
           "places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.priceLevel,places.types,places.editorialSummary,places.photos",
       },
-      body: JSON.stringify({ textQuery: q, maxResultCount: max, regionCode: "IN" }),
+      body: JSON.stringify({ textQuery: q, maxResultCount: requestCount, regionCode: "IN" }),
     });
     if (!res.ok) { listCache.set(cacheKey, []); return []; }
     const data = await res.json();
-    const out: LivePlace[] = (data?.places ?? []).map((p: any) => ({
+    const all: LivePlace[] = (data?.places ?? []).map((p: any) => ({
       id: p.id,
       name: p.displayName?.text,
       address: p.formattedAddress,
@@ -172,6 +181,9 @@ export async function searchPlaces(q: string, max = 5): Promise<LivePlace[]> {
       summary: p.editorialSummary?.text,
       photoRef: p.photos?.[0]?.name,
     })).filter((p: LivePlace) => p.id && p.name);
+    // Keep Google's own relevance ordering; only strip the unreliable tail of it.
+    const reliable = all.filter(p => (p.userRatings ?? 0) >= MIN_RELIABLE_REVIEWS);
+    const out = (reliable.length >= Math.min(max, 3) ? reliable : all).slice(0, max);
     listCache.set(cacheKey, out);
     return out;
   } catch {

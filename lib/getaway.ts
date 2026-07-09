@@ -181,20 +181,48 @@ function block(startMin: number, durMin: number, kind: Category | "buffer", titl
   return { startMin, endMin: startMin + durMin, title, place, why, cost: place?.costPerPerson ? place.costPerPerson * 2 : 0, kind, backup };
 }
 
+// Shared by curated highlights and live "things to do" results, so a well-reviewed live
+// find (e.g. Garbett Plateau for Karjat + "Trekking & hikes") competes on the same terms as
+// curated data instead of always losing to it — see scoreHighlight below.
+function scoreByText(text: string, prefs: string[]): number {
+  if (!prefs.length) return 0;
+  const t = text.toLowerCase();
+  let s = 0;
+  if (prefs.includes("Trekking & hikes")   && /trek|trail|climb|hike|fort|rappel|plateau|peak|ghat/.test(t)) s += 5;
+  if (prefs.includes("Water spots")        && /water|fall|river|lake|dam|rafting|kayak|pool|stream/.test(t)) s += 5;
+  if (prefs.includes("Scenic photography") && /view|point|sunrise|sunset|valley|cliff|vista|scenic|panoram/.test(t)) s += 5;
+  if (prefs.includes("History & culture")  && /temple|cave|fort|heritage|historic|church|ruin|buddhist|ancient/.test(t)) s += 5;
+  if (prefs.includes("Wildlife & nature")  && /forest|bird|wildlife|flamingo|nature|jungle|animal|sanctuary/.test(t)) s += 5;
+  if (prefs.includes("Camping & bonfire")  && /camp|bonfire|night|firefly|star/.test(t)) s += 5;
+  return s;
+}
+
 function scoreHighlight(h: Highlight, prefs: string[]): number {
   if (!prefs.length) return 0;
-  const text = (h.name + " " + h.note).toLowerCase();
-  let s = 0;
-  if (prefs.includes("Trekking & hikes")   && /trek|trail|climb|hike|fort|rappel/.test(text)) s += 5;
-  if (prefs.includes("Water spots")        && /water|fall|river|lake|dam|rafting|kayak|pool|stream/.test(text)) s += 5;
-  if (prefs.includes("Scenic photography") && /view|point|sunrise|sunset|valley|cliff|vista|scenic|panoram/.test(text)) s += 5;
+  let s = scoreByText(h.name + " " + h.note, prefs);
   if (prefs.includes("Relaxed resort")     && !h.outdoor) s += 4;
   if (prefs.includes("Relaxed resort")     && h.outdoor && h.monsoonRisk === "ok") s += 1;
-  if (prefs.includes("History & culture")  && /temple|cave|fort|heritage|historic|church|ruin|buddhist|ancient/.test(text)) s += 5;
-  if (prefs.includes("Wildlife & nature")  && /forest|bird|wildlife|flamingo|nature|jungle|animal/.test(text)) s += 5;
-  if (prefs.includes("Camping & bonfire")  && /camp|bonfire|night|firefly|star/.test(text)) s += 5;
   if (prefs.includes("Wine & food")        && h.kind === "food") s += 5;
   return s;
+}
+
+// Same idea as engine.ts's scoreHighlight() keyword sets, but for the live search query
+// itself — previously the "things to do" search was always generic ("top things to do in
+// X"), completely ignoring the preferences the user picked (Trekking & hikes selected for
+// Karjat still searched generically and missed Garbett Plateau, a real, well-reviewed trek).
+const PREF_QUERY_KEYWORDS: Record<string, string> = {
+  "Trekking & hikes":    "trekking trails viewpoints hikes",
+  "Water spots":         "waterfalls rivers lakes water sports",
+  "Scenic photography":  "scenic viewpoints photography spots",
+  "Relaxed resort":      "resorts spas relaxation",
+  "History & culture":   "forts temples heritage historic sites",
+  "Wildlife & nature":   "wildlife sanctuaries nature reserves birdwatching",
+  "Camping & bonfire":   "camping sites bonfire spots",
+  "Wine & food":         "wineries vineyards food experiences",
+};
+function thingsToDoQuery(name: string, preferences: string[]): string {
+  const kws = preferences.map(p => PREF_QUERY_KEYWORDS[p]).filter(Boolean);
+  return kws.length ? `${kws.join(" ")} in ${name}` : `top things to do in ${name}`;
 }
 
 export async function buildGetaway(
@@ -207,7 +235,7 @@ export async function buildGetaway(
 
   // Live augmentation for this destination.
   const [liveThings, liveEats, liveStays] = await Promise.all([
-    searchPlaces(`top things to do in ${d.name}`, 6),
+    searchPlaces(thingsToDoQuery(d.name, preferences), 6),
     searchPlaces(`best restaurants in ${d.name}`, 5),
     searchPlaces(`resorts and stays in ${d.name}`, 5),
   ]);
@@ -221,11 +249,12 @@ export async function buildGetaway(
     return block(mealMins, 75, "food", `${label}: ${p.name}`, p.summary || "A good local table.", p);
   };
 
-  // Highlights: curated (with monsoon awareness), sorted by user's preferences, then live extras.
+  // Highlights: curated (with monsoon awareness) and live "things to do" results are scored
+  // on the same preference criteria and merged into one queue — previously curated highlights
+  // always filled every slot before live ones were ever reached, so a genuinely better-matched
+  // live find (e.g. Garbett Plateau for Karjat + "Trekking & hikes") never made the cut in a
+  // short trip even though the destination had it.
   const usableHi = d.highlights.filter(h => !(monsoon && h.outdoor && h.monsoonRisk === "avoid"));
-  const sortedHi = preferences.length
-    ? [...usableHi].sort((a, b) => scoreHighlight(b, preferences) - scoreHighlight(a, preferences))
-    : usableHi;
 
   // User's explicit custom stops go first — they always make the itinerary.
   const customHiBlocks: PlanBlock[] = customStops.map(name => {
@@ -234,15 +263,19 @@ export async function buildGetaway(
   });
 
   const liveHi = liveThings.map(t => liveToPlace(t, d.name, "experience"));
-  const highlightQueue: PlanBlock[] = [
-    ...customHiBlocks,
-    ...sortedHi.map(h => {
-      const p = syntheticPlace(h.name, d.name, (h.kind as Category) || "experience", { outdoor: h.outdoor, monsoonRisk: h.monsoonRisk, summary: h.note });
-      const backup = monsoon && h.outdoor && h.monsoonRisk === "caution" ? `Monsoon caution: ${h.note}` : undefined;
-      return block(0, 120, p.category, h.name, h.note, p, backup);
-    }),
-    ...liveHi.map(p => block(0, 90, "experience", p.name, p.summary, p)),
-  ];
+  const curatedScored = usableHi.map(h => {
+    const p = syntheticPlace(h.name, d.name, (h.kind as Category) || "experience", { outdoor: h.outdoor, monsoonRisk: h.monsoonRisk, summary: h.note });
+    const backup = monsoon && h.outdoor && h.monsoonRisk === "caution" ? `Monsoon caution: ${h.note}` : undefined;
+    // Small trust bonus for curated data so it wins ties against an equally-scored live result.
+    return { score: scoreHighlight(h, preferences) + 0.5, blk: block(0, 120, p.category, h.name, h.note, p, backup) };
+  });
+  const liveScored = liveHi.map(p => ({
+    score: scoreByText(p.name + " " + (p.summary ?? ""), preferences),
+    blk: block(0, 90, "experience", p.name, p.summary, p),
+  }));
+  const rankedHi = [...curatedScored, ...liveScored];
+  if (preferences.length) rankedHi.sort((a, b) => b.score - a.score);
+  const highlightQueue: PlanBlock[] = [...customHiBlocks, ...rankedHi.map(x => x.blk)];
   let hiIdx = 0;
   const nextHi = (startMin: number, durMin = 120): PlanBlock | null => {
     if (hiIdx >= highlightQueue.length) return null;
